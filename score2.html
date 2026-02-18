@@ -4,750 +4,691 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SCORE2 Rechner (SCORE2 / SCORE2-OP / SCORE2-Diabetes)</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
-    h1 { font-size: 22px; margin: 0 0 10px; }
-    .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 980px; border-radius: 10px; }
 
-    .switch {
-      display: flex; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
-      align-items: center; background: #fcfcfc;
-    }
-    .switch label { cursor: pointer; margin-right: 10px; }
-
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
-    .item {
-      border: 1px solid #eee;
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: #fff;
-    }
-    .title { font-weight: bold; margin-bottom: 6px; }
-
-    /* ===== Form layout: robust gegen "verschoben" ===== */
-    .formgrid {
-      display: grid;
-      grid-template-columns: 170px 1fr;
-      gap: 10px 12px;
-      align-items: center;
-    }
-    @media (max-width: 520px) {
-      .formgrid { grid-template-columns: 1fr; }
-      .formgrid .lbl { font-weight: bold; }
-    }
-    .lbl { font-size: 13px; color: #222; }
-
-    input[type="text"], select {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: #fff;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .inline {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .inline label { cursor: pointer; }
-
-    button {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #fafafa;
-      cursor: pointer;
-    }
-    button:hover { background: #f2f2f2; }
-
-    .scoreline {
-      margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee;
-      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
-    }
-    .score { font-size: 30px; font-weight: bold; }
-    .copied { font-size: 13px; color: green; }
-
-    .interpret {
-      margin-top: 8px; font-size: 13px; color: #333;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px;
-      background: #fcfcfc;
-    }
-
-    .band { display: grid; gap: 10px; margin-top: 12px; grid-template-columns: repeat(3, 1fr); }
-    @media (max-width: 700px) { .band { grid-template-columns: 1fr; } }
-    .bandbox {
-      border: 1px solid #eee; border-radius: 10px; padding: 10px 12px;
-      background: #fafafa; font-size: 13px; text-align: center;
-    }
-    .bandbox strong { display:block; margin-bottom: 4px; }
-    .band-active {
-      background: #eef6ff;
-      border: 2px solid #7aa7e6;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .hidden { display: none; }
-
-    .warn {
-      margin-top: 8px; padding: 10px 12px;
-      border: 1px solid #f1d7a6; background: #fff7e6; border-radius: 10px;
-      font-size: 13px; color: #6b4e00;
-    }
-    .err {
-      margin-top: 8px; padding: 10px 12px;
-      border: 1px solid #f2b8b8; background: #fff0f0; border-radius: 10px;
-      font-size: 13px; color: #7a0000;
-    }
-    .hint { font-size: 12px; color: #666; margin-top: 6px; }
-    .pill {
-      display: inline-block;
-      padding: 3px 8px;
-      border: 1px solid #e6e6e6;
-      border-radius: 999px;
-      font-size: 12px;
-      color: #444;
-      background: #fafafa;
-    }
-  </style>
+  <!-- Global -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>SCORE2 Rechner (inkl. SCORE2-OP & SCORE2-Diabetes)</h1>
-<div class="muted">
-  Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Leitlinie, manifeste ASCVD, Komorbiditäten, Therapieziele).
-</div>
+  <div class="container">
+    <div class="card">
 
-<div class="box">
+      <h1>SCORE2 Rechner (inkl. SCORE2-OP & SCORE2-Diabetes)</h1>
+      <div class="muted">
+        Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Leitlinie, manifeste ASCVD, Komorbiditäten, Therapieziele).
+      </div>
 
-  <div class="switch">
-    <strong>Modus:</strong>
-    <label><input type="radio" name="mode" id="mode_score2" checked> SCORE2 / SCORE2-OP</label>
-    <label><input type="radio" name="mode" id="mode_dm"> SCORE2-Diabetes (T2D)</label>
-    <span style="flex:1;"></span>
-    <button id="reset">Alles zurücksetzen</button>
-  </div>
+      <div class="switch">
+        <strong>Modus:</strong>
+        <label><input type="radio" name="mode" id="mode_score2" checked> SCORE2 / SCORE2-OP</label>
+        <label><input type="radio" name="mode" id="mode_dm"> SCORE2-Diabetes (T2D)</label>
+        <span style="flex:1;"></span>
+        <button id="reset">Alles zurücksetzen</button>
+      </div>
 
-  <div class="grid">
-    <!-- ===== Land/Region ===== -->
-    <div class="item">
-      <div class="title">Land & Risikoregion</div>
+      <div class="grid">
+        <!-- ===== Land/Region ===== -->
+        <div class="item">
+          <div class="title">Land & Risikoregion</div>
 
-      <div class="formgrid">
-        <div class="lbl">Land</div>
-        <select id="country">
-          <option value="">— auswählen —</option>
-        </select>
+          <div class="formgrid">
+            <div class="lbl">Land</div>
+            <select id="country">
+              <option value="">— auswählen —</option>
+            </select>
 
-        <div class="lbl">Risikoregion (ESC)</div>
-        <div class="inline">
-          <label><input type="radio" name="region" value="Low" checked> Low</label>
-          <label><input type="radio" name="region" value="Moderate"> Moderate</label>
-          <label><input type="radio" name="region" value="High"> High</label>
-          <label><input type="radio" name="region" value="Very high"> Very high</label>
-          <span class="pill" id="region_auto_note">Auto: aus</span>
+            <div class="lbl">Risikoregion (ESC)</div>
+            <div class="inline">
+              <label><input type="radio" name="region" value="Low" checked> Low</label>
+              <label><input type="radio" name="region" value="Moderate"> Moderate</label>
+              <label><input type="radio" name="region" value="High"> High</label>
+              <label><input type="radio" name="region" value="Very high"> Very high</label>
+              <span class="pill" id="region_auto_note">Auto: aus</span>
+            </div>
+          </div>
+
+          <div class="hint">
+            Länderzuordnung zu ESC-Risikoregionen ist hinterlegt; Auswahl eines Landes setzt die Region automatisch (manuell übersteuerbar).
+          </div>
+        </div>
+
+        <!-- ===== Basisdaten ===== -->
+        <div class="item">
+          <div class="title">Basisdaten</div>
+
+          <div class="formgrid">
+            <div class="lbl">Geschlecht</div>
+            <select id="sex">
+              <option value="male">männlich</option>
+              <option value="female">weiblich</option>
+            </select>
+
+            <div class="lbl">Alter (Jahre)</div>
+            <input id="age" type="text" placeholder="z.B. 50" inputmode="numeric">
+
+            <div class="lbl">Rauchen</div>
+            <label class="inline" style="gap:8px;">
+              <input type="checkbox" id="smoker"> aktueller Raucher
+            </label>
+          </div>
+
+          <div id="age_msg" class="hidden"></div>
+        </div>
+
+        <!-- ===== Blutdruck & Lipide ===== -->
+        <div class="item">
+          <div class="title">Blutdruck & Lipide</div>
+
+          <div class="formgrid">
+            <div class="lbl">SBP (mmHg)</div>
+            <input id="sbp" type="text" placeholder="z.B. 140" inputmode="numeric">
+
+            <div class="lbl">Lipideinheit</div>
+            <div class="inline">
+              <label><input type="radio" name="lipunit" value="mgdl" checked> mg/dL</label>
+              <label><input type="radio" name="lipunit" value="mmol"> mmol/L</label>
+            </div>
+
+            <div class="lbl">Gesamt-Chol</div>
+            <input id="tchol" type="text" placeholder="z.B. 220" inputmode="decimal">
+
+            <div class="lbl">HDL</div>
+            <input id="hdl" type="text" placeholder="z.B. 45" inputmode="decimal">
+          </div>
+
+          <div class="hint">
+            Umrechnung Cholesterin: mg/dL → mmol/L = ÷ 38,67.
+          </div>
+        </div>
+
+        <!-- ===== Diabetes-spezifisch ===== -->
+        <div class="item hidden" id="dm_panel">
+          <div class="title">Diabetes-spezifische Variablen (SCORE2-Diabetes)</div>
+
+          <div class="formgrid">
+            <div class="lbl">Alter bei Diagnose (J)</div>
+            <input id="agedm" type="text" placeholder="z.B. 45" inputmode="numeric">
+
+            <div class="lbl">HbA1c Einheit</div>
+            <div class="inline">
+              <label><input type="radio" name="hba1c_unit" value="pct" checked> %</label>
+              <label><input type="radio" name="hba1c_unit" value="mmol"> mmol/mol</label>
+            </div>
+
+            <div class="lbl">HbA1c</div>
+            <input id="hba1c" type="text" placeholder="z.B. 7.5" inputmode="decimal">
+
+            <div class="lbl">eGFR (ml/min/1.73m²)</div>
+            <input id="egfr" type="text" placeholder="z.B. 75" inputmode="decimal">
+          </div>
+
+          <div class="hint">
+            HbA1c wird intern in <strong>mmol/mol (IFCC)</strong> umgerechnet. Standard ist % (NGSP).
+          </div>
         </div>
       </div>
 
-      <div class="hint">
-        Länderzuordnung zu ESC-Risikoregionen ist hinterlegt; Auswahl eines Landes setzt die Region automatisch (manuell übersteuerbar).
-      </div>
-    </div>
+      <div id="global_msg" class="hidden"></div>
 
-    <!-- ===== Basisdaten ===== -->
-    <div class="item">
-      <div class="title">Basisdaten</div>
-
-      <div class="formgrid">
-        <div class="lbl">Geschlecht</div>
-        <select id="sex">
-          <option value="male">männlich</option>
-          <option value="female">weiblich</option>
-        </select>
-
-        <div class="lbl">Alter (Jahre)</div>
-        <!-- frei, ohne min/max -> kein "Springen" -->
-        <input id="age" type="text" placeholder="z.B. 50" inputmode="numeric">
-
-        <div class="lbl">Rauchen</div>
-        <label class="inline" style="gap:8px;">
-          <input type="checkbox" id="smoker"> aktueller Raucher
-        </label>
+      <!-- ===== Ergebnis ===== -->
+      <div class="scoreline">
+        <div>10-Jahres-Risiko:</div>
+        <div class="score" id="risk_result">—</div>
+        <button id="copy_btn">Ergebnis kopieren</button>
+        <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
       </div>
 
-      <div id="age_msg" class="hidden"></div>
-    </div>
-
-    <!-- ===== Blutdruck & Lipide ===== -->
-    <div class="item">
-      <div class="title">Blutdruck & Lipide</div>
-
-      <div class="formgrid">
-        <div class="lbl">SBP (mmHg)</div>
-        <input id="sbp" type="text" placeholder="z.B. 140" inputmode="numeric">
-
-        <div class="lbl">Lipideinheit</div>
-        <div class="inline">
-          <label><input type="radio" name="lipunit" value="mgdl" checked> mg/dL</label>
-          <label><input type="radio" name="lipunit" value="mmol"> mmol/L</label>
-        </div>
-
-        <div class="lbl">Gesamt-Chol</div>
-        <input id="tchol" type="text" placeholder="z.B. 220" inputmode="decimal">
-
-        <div class="lbl">HDL</div>
-        <input id="hdl" type="text" placeholder="z.B. 45" inputmode="decimal">
+      <div class="band" id="band">
+        <div id="band_low" class="bandbox"><strong>Low</strong><span id="band_low_txt">—</span></div>
+        <div id="band_mod" class="bandbox"><strong>Intermediate</strong><span id="band_mod_txt">—</span></div>
+        <div id="band_high" class="bandbox"><strong>High</strong><span id="band_high_txt">—</span></div>
       </div>
 
-      <div class="hint">
-        Umrechnung Cholesterin: mg/dL → mmol/L = ÷ 38,67.
-      </div>
-    </div>
-
-    <!-- ===== Diabetes-spezifisch ===== -->
-    <div class="item" id="dm_panel">
-      <div class="title">Diabetes-spezifische Variablen (SCORE2-Diabetes)</div>
-
-      <div class="formgrid">
-        <div class="lbl">Alter bei Diagnose (J)</div>
-        <input id="agedm" type="text" placeholder="z.B. 45" inputmode="numeric">
-
-        <div class="lbl">HbA1c Einheit</div>
-        <div class="inline">
-          <label><input type="radio" name="hba1c_unit" value="pct" checked> %</label>
-          <label><input type="radio" name="hba1c_unit" value="mmol"> mmol/mol</label>
-        </div>
-
-        <div class="lbl">HbA1c</div>
-        <input id="hba1c" type="text" placeholder="z.B. 7.5" inputmode="decimal">
-
-        <div class="lbl">eGFR (ml/min/1.73m²)</div>
-        <input id="egfr" type="text" placeholder="z.B. 75" inputmode="decimal">
+      <div class="interpret" id="interpret">
+        <strong>Interpretation:</strong> —
       </div>
 
-      <div class="hint">
-        HbA1c wird intern in <strong>mmol/mol (IFCC)</strong> umgerechnet. Standard ist % (NGSP).
-      </div>
     </div>
   </div>
 
-  <div id="global_msg" class="hidden"></div>
+  <!-- Seiten-spezifisches CSS (weil style.css bewusst generisch ist) -->
+  <style>
+    :root{
+      /* Falls du das global schon hast: ok. Sonst sorgt das für konsistente Rundungen. */
+      --radius-sm: 12px;
+    }
 
-  <!-- ===== Ergebnis ===== -->
-  <div class="scoreline">
-    <div>10-Jahres-Risiko:</div>
-    <div class="score" id="risk_result">—</div>
-    <button id="copy_btn">Ergebnis kopieren</button>
-    <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
-  </div>
+    h1 { font-size: 22px; margin: 0 0 10px; }
+    .muted { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
 
-  <div class="band" id="band">
-    <div id="band_low" class="bandbox"><strong>Low</strong><span id="band_low_txt">—</span></div>
-    <div id="band_mod" class="bandbox"><strong>Intermediate</strong><span id="band_mod_txt">—</span></div>
-    <div id="band_high" class="bandbox"><strong>High</strong><span id="band_high_txt">—</span></div>
-  </div>
+    .switch{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      align-items:center;
+      background:#fcfcfc;
+    }
+    .switch label{ cursor:pointer; margin-right:10px; }
 
-  <div class="interpret" id="interpret">
-    <strong>Interpretation:</strong> —
-  </div>
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
 
-</div>
+    .item{
+      border:1px solid var(--border);
+      padding:12px 14px;
+      border-radius: var(--radius-sm);
+      background:#fff;
+    }
+    .title{ font-weight:700; margin-bottom:6px; }
 
-<script>
-/* =========================
-   Länder (deutsch) + Region
-   (ESC/HeartScore-Risikoregionen)
-   ========================= */
-const COUNTRY_TO_REGION_DE = {
-  // Low
-  "Belgien":"Low",
-  "Dänemark":"Low",
-  "Frankreich":"Low",
-  "Israel":"Low",
-  "Luxemburg":"Low",
-  "Niederlande":"Low",
-  "Norwegen":"Low",
-  "Spanien":"Low",
-  "Schweiz":"Low",
-  "Vereinigtes Königreich":"Low",
+    .formgrid{
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap: 10px 12px;
+      align-items:center;
+    }
+    @media (max-width: 520px){
+      .formgrid{ grid-template-columns: 1fr; }
+      .formgrid .lbl{ font-weight:700; }
+    }
+    .lbl{ font-size: 13px; color:#222; }
 
-  // Moderate
-  "Österreich":"Moderate",
-  "Zypern":"Moderate",
-  "Finnland":"Moderate",
-  "Deutschland":"Moderate",
-  "Griechenland":"Moderate",
-  "Island":"Moderate",
-  "Irland":"Moderate",
-  "Italien":"Moderate",
-  "Malta":"Moderate",
-  "Portugal":"Moderate",
-  "San Marino":"Moderate",
-  "Slowenien":"Moderate",
-  "Schweden":"Moderate",
+    input[type="text"], select{
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: var(--radius-sm);
+      background:#fff;
+      width: 100%;
+      box-sizing:border-box;
+      font-size: 14px;
+    }
 
-  // High
-  "Albanien":"High",
-  "Bosnien und Herzegowina":"High",
-  "Kroatien":"High",
-  "Tschechien":"High",
-  "Estland":"High",
-  "Ungarn":"High",
-  "Kasachstan":"High",
-  "Polen":"High",
-  "Slowakei":"High",
-  "Türkei":"High",
+    .inline{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .inline label{ cursor:pointer; }
 
-  // Very high
-  "Algerien":"Very high",
-  "Armenien":"Very high",
-  "Aserbaidschan":"Very high",
-  "Belarus":"Very high",
-  "Bulgarien":"Very high",
-  "Ägypten":"Very high",
-  "Georgien":"Very high",
-  "Kirgisistan":"Very high",
-  "Lettland":"Very high",
-  "Libanon":"Very high",
-  "Libyen":"Very high",
-  "Litauen":"Very high",
-  "Montenegro":"Very high",
-  "Marokko":"Very high",
-  "Nordmazedonien":"Very high",
-  "Republik Moldau":"Very high",
-  "Rumänien":"Very high",
-  "Russische Föderation":"Very high",
-  "Serbien":"Very high",
-  "Syrien":"Very high",
-  "Tunesien":"Very high",
-  "Ukraine":"Very high",
-  "Usbekistan":"Very high"
-};
+    .scoreline{
+      margin-top:16px; padding-top:12px;
+      border-top:1px solid var(--border);
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .score{ font-size:30px; font-weight:800; }
+    .copied{ font-size:13px; color: green; }
 
-function populateCountryDropdownAlphabetical() {
-  const sel = document.getElementById("country");
-  const countries = Object.keys(COUNTRY_TO_REGION_DE).sort((a,b)=>a.localeCompare(b,"de-DE"));
-  countries.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    sel.appendChild(opt);
-  });
-}
+    .interpret{
+      margin-top: 8px;
+      font-size: 13px;
+      color: #333;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #fcfcfc;
+    }
 
-/* =========================
-   Helpers
-   ========================= */
-function setMsg(el, html, type) {
-  el.classList.remove("hidden","warn","err");
-  el.classList.add(type);
-  el.innerHTML = html;
-}
-function hideMsg(el) {
-  el.classList.add("hidden");
-  el.classList.remove("warn","err");
-  el.innerHTML = "";
-}
-function clearBand() {
-  ["band_low","band_mod","band_high"].forEach(id => document.getElementById(id).classList.remove("band-active"));
-}
-function setBand(which) {
-  clearBand();
-  if (which === "low") document.getElementById("band_low").classList.add("band-active");
-  if (which === "mod") document.getElementById("band_mod").classList.add("band-active");
-  if (which === "high") document.getElementById("band_high").classList.add("band-active");
-}
+    .band{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 700px){ .band{ grid-template-columns: 1fr; } }
 
-function parseNumber(id) {
-  const raw = (document.getElementById(id).value || "").trim().replace(",", ".");
-  if (raw === "") return NaN;
-  const v = Number(raw);
-  return Number.isFinite(v) ? v : NaN;
-}
+    .bandbox{
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      background:#fafafa;
+      font-size:13px;
+      text-align:center;
+    }
+    .bandbox strong{ display:block; margin-bottom:4px; }
+    .band-active{
+      background:#eef6ff;
+      border:2px solid #7aa7e6;
+      font-size:15px;
+      font-weight:800;
+    }
 
-function getRegion() {
-  const r = document.querySelector('input[name="region"]:checked');
-  return r ? r.value : "Low";
-}
-function setRegion(region) {
-  const r = document.querySelector(`input[name="region"][value="${region}"]`);
-  if (r) r.checked = true;
-}
+    .hidden{ display:none; }
 
-function getMode() {
-  return document.getElementById("mode_dm").checked ? "dm" : "score2";
-}
-function showMode() {
-  const dm = (getMode() === "dm");
-  document.getElementById("dm_panel").classList.toggle("hidden", !dm);
-}
+    .warn{
+      margin-top:8px;
+      padding:10px 12px;
+      border:1px solid #f1d7a6;
+      background:#fff7e6;
+      border-radius: var(--radius-sm);
+      font-size:13px;
+      color:#6b4e00;
+    }
+    .err{
+      margin-top:8px;
+      padding:10px 12px;
+      border:1px solid #f2b8b8;
+      background:#fff0f0;
+      border-radius: var(--radius-sm);
+      font-size:13px;
+      color:#7a0000;
+    }
+    .hint{ font-size:12px; color: var(--muted); margin-top:6px; }
+    .pill{
+      display:inline-block;
+      padding:3px 8px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      font-size:12px;
+      color:#444;
+      background:#fafafa;
+    }
+  </style>
 
-/* Lipide: mg/dL oder mmol/L → mmol/L */
-function lipidToMmolL(val, unit) {
-  if (!Number.isFinite(val)) return NaN;
-  if (unit === "mmol") return val;
-  return val / 38.67;
-}
+  <script>
+    /* =========================
+       Länder (deutsch) + Region
+       ========================= */
+    const COUNTRY_TO_REGION_DE = {
+      "Belgien":"Low","Dänemark":"Low","Frankreich":"Low","Israel":"Low","Luxemburg":"Low","Niederlande":"Low","Norwegen":"Low","Spanien":"Low","Schweiz":"Low","Vereinigtes Königreich":"Low",
+      "Österreich":"Moderate","Zypern":"Moderate","Finnland":"Moderate","Deutschland":"Moderate","Griechenland":"Moderate","Island":"Moderate","Irland":"Moderate","Italien":"Moderate","Malta":"Moderate","Portugal":"Moderate","San Marino":"Moderate","Slowenien":"Moderate","Schweden":"Moderate",
+      "Albanien":"High","Bosnien und Herzegowina":"High","Kroatien":"High","Tschechien":"High","Estland":"High","Ungarn":"High","Kasachstan":"High","Polen":"High","Slowakei":"High","Türkei":"High",
+      "Algerien":"Very high","Armenien":"Very high","Aserbaidschan":"Very high","Belarus":"Very high","Bulgarien":"Very high","Ägypten":"Very high","Georgien":"Very high","Kirgisistan":"Very high","Lettland":"Very high","Libanon":"Very high","Libyen":"Very high","Litauen":"Very high","Montenegro":"Very high","Marokko":"Very high","Nordmazedonien":"Very high","Republik Moldau":"Very high","Rumänien":"Very high","Russische Föderation":"Very high","Serbien":"Very high","Syrien":"Very high","Tunesien":"Very high","Ukraine":"Very high","Usbekistan":"Very high"
+    };
 
-/* HbA1c: % <-> mmol/mol (IFCC)
-   IFCC (mmol/mol) = (NGSP% - 2.15) * 10.929
-   NGSP% = (IFCC * 0.09148) + 2.15
-*/
-function hba1cToIFCC(val, unit) {
-  if (!Number.isFinite(val)) return NaN;
-  if (unit === "mmol") return val;
-  // percent
-  return (val - 2.15) * 10.929;
-}
+    function populateCountryDropdownAlphabetical() {
+      const sel = document.getElementById("country");
+      const countries = Object.keys(COUNTRY_TO_REGION_DE).sort((a,b)=>a.localeCompare(b,"de-DE"));
+      countries.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
+      });
+    }
 
-/* =========================
-   SCORE2 / SCORE2-OP: Recalibration
-   ========================= */
-const SCALE = {
-  "<70": {
-    "Low":      { male: {s1:-0.5699,s2:0.7476}, female:{s1:-0.7380,s2:0.7019} },
-    "Moderate": { male: {s1:-0.1565,s2:0.8009}, female:{s1:-0.3143,s2:0.7701} },
-    "High":     { male: {s1: 0.3207,s2:0.9360}, female:{s1: 0.5710,s2:0.9369} },
-    "Very high":{ male: {s1: 0.5836,s2:0.8294}, female:{s1: 0.9412,s2:0.8329} }
-  },
-  ">=70": {
-    "Low":      { male: {s1:-0.34,s2:1.19}, female:{s1:-0.52,s2:1.01} },
-    "Moderate": { male: {s1: 0.01,s2:1.25}, female:{s1:-0.10,s2:1.10} },
-    "High":     { male: {s1: 0.08,s2:1.15}, female:{s1: 0.38,s2:1.09} },
-    "Very high":{ male: {s1: 0.05,s2:0.70}, female:{s1: 0.38,s2:0.69} }
-  }
-};
+    /* =========================
+       Helpers
+       ========================= */
+    function setMsg(el, html, type) {
+      el.classList.remove("hidden","warn","err");
+      el.classList.add(type);
+      el.innerHTML = html;
+    }
+    function hideMsg(el) {
+      el.classList.add("hidden");
+      el.classList.remove("warn","err");
+      el.innerHTML = "";
+    }
+    function clearBand() {
+      ["band_low","band_mod","band_high"].forEach(id => document.getElementById(id).classList.remove("band-active"));
+    }
+    function setBand(which) {
+      clearBand();
+      if (which === "low") document.getElementById("band_low").classList.add("band-active");
+      if (which === "mod") document.getElementById("band_mod").classList.add("band-active");
+      if (which === "high") document.getElementById("band_high").classList.add("band-active");
+    }
 
-function uncalibratedScore2(age, sex, smoker, sbp, tchol_mmol, hdl_mmol) {
-  const cage = (age - 60) / 5;
-  const csbp = (sbp - 120) / 20;
-  const ctchol = (tchol_mmol - 6) / 1;
-  const chdl = (hdl_mmol - 1.3) / 0.5;
+    function parseNumber(id) {
+      const raw = (document.getElementById(id).value || "").trim().replace(",", ".");
+      if (raw === "") return NaN;
+      const v = Number(raw);
+      return Number.isFinite(v) ? v : NaN;
+    }
 
-  let lp, baseSurv;
+    function getRegion() {
+      const r = document.querySelector('input[name="region"]:checked');
+      return r ? r.value : "Low";
+    }
+    function setRegion(region) {
+      const r = document.querySelector(`input[name="region"][value="${region}"]`);
+      if (r) r.checked = true;
+    }
 
-  if (sex === "male" && age < 70) {
-    lp =
-      0.3742*cage + 0.6012*smoker + 0.2777*csbp + 0.1458*ctchol + (-0.2698)*chdl +
-      (-0.0755)*cage*smoker + (-0.0255)*cage*csbp + (-0.0281)*cage*ctchol + 0.0426*cage*chdl;
-    baseSurv = 0.9605;
-    return 1 - Math.pow(baseSurv, Math.exp(lp));
-  }
+    function getMode() {
+      return document.getElementById("mode_dm").checked ? "dm" : "score2";
+    }
+    function showMode() {
+      const dm = (getMode() === "dm");
+      document.getElementById("dm_panel").classList.toggle("hidden", !dm);
+    }
 
-  if (sex === "female" && age < 70) {
-    lp =
-      0.4648*cage + 0.7744*smoker + 0.3131*csbp + 0.1002*ctchol + (-0.2606)*chdl +
-      (-0.1088)*cage*smoker + (-0.0277)*cage*csbp + (-0.0226)*cage*ctchol + 0.0613*cage*chdl;
-    baseSurv = 0.9776;
-    return 1 - Math.pow(baseSurv, Math.exp(lp));
-  }
+    /* Lipide: mg/dL oder mmol/L → mmol/L */
+    function lipidToMmolL(val, unit) {
+      if (!Number.isFinite(val)) return NaN;
+      if (unit === "mmol") return val;
+      return val / 38.67;
+    }
 
-  // SCORE2-OP (>=70)
-  if (sex === "male") {
-    const a = (age - 73);
-    lp =
-      0.0634*a + 0.3524*smoker +
-      0.0094*(sbp - 150) + 0.0850*(tchol_mmol - 6) + (-0.3564)*(hdl_mmol - 1.4) +
-      (-0.0247)*a*smoker + (-0.0005)*a*(sbp - 150) + 0.0073*a*(tchol_mmol - 6) + 0.0091*a*(hdl_mmol - 1.4);
-    return 1 - Math.pow(0.7576, Math.exp(lp - 0.0929));
-  } else {
-    const a = (age - 73);
-    lp =
-      0.0789*a + 0.4921*smoker +
-      0.0102*(sbp - 150) + 0.0605*(tchol_mmol - 6) + (-0.3040)*(hdl_mmol - 1.4) +
-      (-0.0255)*a*smoker + (-0.0004)*a*(sbp - 150) + (-0.0009)*a*(tchol_mmol - 6) + 0.0154*a*(hdl_mmol - 1.4);
-    return 1 - Math.pow(0.8082, Math.exp(lp - 0.229));
-  }
-}
+    /* HbA1c: % <-> mmol/mol (IFCC) */
+    function hba1cToIFCC(val, unit) {
+      if (!Number.isFinite(val)) return NaN;
+      if (unit === "mmol") return val;
+      return (val - 2.15) * 10.929;
+    }
 
-function recalibrate(uncal, age, sex, region) {
-  const keyAge = (age < 70) ? "<70" : ">=70";
-  const sc = SCALE[keyAge][region][sex];
-  const scale1 = sc.s1, scale2 = sc.s2;
+    /* =========================
+       SCORE2 / SCORE2-OP: Recalibration
+       ========================= */
+    const SCALE = {
+      "<70": {
+        "Low":      { male: {s1:-0.5699,s2:0.7476}, female:{s1:-0.7380,s2:0.7019} },
+        "Moderate": { male: {s1:-0.1565,s2:0.8009}, female:{s1:-0.3143,s2:0.7701} },
+        "High":     { male: {s1: 0.3207,s2:0.9360}, female:{s1: 0.5710,s2:0.9369} },
+        "Very high":{ male: {s1: 0.5836,s2:0.8294}, female:{s1: 0.9412,s2:0.8329} }
+      },
+      ">=70": {
+        "Low":      { male: {s1:-0.34,s2:1.19}, female:{s1:-0.52,s2:1.01} },
+        "Moderate": { male: {s1: 0.01,s2:1.25}, female:{s1:-0.10,s2:1.10} },
+        "High":     { male: {s1: 0.08,s2:1.15}, female:{s1: 0.38,s2:1.09} },
+        "Very high":{ male: {s1: 0.05,s2:0.70}, female:{s1: 0.38,s2:0.69} }
+      }
+    };
 
-  // 1 - exp( -exp( scale1 + scale2 * ln( -ln(1-uncal) ) ) )
-  const inner = Math.log(-Math.log(1 - uncal));
-  return 1 - Math.exp(-Math.exp(scale1 + scale2 * inner));
-}
+    function uncalibratedScore2(age, sex, smoker, sbp, tchol_mmol, hdl_mmol) {
+      const cage = (age - 60) / 5;
+      const csbp = (sbp - 120) / 20;
+      const ctchol = (tchol_mmol - 6) / 1;
+      const chdl = (hdl_mmol - 1.3) / 0.5;
 
-/* =========================
-   SCORE2-Diabetes (T2D) – Implementierung (IFCC HbA1c, ln(eGFR))
-   ========================= */
-function score2Diabetes10y(age, sex, smoker, sbp, tchol_mmol, hdl_mmol, ageDiag, hba1c_ifcc, egfr, region) {
-  const cage = (age - 60) / 5;
-  const csbp = (sbp - 120) / 20;
-  const ctchol = (tchol_mmol - 6) / 1;
-  const chdl = (hdl_mmol - 1.3) / 0.5;
+      let lp, baseSurv;
 
-  const cagediab = (ageDiag - 50) / 5;
-  const chba1c = (hba1c_ifcc - 31) / 9.34;
-  const lnegfr = Math.log(egfr);
-  const clnegfr = (lnegfr - 4.5) / 0.15;
+      if (sex === "male" && age < 70) {
+        lp =
+          0.3742*cage + 0.6012*smoker + 0.2777*csbp + 0.1458*ctchol + (-0.2698)*chdl +
+          (-0.0755)*cage*smoker + (-0.0255)*cage*csbp + (-0.0281)*cage*ctchol + 0.0426*cage*chdl;
+        baseSurv = 0.9605;
+        return 1 - Math.pow(baseSurv, Math.exp(lp));
+      }
 
-  let lp, baseSurv;
+      if (sex === "female" && age < 70) {
+        lp =
+          0.4648*cage + 0.7744*smoker + 0.3131*csbp + 0.1002*ctchol + (-0.2606)*chdl +
+          (-0.1088)*cage*smoker + (-0.0277)*cage*csbp + (-0.0226)*cage*ctchol + 0.0613*cage*chdl;
+        baseSurv = 0.9776;
+        return 1 - Math.pow(baseSurv, Math.exp(lp));
+      }
 
-  if (sex === "male") {
-    baseSurv = 0.9605;
-    lp =
-      0.3742*cage + 0.6012*smoker + 0.2777*csbp + 0.1458*ctchol + (-0.2698)*chdl +
-      (-0.0755)*cage*smoker + (-0.0255)*cage*csbp + (-0.0281)*cage*ctchol + 0.0426*cage*chdl +
-      (-0.0998)*cagediab + 0.0955*chba1c + (-0.0134)*chba1c*cage +
-      (-0.0591)*clnegfr + 0.0058*clnegfr*clnegfr + 0.0115*clnegfr*cage;
-  } else {
-    baseSurv = 0.9776;
-    lp =
-      0.4648*cage + 0.7744*smoker + 0.3131*csbp + 0.1002*ctchol + (-0.2606)*chdl +
-      (-0.1088)*cage*smoker + (-0.0277)*cage*csbp + (-0.0226)*cage*ctchol + 0.0613*cage*chdl +
-      (-0.1180)*cagediab + 0.1173*chba1c + (-0.0196)*chba1c*cage +
-      (-0.0640)*clnegfr + 0.0062*clnegfr*clnegfr + 0.0169*clnegfr*cage;
-  }
+      // SCORE2-OP (>=70)
+      if (sex === "male") {
+        const a = (age - 73);
+        lp =
+          0.0634*a + 0.3524*smoker +
+          0.0094*(sbp - 150) + 0.0850*(tchol_mmol - 6) + (-0.3564)*(hdl_mmol - 1.4) +
+          (-0.0247)*a*smoker + (-0.0005)*a*(sbp - 150) + 0.0073*a*(tchol_mmol - 6) + 0.0091*a*(hdl_mmol - 1.4);
+        return 1 - Math.pow(0.7576, Math.exp(lp - 0.0929));
+      } else {
+        const a = (age - 73);
+        lp =
+          0.0789*a + 0.4921*smoker +
+          0.0102*(sbp - 150) + 0.0605*(tchol_mmol - 6) + (-0.3040)*(hdl_mmol - 1.4) +
+          (-0.0255)*a*smoker + (-0.0004)*a*(sbp - 150) + (-0.0009)*a*(tchol_mmol - 6) + 0.0154*a*(hdl_mmol - 1.4);
+        return 1 - Math.pow(0.8082, Math.exp(lp - 0.229));
+      }
+    }
 
-  const uncal = 1 - Math.pow(baseSurv, Math.exp(lp));
-  // Recalibration nutzt SCORE2-Regionen (<70). SCORE2-Diabetes ist 40–69 Modell.
-  const cal = recalibrate(uncal, Math.min(age, 69), sex, region);
-  return cal;
-}
+    function recalibrate(uncal, age, sex, region) {
+      const keyAge = (age < 70) ? "<70" : ">=70";
+      const sc = SCALE[keyAge][region][sex];
+      const scale1 = sc.s1, scale2 = sc.s2;
 
-/* =========================
-   Kategorien (ESC Schwellen)
-   ========================= */
-function setBandThresholdText(age) {
-  let low, mod, high;
-  if (age < 50) { low = "<2,5%"; mod = "2,5–<7,5%"; high = "≥7,5%"; }
-  else if (age <= 69) { low = "<5%"; mod = "5–<10%"; high = "≥10%"; }
-  else { low = "<7,5%"; mod = "7,5–<15%"; high = "≥15%"; }
-  document.getElementById("band_low_txt").textContent = low;
-  document.getElementById("band_mod_txt").textContent = mod;
-  document.getElementById("band_high_txt").textContent = high;
-}
-function classifyRisk(age, riskPct) {
-  if (!Number.isFinite(riskPct)) return { band:"low", label:"—" };
-  if (age < 50) {
-    if (riskPct < 2.5) return {band:"low", label:"Low"};
-    if (riskPct < 7.5) return {band:"mod", label:"Intermediate"};
-    return {band:"high", label:"High"};
-  }
-  if (age <= 69) {
-    if (riskPct < 5) return {band:"low", label:"Low"};
-    if (riskPct < 10) return {band:"mod", label:"Intermediate"};
-    return {band:"high", label:"High"};
-  }
-  if (riskPct < 7.5) return {band:"low", label:"Low"};
-  if (riskPct < 15) return {band:"mod", label:"Intermediate"};
-  return {band:"high", label:"High"};
-}
+      const inner = Math.log(-Math.log(1 - uncal));
+      return 1 - Math.exp(-Math.exp(scale1 + scale2 * inner));
+    }
 
-/* =========================
-   Main calc
-   ========================= */
-function calculateAll() {
-  document.getElementById("copied").style.display = "none";
-  hideMsg(document.getElementById("global_msg"));
-  hideMsg(document.getElementById("age_msg"));
+    /* =========================
+       SCORE2-Diabetes (T2D)
+       ========================= */
+    function score2Diabetes10y(age, sex, smoker, sbp, tchol_mmol, hdl_mmol, ageDiag, hba1c_ifcc, egfr, region) {
+      const cage = (age - 60) / 5;
+      const csbp = (sbp - 120) / 20;
+      const ctchol = (tchol_mmol - 6) / 1;
+      const chdl = (hdl_mmol - 1.3) / 0.5;
 
-  const mode = getMode();
-  const sex = document.getElementById("sex").value;
-  const region = getRegion();
-  const smoker = document.getElementById("smoker").checked ? 1 : 0;
+      const cagediab = (ageDiag - 50) / 5;
+      const chba1c = (hba1c_ifcc - 31) / 9.34;
+      const lnegfr = Math.log(egfr);
+      const clnegfr = (lnegfr - 4.5) / 0.15;
 
-  const age = parseNumber("age");
-  const sbp = parseNumber("sbp");
+      let lp, baseSurv;
 
-  const unit = document.querySelector('input[name="lipunit"]:checked')?.value || "mgdl";
-  const tchol_raw = parseNumber("tchol");
-  const hdl_raw = parseNumber("hdl");
-  const tchol = lipidToMmolL(tchol_raw, unit);
-  const hdl = lipidToMmolL(hdl_raw, unit);
+      if (sex === "male") {
+        baseSurv = 0.9605;
+        lp =
+          0.3742*cage + 0.6012*smoker + 0.2777*csbp + 0.1458*ctchol + (-0.2698)*chdl +
+          (-0.0755)*cage*smoker + (-0.0255)*cage*csbp + (-0.0281)*cage*ctchol + 0.0426*cage*chdl +
+          (-0.0998)*cagediab + 0.0955*chba1c + (-0.0134)*chba1c*cage +
+          (-0.0591)*clnegfr + 0.0058*clnegfr*clnegfr + 0.0115*clnegfr*cage;
+      } else {
+        baseSurv = 0.9776;
+        lp =
+          0.4648*cage + 0.7744*smoker + 0.3131*csbp + 0.1002*ctchol + (-0.2606)*chdl +
+          (-0.1088)*cage*smoker + (-0.0277)*cage*csbp + (-0.0226)*cage*ctchol + 0.0613*cage*chdl +
+          (-0.1180)*cagediab + 0.1173*chba1c + (-0.0196)*chba1c*cage +
+          (-0.0640)*clnegfr + 0.0062*clnegfr*clnegfr + 0.0169*clnegfr*cage;
+      }
 
-  const gmsg = document.getElementById("global_msg");
-  const amsg = document.getElementById("age_msg");
+      const uncal = 1 - Math.pow(baseSurv, Math.exp(lp));
+      const cal = recalibrate(uncal, Math.min(age, 69), sex, region);
+      return cal;
+    }
 
-  // Altermeldung ohne Sprung
-  if (!Number.isFinite(age)) {
-    setMsg(amsg, "<strong>Fehler:</strong> Bitte ein gültiges Alter eingeben.", "err");
-  } else if (age < 40 || age > 100) {
-    setMsg(amsg, "<strong>Achtung:</strong> Außerhalb 40–100 Jahre. Ergebnis ggf. nicht validiert/interpretierbar.", "warn");
-  }
+    /* =========================
+       Kategorien (ESC Schwellen)
+       ========================= */
+    function setBandThresholdText(age) {
+      let low, mod, high;
+      if (age < 50) { low = "<2,5%"; mod = "2,5–<7,5%"; high = "≥7,5%"; }
+      else if (age <= 69) { low = "<5%"; mod = "5–<10%"; high = "≥10%"; }
+      else { low = "<7,5%"; mod = "7,5–<15%"; high = "≥15%"; }
+      document.getElementById("band_low_txt").textContent = low;
+      document.getElementById("band_mod_txt").textContent = mod;
+      document.getElementById("band_high_txt").textContent = high;
+    }
+    function classifyRisk(age, riskPct) {
+      if (!Number.isFinite(riskPct)) return { band:"low", label:"—" };
+      if (age < 50) {
+        if (riskPct < 2.5) return {band:"low", label:"Low"};
+        if (riskPct < 7.5) return {band:"mod", label:"Intermediate"};
+        return {band:"high", label:"High"};
+      }
+      if (age <= 69) {
+        if (riskPct < 5) return {band:"low", label:"Low"};
+        if (riskPct < 10) return {band:"mod", label:"Intermediate"};
+        return {band:"high", label:"High"};
+      }
+      if (riskPct < 7.5) return {band:"low", label:"Low"};
+      if (riskPct < 15) return {band:"mod", label:"Intermediate"};
+      return {band:"high", label:"High"};
+    }
 
-  // required fields
-  const missing = [];
-  if (!Number.isFinite(age)) missing.push("Alter");
-  if (!Number.isFinite(sbp)) missing.push("SBP");
-  if (!Number.isFinite(tchol_raw)) missing.push("Gesamtcholesterin");
-  if (!Number.isFinite(hdl_raw)) missing.push("HDL");
+    /* =========================
+       Main calc
+       ========================= */
+    function calculateAll() {
+      document.getElementById("copied").style.display = "none";
+      hideMsg(document.getElementById("global_msg"));
+      hideMsg(document.getElementById("age_msg"));
 
-  // DM fields
-  const ageDiag = parseNumber("agedm");
-  const egfr = parseNumber("egfr");
-  const hbaUnit = document.querySelector('input[name="hba1c_unit"]:checked')?.value || "pct";
-  const hbaRaw = parseNumber("hba1c");
-  const hbaIFCC = hba1cToIFCC(hbaRaw, hbaUnit);
+      const mode = getMode();
+      const sex = document.getElementById("sex").value;
+      const region = getRegion();
+      const smoker = document.getElementById("smoker").checked ? 1 : 0;
 
-  if (mode === "dm") {
-    if (!Number.isFinite(ageDiag)) missing.push("Alter bei Diagnose");
-    if (!Number.isFinite(hbaRaw)) missing.push("HbA1c");
-    if (!Number.isFinite(egfr)) missing.push("eGFR");
-  }
+      const age = parseNumber("age");
+      const sbp = parseNumber("sbp");
 
-  if (missing.length) {
-    document.getElementById("risk_result").textContent = "—";
-    clearBand();
-    document.getElementById("interpret").innerHTML = "<strong>Interpretation:</strong> —";
-    setMsg(gmsg, "<strong>Fehlende/ungültige Eingaben:</strong> " + missing.join(", "), "err");
-    return;
-  }
+      const unit = document.querySelector('input[name="lipunit"]:checked')?.value || "mgdl";
+      const tchol_raw = parseNumber("tchol");
+      const hdl_raw = parseNumber("hdl");
+      const tchol = lipidToMmolL(tchol_raw, unit);
+      const hdl = lipidToMmolL(hdl_raw, unit);
 
-  // Plausibility warnings
-  const warns = [];
-  if (sbp < 70 || sbp > 260) warns.push("SBP wirkt unplausibel");
-  if (tchol < 2 || tchol > 15) warns.push("Gesamtcholesterin wirkt unplausibel");
-  if (hdl < 0.3 || hdl > 4) warns.push("HDL wirkt unplausibel");
-  if (mode === "dm") {
-    if (egfr <= 0) warns.push("eGFR muss >0 sein");
-    if (hbaIFCC < 20 || hbaIFCC > 200) warns.push("HbA1c wirkt unplausibel");
-    if (ageDiag < 0 || ageDiag > age) warns.push("Alter bei Diagnose unplausibel");
-  }
-  if (warns.length) setMsg(gmsg, "<strong>Hinweis:</strong> " + warns.join("; ") + ".", "warn");
+      const gmsg = document.getElementById("global_msg");
+      const amsg = document.getElementById("age_msg");
 
-  // Calculate
-  let riskPct = NaN;
-  let modelUsed = "";
+      if (!Number.isFinite(age)) {
+        setMsg(amsg, "<strong>Fehler:</strong> Bitte ein gültiges Alter eingeben.", "err");
+      } else if (age < 40 || age > 100) {
+        setMsg(amsg, "<strong>Achtung:</strong> Außerhalb 40–100 Jahre. Ergebnis ggf. nicht validiert/interpretierbar.", "warn");
+      }
 
-  if (mode === "dm") {
-    modelUsed = "SCORE2-Diabetes (T2D; 40–69 J)";
-    const cal = score2Diabetes10y(age, sex, smoker, sbp, tchol, hdl, ageDiag, hbaIFCC, egfr, region);
-    riskPct = cal * 100;
-  } else {
-    modelUsed = (age >= 70) ? "SCORE2-OP (≥70 J)" : "SCORE2 (40–69 J)";
-    const uncal = uncalibratedScore2(age, sex, smoker, sbp, tchol, hdl);
-    const cal = recalibrate(uncal, age, sex, region);
-    riskPct = cal * 100;
-  }
+      const missing = [];
+      if (!Number.isFinite(age)) missing.push("Alter");
+      if (!Number.isFinite(sbp)) missing.push("SBP");
+      if (!Number.isFinite(tchol_raw)) missing.push("Gesamtcholesterin");
+      if (!Number.isFinite(hdl_raw)) missing.push("HDL");
 
-  const riskRounded = Math.round(riskPct * 10) / 10;
-  document.getElementById("risk_result").textContent = riskRounded.toFixed(1) + " %";
+      const ageDiag = parseNumber("agedm");
+      const egfr = parseNumber("egfr");
+      const hbaUnit = document.querySelector('input[name="hba1c_unit"]:checked')?.value || "pct";
+      const hbaRaw = parseNumber("hba1c");
+      const hbaIFCC = hba1cToIFCC(hbaRaw, hbaUnit);
 
-  setBandThresholdText(age);
-  const cls = classifyRisk(age, riskRounded);
-  setBand(cls.band);
+      if (mode === "dm") {
+        if (!Number.isFinite(ageDiag)) missing.push("Alter bei Diagnose");
+        if (!Number.isFinite(hbaRaw)) missing.push("HbA1c");
+        if (!Number.isFinite(egfr)) missing.push("eGFR");
+      }
 
-  const note = (mode === "dm")
-    ? "SCORE2-Diabetes unterstützt die Primärprävention bei T2D; Sekundärprävention/Endorganschaden separat berücksichtigen."
-    : "Bei manifester ASCVD (Sekundärprävention) sind Primärpräventions-Scores i. d. R. nicht zur Risikostratifizierung gedacht.";
+      if (missing.length) {
+        document.getElementById("risk_result").textContent = "—";
+        clearBand();
+        document.getElementById("interpret").innerHTML = "<strong>Interpretation:</strong> —";
+        setMsg(gmsg, "<strong>Fehlende/ungültige Eingaben:</strong> " + missing.join(", "), "err");
+        return;
+      }
 
-  document.getElementById("interpret").innerHTML =
-    `<strong>Interpretation:</strong> Kategorie: <strong>${cls.label}</strong>. Region: <strong>${region}</strong>. Modell: <strong>${modelUsed}</strong>. ${note}`;
+      const warns = [];
+      if (sbp < 70 || sbp > 260) warns.push("SBP wirkt unplausibel");
+      if (tchol < 2 || tchol > 15) warns.push("Gesamtcholesterin wirkt unplausibel");
+      if (hdl < 0.3 || hdl > 4) warns.push("HDL wirkt unplausibel");
+      if (mode === "dm") {
+        if (egfr <= 0) warns.push("eGFR muss >0 sein");
+        if (hbaIFCC < 20 || hbaIFCC > 200) warns.push("HbA1c wirkt unplausibel");
+        if (ageDiag < 0 || ageDiag > age) warns.push("Alter bei Diagnose unplausibel");
+      }
+      if (warns.length) setMsg(gmsg, "<strong>Hinweis:</strong> " + warns.join("; ") + ".", "warn");
 
-  // store for copy
-  window.__lastResult = {
-    risk: riskRounded, model: modelUsed, region, sex, age,
-    smoker, sbp, unit, tchol_raw, hdl_raw,
-    dm: (mode === "dm"),
-    ageDiag, egfr, hbaRaw, hbaUnit
-  };
-}
+      let riskPct = NaN;
+      let modelUsed = "";
 
-/* =========================
-   Events
-   ========================= */
-populateCountryDropdownAlphabetical();
-showMode();
+      if (mode === "dm") {
+        modelUsed = "SCORE2-Diabetes (T2D; 40–69 J)";
+        const cal = score2Diabetes10y(age, sex, smoker, sbp, tchol, hdl, ageDiag, hbaIFCC, egfr, region);
+        riskPct = cal * 100;
+      } else {
+        modelUsed = (age >= 70) ? "SCORE2-OP (≥70 J)" : "SCORE2 (40–69 J)";
+        const uncal = uncalibratedScore2(age, sex, smoker, sbp, tchol, hdl);
+        const cal = recalibrate(uncal, age, sex, region);
+        riskPct = cal * 100;
+      }
 
-// Default: Deutschland + Moderate? (optional) – ich setze es bewusst NICHT automatisch,
-// damit du aktiv entscheidest; wenn du es willst: uncomment.
-/*
-document.getElementById("country").value = "Deutschland";
-setRegion(COUNTRY_TO_REGION_DE["Deutschland"]);
-document.getElementById("region_auto_note").textContent = "Auto: an";
-*/
+      const riskRounded = Math.round(riskPct * 10) / 10;
+      document.getElementById("risk_result").textContent = riskRounded.toFixed(1) + " %";
 
-document.getElementById("mode_score2").addEventListener("change", () => { showMode(); calculateAll(); });
-document.getElementById("mode_dm").addEventListener("change", () => { showMode(); calculateAll(); });
+      setBandThresholdText(age);
+      const cls = classifyRisk(age, riskRounded);
+      setBand(cls.band);
 
-document.getElementById("country").addEventListener("change", (e) => {
-  const c = e.target.value;
-  if (c && COUNTRY_TO_REGION_DE[c]) {
-    setRegion(COUNTRY_TO_REGION_DE[c]);
-    document.getElementById("region_auto_note").textContent = "Auto: an";
-  } else {
-    document.getElementById("region_auto_note").textContent = "Auto: aus";
-  }
-  calculateAll();
-});
+      const note = (mode === "dm")
+        ? "SCORE2-Diabetes unterstützt die Primärprävention bei T2D; Sekundärprävention/Endorganschaden separat berücksichtigen."
+        : "Bei manifester ASCVD (Sekundärprävention) sind Primärpräventions-Scores i. d. R. nicht zur Risikostratifizierung gedacht.";
 
-// Manual region override turns auto note off (but keeps selected country)
-document.querySelectorAll('input[name="region"]').forEach(r => {
-  r.addEventListener("change", () => {
-    document.getElementById("region_auto_note").textContent = "Auto: aus";
+      document.getElementById("interpret").innerHTML =
+        `<strong>Interpretation:</strong> Kategorie: <strong>${cls.label}</strong>. Region: <strong>${region}</strong>. Modell: <strong>${modelUsed}</strong>. ${note}`;
+
+      window.__lastResult = {
+        risk: riskRounded, model: modelUsed, region, sex, age,
+        smoker, sbp, unit, tchol_raw, hdl_raw,
+        dm: (mode === "dm"),
+        ageDiag, egfr, hbaRaw, hbaUnit
+      };
+    }
+
+    /* =========================
+       Events
+       ========================= */
+    populateCountryDropdownAlphabetical();
+    showMode();
+
+    document.getElementById("mode_score2").addEventListener("change", () => { showMode(); calculateAll(); });
+    document.getElementById("mode_dm").addEventListener("change", () => { showMode(); calculateAll(); });
+
+    document.getElementById("country").addEventListener("change", (e) => {
+      const c = e.target.value;
+      if (c && COUNTRY_TO_REGION_DE[c]) {
+        setRegion(COUNTRY_TO_REGION_DE[c]);
+        document.getElementById("region_auto_note").textContent = "Auto: an";
+      } else {
+        document.getElementById("region_auto_note").textContent = "Auto: aus";
+      }
+      calculateAll();
+    });
+
+    document.querySelectorAll('input[name="region"]').forEach(r => {
+      r.addEventListener("change", () => {
+        document.getElementById("region_auto_note").textContent = "Auto: aus";
+        calculateAll();
+      });
+    });
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("change", calculateAll);
+      if (el.tagName.toLowerCase() === "input" && el.type === "text") {
+        el.addEventListener("input", calculateAll);
+      }
+    });
+
+    document.getElementById("copy_btn").addEventListener("click", () => {
+      const r = window.__lastResult;
+      if (!r || !Number.isFinite(r.risk)) return;
+
+      const sexTxt = (r.sex === "male") ? "m" : "w";
+      const smokeTxt = r.smoker ? "Raucher: ja" : "Raucher: nein";
+
+      let text =
+        `SCORE2 Ergebnis: ${r.risk.toFixed(1)} % (10-Jahres-Risiko), Modell: ${r.model}, Region: ${r.region}, ` +
+        `Alter: ${r.age}, Geschlecht: ${sexTxt}, ${smokeTxt}, SBP: ${r.sbp} mmHg, ` +
+        `TC: ${r.tchol_raw} ${r.unit === "mgdl" ? "mg/dL" : "mmol/L"}, HDL: ${r.hdl_raw} ${r.unit === "mgdl" ? "mg/dL" : "mmol/L"}`;
+
+      if (r.dm) {
+        text += `, DM-Diagnosealter: ${r.ageDiag}, HbA1c: ${r.hbaRaw} ${r.hbaUnit === "pct" ? "%" : "mmol/mol"}, eGFR: ${r.egfr}`;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById("copied");
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 1500);
+      });
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      document.getElementById("mode_score2").checked = true;
+      document.getElementById("sex").value = "male";
+      document.getElementById("age").value = "";
+      document.getElementById("smoker").checked = false;
+
+      document.getElementById("sbp").value = "";
+      document.getElementById("tchol").value = "";
+      document.getElementById("hdl").value = "";
+      document.querySelector('input[name="lipunit"][value="mgdl"]').checked = true;
+
+      document.getElementById("country").value = "";
+      setRegion("Low");
+      document.getElementById("region_auto_note").textContent = "Auto: aus";
+
+      document.getElementById("agedm").value = "";
+      document.getElementById("hba1c").value = "";
+      document.getElementById("egfr").value = "";
+      document.querySelector('input[name="hba1c_unit"][value="pct"]').checked = true;
+
+      showMode();
+      calculateAll();
+    });
+
     calculateAll();
-  });
-});
+  </script>
 
-// Recalc on any input/select change
-document.querySelectorAll("input, select").forEach(el => {
-  el.addEventListener("change", calculateAll);
-  if (el.tagName.toLowerCase() === "input" && el.type === "text") {
-    el.addEventListener("input", calculateAll);
-  }
-});
-
-document.getElementById("copy_btn").addEventListener("click", () => {
-  const r = window.__lastResult;
-  if (!r || !Number.isFinite(r.risk)) return;
-
-  const sexTxt = (r.sex === "male") ? "m" : "w";
-  const smokeTxt = r.smoker ? "Raucher: ja" : "Raucher: nein";
-
-  let text =
-    `SCORE2 Ergebnis: ${r.risk.toFixed(1)} % (10-Jahres-Risiko), Modell: ${r.model}, Region: ${r.region}, ` +
-    `Alter: ${r.age}, Geschlecht: ${sexTxt}, ${smokeTxt}, SBP: ${r.sbp} mmHg, ` +
-    `TC: ${r.tchol_raw} ${r.unit === "mgdl" ? "mg/dL" : "mmol/L"}, HDL: ${r.hdl_raw} ${r.unit === "mgdl" ? "mg/dL" : "mmol/L"}`;
-
-  if (r.dm) {
-    text += `, DM-Diagnosealter: ${r.ageDiag}, HbA1c: ${r.hbaRaw} ${r.hbaUnit === "pct" ? "%" : "mmol/mol"}, eGFR: ${r.egfr}`;
-  }
-
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("copied");
-    msg.style.display = "inline";
-    setTimeout(() => msg.style.display = "none", 1500);
-  });
-});
-
-document.getElementById("reset").addEventListener("click", () => {
-  document.getElementById("mode_score2").checked = true;
-  document.getElementById("sex").value = "male";
-  document.getElementById("age").value = "";
-  document.getElementById("smoker").checked = false;
-
-  document.getElementById("sbp").value = "";
-  document.getElementById("tchol").value = "";
-  document.getElementById("hdl").value = "";
-  document.querySelector('input[name="lipunit"][value="mgdl"]').checked = true; // mg/dL Standard
-
-  document.getElementById("country").value = "";
-  setRegion("Low");
-  document.getElementById("region_auto_note").textContent = "Auto: aus";
-
-  document.getElementById("agedm").value = "";
-  document.getElementById("hba1c").value = "";
-  document.getElementById("egfr").value = "";
-  document.querySelector('input[name="hba1c_unit"][value="pct"]').checked = true; // % Standard
-
-  showMode();
-  calculateAll();
-});
-
-// Initial
-calculateAll();
-</script>
-
+  <!-- Navbar -->
+  <script src="nav.js"></script>
 </body>
 </html>
