@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Child-Pugh & MELD (Na / 3.0)</title>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    /* Grundlayout kommt aus style.css */
     h1 { font-size: 22px; margin: 0 0 10px; }
     h2 { font-size: 18px; margin: 18px 0 10px; }
     .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 1060px; border-radius: 10px; }
 
     .switch {
       display: flex; gap: 10px; flex-wrap: wrap;
@@ -128,203 +130,209 @@
       font-size: 15px;
       font-weight: bold;
     }
+
+    /* Card aus style.css etwas luftiger */
+    .card { padding: 20px; }
   </style>
 </head>
+
 <body>
 
-<h1>Child-Pugh & MELD</h1>
-<div class="muted">
-  Arbeits-/Lernhilfe ohne Speicherung. (MELD-Anzeige wird bei 40 gedeckelt. Kopieren: immer nur ein Score pro Button.)
-</div>
+<div class="container">
+  <div class="card">
 
-<div class="box">
+    <h1>Child-Pugh & MELD</h1>
+    <div class="muted">
+      Arbeits-/Lernhilfe ohne Speicherung. (MELD-Anzeige wird bei 40 gedeckelt. Kopieren: immer nur ein Score pro Button.)
+    </div>
 
-  <div class="switch">
-    <strong>Modus:</strong>
-    <label><input type="radio" name="mode" id="mode_ctp" checked> Child-Pugh</label>
-    <label><input type="radio" name="mode" id="mode_meld"> MELD</label>
+    <div class="switch">
+      <strong>Modus:</strong>
+      <label><input type="radio" name="mode" id="mode_ctp" checked> Child-Pugh</label>
+      <label><input type="radio" name="mode" id="mode_meld"> MELD</label>
+    </div>
+
+    <!-- ===================== CHILD-PUGH ===================== -->
+    <div id="section_ctp">
+      <h2>Child-Pugh</h2>
+
+      <div class="group">
+        <div class="gtitle">Aszites</div>
+        <div class="radio-row">
+          <label><input type="radio" name="ctp_asc" value="1" checked> keiner <span class="pts">1</span></label>
+          <label><input type="radio" name="ctp_asc" value="2"> leicht, kontrolliert <span class="pts">2</span></label>
+          <label><input type="radio" name="ctp_asc" value="3"> moderat–refraktär <span class="pts">3</span></label>
+        </div>
+        <div class="explain">„Kontrolliert“ = diuretisch gut beherrschbar. „Refraktär“ = trotz Therapie/Parazentese relevant.</div>
+      </div>
+
+      <div class="group">
+        <div class="gtitle">Enzephalopathie</div>
+        <div class="radio-row">
+          <label><input type="radio" name="ctp_he" value="1" checked> keine <span class="pts">1</span></label>
+          <label><input type="radio" name="ctp_he" value="2"> Grad I–II <span class="pts">2</span></label>
+          <label><input type="radio" name="ctp_he" value="3"> Grad III–IV <span class="pts">3</span></label>
+        </div>
+        <div class="explain">I–II: Schlaf-Wach-Umkehr, Asterixis. III–IV: Somnolenz bis Koma.</div>
+      </div>
+
+      <div class="group">
+        <div class="gtitle">Bilirubin</div>
+        <div class="radio-row">
+          <label><input type="radio" name="ctp_bili" value="1" checked> &lt;2 mg/dL <span class="pts">1</span></label>
+          <label><input type="radio" name="ctp_bili" value="2"> 2–3 mg/dL <span class="pts">2</span></label>
+          <label><input type="radio" name="ctp_bili" value="3"> &gt;3 mg/dL <span class="pts">3</span></label>
+        </div>
+        <div class="explain">Gesamtbilirubin (Standard-Child-Pugh).</div>
+      </div>
+
+      <div class="group">
+        <div class="gtitle">Albumin</div>
+        <div class="radio-row">
+          <label><input type="radio" name="ctp_alb" value="1" checked> &gt;3.5 g/dL <span class="pts">1</span></label>
+          <label><input type="radio" name="ctp_alb" value="2"> 2.8–3.5 g/dL <span class="pts">2</span></label>
+          <label><input type="radio" name="ctp_alb" value="3"> &lt;2.8 g/dL <span class="pts">3</span></label>
+        </div>
+        <div class="explain">Serumalbumin.</div>
+      </div>
+
+      <div class="group">
+        <div class="gtitle">INR</div>
+        <div class="radio-row">
+          <label><input type="radio" name="ctp_inr" value="1" checked> &lt;1.7 <span class="pts">1</span></label>
+          <label><input type="radio" name="ctp_inr" value="2"> 1.7–2.3 <span class="pts">2</span></label>
+          <label><input type="radio" name="ctp_inr" value="3"> &gt;2.3 <span class="pts">3</span></label>
+        </div>
+        <div class="explain">Nur leberbedingt interpretieren (Vitamin-K-Mangel/Antikoagulation beachten).</div>
+      </div>
+
+      <div class="scoreline">
+        <div>Child-Pugh:</div>
+        <div class="score" id="ctp_score">5</div>
+        <button id="ctp_copy">kopieren</button>
+        <span class="copied" id="ctp_copied" style="display:none;">✓ kopiert</span>
+        <span style="flex:1;"></span>
+        <button id="ctp_reset">Zurücksetzen</button>
+      </div>
+
+      <div class="ctp-overview">
+        <div id="ctp_A" class="ctp-box">
+          <strong>Child-Pugh A</strong>
+          5–6 Punkte<br>kompensiert / mild
+        </div>
+        <div id="ctp_B" class="ctp-box">
+          <strong>Child-Pugh B</strong>
+          7–9 Punkte<br>moderat dekompensiert
+        </div>
+        <div id="ctp_C" class="ctp-box">
+          <strong>Child-Pugh C</strong>
+          10–15 Punkte<br>schwer dekompensiert
+        </div>
+      </div>
+
+      <div class="interpret" id="ctp_rec"><strong>Empfehlung:</strong> —</div>
+    </div>
+
+    <!-- ===================== MELD ===================== -->
+    <div id="section_meld" class="hidden">
+      <h2>MELD</h2>
+
+      <div class="switch" style="margin-top:10px;">
+        <strong>Rechner:</strong>
+        <label><input type="radio" name="meld_type" id="meld_type_na" checked> MELD / MELD-Na</label>
+        <label><input type="radio" name="meld_type" id="meld_type_30"> MELD 3.0</label>
+      </div>
+
+      <div class="rowbox">
+        <strong>Bilirubin:</strong>
+        <input type="number" id="meld_bili" step="0.1" min="0" placeholder="z. B. 3.2">
+        <select id="meld_bili_unit" class="small">
+          <option value="mgdl" selected>mg/dL</option>
+          <option value="umol">µmol/L</option>
+        </select>
+
+        <strong>INR:</strong>
+        <input type="number" id="meld_inr" step="0.01" min="0" placeholder="z. B. 1.8" class="small">
+
+        <strong>Kreatinin:</strong>
+        <input type="number" id="meld_crea" step="0.1" min="0" placeholder="z. B. 1.6">
+        <select id="meld_crea_unit" class="small">
+          <option value="mgdl" selected>mg/dL</option>
+          <option value="umol">µmol/L</option>
+        </select>
+
+        <strong>Natrium:</strong>
+        <input type="number" id="meld_na" step="1" min="80" max="200" placeholder="mmol/L" class="small">
+
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="meld_dialysis">
+          Dialyse (oder ≥2×/Woche)
+        </label>
+
+        <span class="hint">Anzeige ist bei 40 gedeckelt. Na wird auf 125–137 geklemmt.</span>
+      </div>
+
+      <div id="meld30_extras" class="rowbox hidden">
+        <strong>Geschlecht:</strong>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="radio" name="meld_sex" id="meld_sex_m" checked> männlich
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="radio" name="meld_sex" id="meld_sex_f"> weiblich
+        </label>
+
+        <strong>Albumin:</strong>
+        <input type="number" id="meld_alb" step="0.1" min="0" placeholder="z. B. 2.9" class="small">
+        <select id="meld_alb_unit" class="small">
+          <option value="gdl" selected>g/dL</option>
+          <option value="gl">g/L</option>
+        </select>
+
+        <span class="hint">MELD 3.0: Albumin 1.5–3.5 g/dL, Kreatinin max. 3.0 mg/dL.</span>
+      </div>
+
+      <!-- Classic scoreline -->
+      <div class="scoreline" id="meld_scoreline_na">
+        <div>MELD(i):</div>
+        <div class="score" id="meld_score">—</div>
+        <button id="meld_copy_meldi">kopieren</button>
+        <span class="copied" id="meld_copied_meldi" style="display:none;">✓ kopiert</span>
+
+        <div style="margin-left:14px;">MELD-Na:</div>
+        <div class="score" id="meldna_score">—</div>
+        <button id="meld_copy_meldna">kopieren</button>
+        <span class="copied" id="meld_copied_meldna" style="display:none;">✓ kopiert</span>
+
+        <span style="flex:1;"></span>
+        <button id="meld_reset">Zurücksetzen</button>
+      </div>
+
+      <!-- MELD 3.0 scoreline -->
+      <div class="scoreline hidden" id="meld_scoreline_30">
+        <div>MELD 3.0:</div>
+        <div class="score" id="meld30_score">—</div>
+        <button id="meld_copy_meld30">kopieren</button>
+        <span class="copied" id="meld_copied_meld30" style="display:none;">✓ kopiert</span>
+
+        <span style="flex:1;"></span>
+        <button id="meld30_reset">Zurücksetzen</button>
+      </div>
+
+      <!-- Kategorieband -->
+      <div class="meld-band" id="meld_band">
+        <div id="band_0" class="bandbox"><strong>≤ 9</strong> sehr niedrig</div>
+        <div id="band_1" class="bandbox"><strong>10–19</strong> niedrig–moderat</div>
+        <div id="band_2" class="bandbox"><strong>20–29</strong> moderat–hoch</div>
+        <div id="band_3" class="bandbox"><strong>30–39</strong> hoch</div>
+        <div id="band_4" class="bandbox"><strong>40</strong> sehr hoch</div>
+      </div>
+
+      <div class="interpret" id="meld_interp"><strong>Einordnung:</strong> —</div>
+      <div class="interpret" id="meld_rec"><strong>Empfehlung:</strong> —</div>
+      <div class="warn hidden" id="meld_warn"><strong>Achtung:</strong> —</div>
+    </div>
+
   </div>
-
-  <!-- ===================== CHILD-PUGH ===================== -->
-  <div id="section_ctp">
-    <h2>Child-Pugh</h2>
-
-    <div class="group">
-      <div class="gtitle">Aszites</div>
-      <div class="radio-row">
-        <label><input type="radio" name="ctp_asc" value="1" checked> keiner <span class="pts">1</span></label>
-        <label><input type="radio" name="ctp_asc" value="2"> leicht, kontrolliert <span class="pts">2</span></label>
-        <label><input type="radio" name="ctp_asc" value="3"> moderat–refraktär <span class="pts">3</span></label>
-      </div>
-      <div class="explain">„Kontrolliert“ = diuretisch gut beherrschbar. „Refraktär“ = trotz Therapie/Parazentese relevant.</div>
-    </div>
-
-    <div class="group">
-      <div class="gtitle">Enzephalopathie</div>
-      <div class="radio-row">
-        <label><input type="radio" name="ctp_he" value="1" checked> keine <span class="pts">1</span></label>
-        <label><input type="radio" name="ctp_he" value="2"> Grad I–II <span class="pts">2</span></label>
-        <label><input type="radio" name="ctp_he" value="3"> Grad III–IV <span class="pts">3</span></label>
-      </div>
-      <div class="explain">I–II: Schlaf-Wach-Umkehr, Asterixis. III–IV: Somnolenz bis Koma.</div>
-    </div>
-
-    <div class="group">
-      <div class="gtitle">Bilirubin</div>
-      <div class="radio-row">
-        <label><input type="radio" name="ctp_bili" value="1" checked> &lt;2 mg/dL <span class="pts">1</span></label>
-        <label><input type="radio" name="ctp_bili" value="2"> 2–3 mg/dL <span class="pts">2</span></label>
-        <label><input type="radio" name="ctp_bili" value="3"> &gt;3 mg/dL <span class="pts">3</span></label>
-      </div>
-      <div class="explain">Gesamtbilirubin (Standard-Child-Pugh).</div>
-    </div>
-
-    <div class="group">
-      <div class="gtitle">Albumin</div>
-      <div class="radio-row">
-        <label><input type="radio" name="ctp_alb" value="1" checked> &gt;3.5 g/dL <span class="pts">1</span></label>
-        <label><input type="radio" name="ctp_alb" value="2"> 2.8–3.5 g/dL <span class="pts">2</span></label>
-        <label><input type="radio" name="ctp_alb" value="3"> &lt;2.8 g/dL <span class="pts">3</span></label>
-      </div>
-      <div class="explain">Serumalbumin.</div>
-    </div>
-
-    <div class="group">
-      <div class="gtitle">INR</div>
-      <div class="radio-row">
-        <label><input type="radio" name="ctp_inr" value="1" checked> &lt;1.7 <span class="pts">1</span></label>
-        <label><input type="radio" name="ctp_inr" value="2"> 1.7–2.3 <span class="pts">2</span></label>
-        <label><input type="radio" name="ctp_inr" value="3"> &gt;2.3 <span class="pts">3</span></label>
-      </div>
-      <div class="explain">Nur leberbedingt interpretieren (Vitamin-K-Mangel/Antikoagulation beachten).</div>
-    </div>
-
-    <div class="scoreline">
-      <div>Child-Pugh:</div>
-      <div class="score" id="ctp_score">5</div>
-      <button id="ctp_copy">kopieren</button>
-      <span class="copied" id="ctp_copied" style="display:none;">✓ kopiert</span>
-      <span style="flex:1;"></span>
-      <button id="ctp_reset">Zurücksetzen</button>
-    </div>
-
-    <div class="ctp-overview">
-      <div id="ctp_A" class="ctp-box">
-        <strong>Child-Pugh A</strong>
-        5–6 Punkte<br>kompensiert / mild
-      </div>
-      <div id="ctp_B" class="ctp-box">
-        <strong>Child-Pugh B</strong>
-        7–9 Punkte<br>moderat dekompensiert
-      </div>
-      <div id="ctp_C" class="ctp-box">
-        <strong>Child-Pugh C</strong>
-        10–15 Punkte<br>schwer dekompensiert
-      </div>
-    </div>
-
-    <div class="interpret" id="ctp_rec"><strong>Empfehlung:</strong> —</div>
-  </div>
-
-  <!-- ===================== MELD ===================== -->
-  <div id="section_meld" class="hidden">
-    <h2>MELD</h2>
-
-    <div class="switch" style="margin-top:10px;">
-      <strong>Rechner:</strong>
-      <label><input type="radio" name="meld_type" id="meld_type_na" checked> MELD / MELD-Na</label>
-      <label><input type="radio" name="meld_type" id="meld_type_30"> MELD 3.0</label>
-    </div>
-
-    <div class="rowbox">
-      <strong>Bilirubin:</strong>
-      <input type="number" id="meld_bili" step="0.1" min="0" placeholder="z. B. 3.2">
-      <select id="meld_bili_unit" class="small">
-        <option value="mgdl" selected>mg/dL</option>
-        <option value="umol">µmol/L</option>
-      </select>
-
-      <strong>INR:</strong>
-      <input type="number" id="meld_inr" step="0.01" min="0" placeholder="z. B. 1.8" class="small">
-
-      <strong>Kreatinin:</strong>
-      <input type="number" id="meld_crea" step="0.1" min="0" placeholder="z. B. 1.6">
-      <select id="meld_crea_unit" class="small">
-        <option value="mgdl" selected>mg/dL</option>
-        <option value="umol">µmol/L</option>
-      </select>
-
-      <strong>Natrium:</strong>
-      <input type="number" id="meld_na" step="1" min="80" max="200" placeholder="mmol/L" class="small">
-
-      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-        <input type="checkbox" id="meld_dialysis">
-        Dialyse (oder ≥2×/Woche)
-      </label>
-
-      <span class="hint">Anzeige ist bei 40 gedeckelt. Na wird auf 125–137 geklemmt.</span>
-    </div>
-
-    <div id="meld30_extras" class="rowbox hidden">
-      <strong>Geschlecht:</strong>
-      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-        <input type="radio" name="meld_sex" id="meld_sex_m" checked> männlich
-      </label>
-      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-        <input type="radio" name="meld_sex" id="meld_sex_f"> weiblich
-      </label>
-
-      <strong>Albumin:</strong>
-      <input type="number" id="meld_alb" step="0.1" min="0" placeholder="z. B. 2.9" class="small">
-      <select id="meld_alb_unit" class="small">
-        <option value="gdl" selected>g/dL</option>
-        <option value="gl">g/L</option>
-      </select>
-
-      <span class="hint">MELD 3.0: Albumin 1.5–3.5 g/dL, Kreatinin max. 3.0 mg/dL.</span>
-    </div>
-
-    <!-- Classic scoreline -->
-    <div class="scoreline" id="meld_scoreline_na">
-      <div>MELD(i):</div>
-      <div class="score" id="meld_score">—</div>
-      <button id="meld_copy_meldi">kopieren</button>
-      <span class="copied" id="meld_copied_meldi" style="display:none;">✓ kopiert</span>
-
-      <div style="margin-left:14px;">MELD-Na:</div>
-      <div class="score" id="meldna_score">—</div>
-      <button id="meld_copy_meldna">kopieren</button>
-      <span class="copied" id="meld_copied_meldna" style="display:none;">✓ kopiert</span>
-
-      <span style="flex:1;"></span>
-      <button id="meld_reset">Zurücksetzen</button>
-    </div>
-
-    <!-- MELD 3.0 scoreline -->
-    <div class="scoreline hidden" id="meld_scoreline_30">
-      <div>MELD 3.0:</div>
-      <div class="score" id="meld30_score">—</div>
-      <button id="meld_copy_meld30">kopieren</button>
-      <span class="copied" id="meld_copied_meld30" style="display:none;">✓ kopiert</span>
-
-      <span style="flex:1;"></span>
-      <button id="meld30_reset">Zurücksetzen</button>
-    </div>
-
-    <!-- Kategorieband (immer sichtbar im MELD-Modus, markiert wird je nach aktivem Score) -->
-    <div class="meld-band" id="meld_band">
-      <div id="band_0" class="bandbox"><strong>≤ 9</strong> sehr niedrig</div>
-      <div id="band_1" class="bandbox"><strong>10–19</strong> niedrig–moderat</div>
-      <div id="band_2" class="bandbox"><strong>20–29</strong> moderat–hoch</div>
-      <div id="band_3" class="bandbox"><strong>30–39</strong> hoch</div>
-      <div id="band_4" class="bandbox"><strong>40</strong> sehr hoch</div>
-    </div>
-
-    <div class="interpret" id="meld_interp"><strong>Einordnung:</strong> —</div>
-    <div class="interpret" id="meld_rec"><strong>Empfehlung:</strong> —</div>
-    <div class="warn hidden" id="meld_warn"><strong>Achtung:</strong> —</div>
-  </div>
-
 </div>
 
 <script>
@@ -382,9 +390,9 @@ function calcCTP() {
 }
 
 /* ===== Units ===== */
-function toMgDl_Bili(x, unit) { return (unit === "umol") ? (x / 17.1) : x; }  // 1 mg/dL = 17.1 µmol/L
-function toMgDl_Crea(x, unit) { return (unit === "umol") ? (x / 88.4) : x; }  // 1 mg/dL ≈ 88.4 µmol/L
-function toGdL_Alb(x, unit)   { return (unit === "gl")   ? (x / 10.0) : x; }  // 1 g/dL = 10 g/L
+function toMgDl_Bili(x, unit) { return (unit === "umol") ? (x / 17.1) : x; }
+function toMgDl_Crea(x, unit) { return (unit === "umol") ? (x / 88.4) : x; }
+function toGdL_Alb(x, unit)   { return (unit === "gl")   ? (x / 10.0) : x; }
 
 /* ===== MELD text ===== */
 function meldRiskBucketLabel(m) {
@@ -446,24 +454,17 @@ function calcMELDClassic() {
   let crea = toMgDl_Crea(creaRaw, creaUnit);
   let na   = naRaw;
 
-  // Mindestwerte für ln
   bili = Math.max(1.0, bili);
   inr  = Math.max(1.0, inr);
 
-  // Dialyse: creatinin 4.0 (klassisch)
   if (dial) crea = 4.0;
-
-  // Kreatinin cap 1.0..4.0
   crea = clamp(crea, 1.0, 4.0);
 
-  // MELD(i)
   const meld = 10 * (0.957 * Math.log(crea) + 0.378 * Math.log(bili) + 1.120 * Math.log(inr) + 0.643);
 
-  // Na clamp 125..137
   const naC = clamp(na, 125, 137);
   const delta = (137 - naC);
 
-  // Häufige Implementationsregel: MELD-Na nur bei MELD>11, sonst = MELD
   let meldNa = meld;
   if (meld > 11) {
     meldNa = meld + 1.32 * delta - 0.033 * meld * delta;
@@ -472,7 +473,6 @@ function calcMELDClassic() {
   const meldShown   = Math.min(40, Math.round(meld));
   const meldNaShown = Math.min(40, Math.round(meldNa));
 
-  // Plausibilität (optional)
   const suspicious = [];
   if (naRaw < 110 || naRaw > 160) suspicious.push("Natrium wirkt unplausibel");
   if (inrRaw > 10) suspicious.push("INR extrem hoch");
@@ -510,7 +510,6 @@ function calcMELD30() {
   let na   = naRaw;
   let alb  = toGdL_Alb(albRaw, albUnit);
 
-  // Caps / Mindestwerte (MELD 3.0)
   bili = Math.max(1.0, bili);
   inr  = Math.max(1.0, inr);
 
@@ -523,7 +522,6 @@ function calcMELD30() {
   const deltaNa = (137 - na);
   const deltaAlb = (3.5 - alb);
 
-  // MELD 3.0 (Kim et al.)
   const meld30 =
     (female ? 1.33 : 0) +
     4.56 * Math.log(bili) +
@@ -548,7 +546,6 @@ function calcMELD30() {
   return { meld30Shown, naRaw, dial };
 }
 
-/* ===== MELD UI coordinator ===== */
 function isMeld30Mode() { return isChecked("meld_type_30"); }
 
 function updateMeldModeUI() {
@@ -556,7 +553,6 @@ function updateMeldModeUI() {
   document.getElementById("meld30_extras").classList.toggle("hidden", !m30);
   document.getElementById("meld_scoreline_na").classList.toggle("hidden", m30);
   document.getElementById("meld_scoreline_30").classList.toggle("hidden", !m30);
-
   recalcMeld();
 }
 
@@ -577,7 +573,6 @@ function recalcMeld() {
     document.getElementById("meld_score").textContent = String(r.meldShown);
     document.getElementById("meldna_score").textContent = String(r.meldNaShown);
 
-    // Kategorieband: markiere "schlechteren" (max) für schnellen Überblick
     const driver = Math.max(r.meldShown, r.meldNaShown);
     setBand(driver);
 
@@ -610,24 +605,19 @@ function recalcMeld() {
 }
 
 /* ===== Events ===== */
-// Top mode
 document.getElementById("mode_ctp").addEventListener("change", () => show("ctp"));
 document.getElementById("mode_meld").addEventListener("change", () => show("meld"));
 
-// Child recalculation
 document.querySelectorAll('#section_ctp input').forEach(el => el.addEventListener("change", calcCTP));
 
-// MELD type switch
 document.getElementById("meld_type_na").addEventListener("change", updateMeldModeUI);
 document.getElementById("meld_type_30").addEventListener("change", updateMeldModeUI);
 
-// MELD inputs
 document.querySelectorAll('#section_meld input, #section_meld select').forEach(el => {
   el.addEventListener("change", recalcMeld);
   el.addEventListener("input",  recalcMeld);
 });
 
-// Copy buttons (ein Wert pro Button!)
 document.getElementById("ctp_copy").addEventListener("click", () => {
   const sum = Number(document.getElementById("ctp_score").textContent);
   const cls = classifyCTP(sum);
@@ -652,7 +642,6 @@ document.getElementById("meld_copy_meld30").addEventListener("click", () => {
   navigator.clipboard.writeText(`MELD 3.0: ${v} Punkte`).then(() => flashCopied("meld_copied_meld30"));
 });
 
-// Reset
 document.getElementById("ctp_reset").addEventListener("click", () => {
   document.querySelector('input[name="ctp_asc"][value="1"]').checked = true;
   document.querySelector('input[name="ctp_he"][value="1"]').checked = true;
@@ -674,7 +663,6 @@ function resetMeldCommon() {
   document.getElementById("meld_sex_m").checked = true;
   document.getElementById("meld_warn").classList.add("hidden");
 
-  // hide copied markers
   ["meld_copied_meldi","meld_copied_meldna","meld_copied_meld30"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = "none";
@@ -696,6 +684,8 @@ show("ctp");
 calcCTP();
 updateMeldModeUI();
 </script>
+
+<script src="nav.js"></script>
 
 </body>
 </html>
