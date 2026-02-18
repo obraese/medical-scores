@@ -1,24 +1,44 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <link rel="stylesheet" href="style.css">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CHA₂DS₂-VA & HAS-BLED Rechner</title>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    body { font-family: Arial, sans-serif; margin: 0; line-height: 1.35; }
+
+    .page-wrapper {
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+    }
+
     h1 { font-size: 22px; margin: 0 0 10px; }
     h2 { font-size: 18px; margin: 22px 0 10px; }
+
     .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 860px; border-radius: 10px; }
+
+    .box {
+      border: 1px solid #ccc;
+      padding: 16px;
+      border-radius: 10px;
+      background: #fff;
+    }
 
     .switch {
-      display: flex; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      margin-bottom: 14px;
       align-items: center;
       background: #fcfcfc;
     }
-    .switch label { cursor: pointer; margin-right: 10px; }
 
     .item {
       border: 1px solid #eee;
@@ -37,19 +57,8 @@
 
     .content { flex: 1; }
     .title { font-weight: bold; margin-bottom: 4px; }
-
-    .explain {
-      font-size: 13px;
-      color: #444;
-      margin-left: 22px;
-    }
-
-    .pts {
-      color: #444;
-      font-size: 13px;
-      white-space: nowrap;
-      margin-left: 10px;
-    }
+    .explain { font-size: 13px; color: #444; margin-left: 22px; }
+    .pts { color: #444; font-size: 13px; white-space: nowrap; margin-left: 10px; }
 
     .scoreline {
       margin-top: 16px;
@@ -70,6 +79,7 @@
       background: #fafafa;
       cursor: pointer;
     }
+
     button:hover { background: #f2f2f2; }
 
     .copied { font-size: 13px; color: green; }
@@ -83,16 +93,13 @@
       border-radius: 10px;
       background: #fcfcfc;
     }
-    .interpret strong { margin-right: 6px; }
 
-    .divider { height: 1px; background: #eee; margin: 18px 0; }
-
-    /* ===== Kategorieband (neu) ===== */
     .band {
       display: grid;
       gap: 10px;
       margin-top: 12px;
     }
+
     .band-3 { grid-template-columns: repeat(3, 1fr); }
     .band-2 { grid-template-columns: repeat(2, 1fr); }
 
@@ -104,6 +111,7 @@
       font-size: 13px;
       text-align: center;
     }
+
     .bandbox strong { display:block; margin-bottom: 4px; }
 
     .band-active {
@@ -116,7 +124,10 @@
     .hidden { display: none; }
   </style>
 </head>
+
 <body>
+
+<div class="page-wrapper">
 
 <h1>Scores: CHA₂DS₂-VA & HAS-BLED</h1>
 <div class="muted">
@@ -125,7 +136,6 @@
 
 <div class="box">
 
-  <!-- ===== Score-Auswahl (neu) ===== -->
   <div class="switch">
     <strong>Score:</strong>
     <label><input type="radio" name="score_view" id="view_cha" checked> CHA₂DS₂-VA</label>
@@ -134,92 +144,17 @@
     <button id="reset">Alles zurücksetzen</button>
   </div>
 
-  <!-- ===================== CHA2DS2-VA ===================== -->
+  <!-- CHA2DS2-VA -->
   <div id="section_cha">
     <h2>CHA₂DS₂-VA</h2>
 
-    <!-- Alter -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_age65">
-        <div class="content">
-          <div class="title">Alter 65–74 Jahre</div>
-          <div class="explain">Alter zwischen 65 und 74 Jahren (inkl.).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_age75">
-        <div class="content">
-          <div class="title">Alter ≥ 75 Jahre</div>
-          <div class="explain">Alter 75 Jahre oder älter.</div>
-        </div>
-        <span class="pts">+2</span>
-      </label>
-    </div>
-
-    <!-- C -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_c">
-        <div class="content">
-          <div class="title">C – Herzinsuffizienz / LV-Dysfunktion</div>
-          <div class="explain">Klinische Herzinsuffizienz oder relevante LV-Dysfunktion.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <!-- H -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_h">
-        <div class="content">
-          <div class="title">H – Arterielle Hypertonie</div>
-          <div class="explain">Diagnostizierte arterielle Hypertonie.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <!-- D -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_d">
-        <div class="content">
-          <div class="title">D – Diabetes mellitus</div>
-          <div class="explain">Diabetes mellitus Typ 1 oder Typ 2.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <!-- S2 -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_s2">
-        <div class="content">
-          <div class="title">S₂ – Schlaganfall / TIA / Thromboembolie</div>
-          <div class="explain">Z. n. ischämischem Schlaganfall, TIA oder systemischer Embolie.</div>
-        </div>
-        <span class="pts">+2</span>
-      </label>
-    </div>
-
-    <!-- V -->
-    <div class="item">
-      <label>
-        <input type="checkbox" id="cha_v">
-        <div class="content">
-          <div class="title">V – Vaskuläre Erkrankung</div>
-          <div class="explain">KHK, pAVK oder relevante Aortenplaques.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    <div class="item"><label><input type="checkbox" id="cha_age65"><div class="content"><div class="title">Alter 65–74 Jahre</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_age75"><div class="content"><div class="title">Alter ≥ 75 Jahre</div></div><span class="pts">+2</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_c"><div class="content"><div class="title">Herzinsuffizienz / LV-Dysfunktion</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_h"><div class="content"><div class="title">Arterielle Hypertonie</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_d"><div class="content"><div class="title">Diabetes mellitus</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_s2"><div class="content"><div class="title">Schlaganfall / TIA / Embolie</div></div><span class="pts">+2</span></label></div>
+    <div class="item"><label><input type="checkbox" id="cha_v"><div class="content"><div class="title">Vaskuläre Erkrankung</div></div><span class="pts">+1</span></label></div>
 
     <div class="scoreline">
       <div>Score:</div>
@@ -228,136 +163,28 @@
       <span class="copied" id="cha_copied" style="display:none;">✓ kopiert</span>
     </div>
 
-    <!-- ===== Kategorieband CHA₂DS₂-VA (neu) ===== -->
-    <div class="band band-3" id="band_cha">
-      <div id="cha_band_0" class="bandbox">
-        <strong>0</strong>
-        niedrig
-      </div>
-      <div id="cha_band_1" class="bandbox">
-        <strong>1</strong>
-        intermediär
-      </div>
-      <div id="cha_band_2plus" class="bandbox">
-        <strong>≥2</strong>
-        erhöht
-      </div>
+    <div class="band band-3">
+      <div id="cha_band_0" class="bandbox"><strong>0</strong>niedrig</div>
+      <div id="cha_band_1" class="bandbox"><strong>1</strong>intermediär</div>
+      <div id="cha_band_2plus" class="bandbox"><strong>≥2</strong>erhöht</div>
     </div>
 
-    <!-- Interpretation (wird NICHT kopiert) -->
-    <div class="interpret" id="cha_interpret">
-      <strong>Interpretation:</strong> —
-    </div>
+    <div class="interpret" id="cha_interpret"><strong>Interpretation:</strong> —</div>
   </div>
 
-  <!-- ===================== HAS-BLED ===================== -->
+  <!-- HAS-BLED -->
   <div id="section_has" class="hidden">
     <h2>HAS-BLED</h2>
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_h">
-        <div class="content">
-          <div class="title">H – Hypertonie</div>
-          <div class="explain">
-            Unkontrollierte Hypertonie (klassisch: systolisch &gt;160 mmHg) oder klinisch relevante Hypertonie.
-          </div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_a_renal">
-        <div class="content">
-          <div class="title">A – Abnorme Nierenfunktion</div>
-          <div class="explain">
-            Relevante Niereninsuffizienz (z. B. Dialyse/Transplantat oder deutlich eingeschränkte Nierenfunktion – lokal definieren).
-          </div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_a_liver">
-        <div class="content">
-          <div class="title">A – Abnorme Leberfunktion</div>
-          <div class="explain">
-            Relevante Leberfunktionsstörung/chronische Lebererkrankung (z. B. Zirrhose – lokal definieren).
-          </div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_s">
-        <div class="content">
-          <div class="title">S – Schlaganfall</div>
-          <div class="explain">Z. n. Schlaganfall (insbesondere ischämisch).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_b_bleed">
-        <div class="content">
-          <div class="title">B – Blutung</div>
-          <div class="explain">Z. n. schwerer Blutung oder relevante Blutungsneigung/Anämie (kontextabhängig).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_l_inr">
-        <div class="content">
-          <div class="title">L – Labile INR</div>
-          <div class="explain">Nur bei VKA: schlecht eingestellte INR / niedrige TTR.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_e">
-        <div class="content">
-          <div class="title">E – Elderly (Alter &gt; 65 Jahre)</div>
-          <div class="explain">Alter über 65 Jahre.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_d_drugs">
-        <div class="content">
-          <div class="title">D – Drugs (begünstigende Medikation)</div>
-          <div class="explain">Z. B. Thrombozytenhemmer oder NSAR (erhöht Blutungsrisiko).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="has_d_alcohol">
-        <div class="content">
-          <div class="title">D – Alkohol</div>
-          <div class="explain">Relevanter/exzessiver Alkoholkonsum (praktische Schwelle je nach Definition/Anamnese).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    <div class="item"><label><input type="checkbox" id="has_h"><div class="content"><div class="title">Hypertonie</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_a_renal"><div class="content"><div class="title">Abnorme Nierenfunktion</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_a_liver"><div class="content"><div class="title">Abnorme Leberfunktion</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_s"><div class="content"><div class="title">Schlaganfall</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_b_bleed"><div class="content"><div class="title">Blutung</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_l_inr"><div class="content"><div class="title">Labile INR</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_e"><div class="content"><div class="title">Alter >65</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_d_drugs"><div class="content"><div class="title">Drugs</div></div><span class="pts">+1</span></label></div>
+    <div class="item"><label><input type="checkbox" id="has_d_alcohol"><div class="content"><div class="title">Alkohol</div></div><span class="pts">+1</span></label></div>
 
     <div class="scoreline">
       <div>Score:</div>
@@ -366,190 +193,52 @@
       <span class="copied" id="has_copied" style="display:none;">✓ kopiert</span>
     </div>
 
-    <!-- ===== Kategorieband HAS-BLED (neu) ===== -->
-    <div class="band band-2" id="band_has">
-      <div id="has_band_low" class="bandbox">
-        <strong>0–2</strong>
-        niedrig–moderat
-      </div>
-      <div id="has_band_high" class="bandbox">
-        <strong>≥3</strong>
-        erhöht
-      </div>
+    <div class="band band-2">
+      <div id="has_band_low" class="bandbox"><strong>0–2</strong>niedrig–moderat</div>
+      <div id="has_band_high" class="bandbox"><strong>≥3</strong>erhöht</div>
     </div>
 
-    <!-- Interpretation (wird NICHT kopiert) -->
-    <div class="interpret" id="has_interpret">
-      <strong>Interpretation:</strong> —
-    </div>
+    <div class="interpret" id="has_interpret"><strong>Interpretation:</strong> —</div>
   </div>
 
 </div>
+</div>
 
 <script>
-function punktText(n) {
-  return (n === 1) ? "Punkt" : "Punkte";
+function interpretCHA(score){
+  if(score===0) return "Niedriges Risiko.";
+  if(score===1) return "Intermediäres Risiko.";
+  return "Erhöhtes Risiko.";
 }
-
-/* ===== Score-Switch (neu) ===== */
-function showScore(which) {
-  document.getElementById("section_cha").classList.toggle("hidden", which !== "cha");
-  document.getElementById("section_has").classList.toggle("hidden", which !== "has");
+function interpretHAS(score){
+  if(score<=2) return "Niedrig–moderat.";
+  return "Erhöhtes Blutungsrisiko.";
 }
-
-/* ===== Kategorieband helpers (neu) ===== */
-function clearBand(ids) {
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("band-active");
-  });
+function calculateCHA(){
+  let s=0;
+  if(cha_age75.checked){ cha_age65.checked=false; s+=2; }
+  else if(cha_age65.checked) s+=1;
+  if(cha_c.checked) s+=1;
+  if(cha_h.checked) s+=1;
+  if(cha_d.checked) s+=1;
+  if(cha_s2.checked) s+=2;
+  if(cha_v.checked) s+=1;
+  cha_result.textContent=s;
+  cha_interpret.innerHTML="<strong>Interpretation:</strong> "+interpretCHA(s);
 }
-function setBandActive(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.add("band-active");
+function calculateHAS(){
+  let s=0;
+  document.querySelectorAll("#section_has input[type=checkbox]").forEach(cb=>{ if(cb.checked)s++; });
+  has_result.textContent=s;
+  has_interpret.innerHTML="<strong>Interpretation:</strong> "+interpretHAS(s);
 }
-function updateBandCHA(score) {
-  clearBand(["cha_band_0","cha_band_1","cha_band_2plus"]);
-  if (score === 0) setBandActive("cha_band_0");
-  else if (score === 1) setBandActive("cha_band_1");
-  else setBandActive("cha_band_2plus");
-}
-function updateBandHAS(score) {
-  clearBand(["has_band_low","has_band_high"]);
-  if (score >= 3) setBandActive("has_band_high");
-  else setBandActive("has_band_low");
-}
-
-function interpretCHA(score) {
-  // bewusst knapp + nicht als Therapieanordnung formuliert
-  if (score === 0) {
-    return "Niedriges thromboembolisches Risiko. Antikoagulationsbedarf ist häufig gering – klinischen Kontext/Leitlinie beachten.";
-  }
-  if (score === 1) {
-    return "Intermediäres Risiko. Nutzen/Risiko der Antikoagulation individuell abwägen (Komorbiditäten, Blutungsrisiko, Präferenzen).";
-  }
-  return "Erhöhtes thromboembolisches Risiko. Antikoagulation ist häufig empfohlen – Entscheidung leitlinien- und patientenbezogen treffen.";
-}
-
-function interpretHAS(score) {
-  // HAS-BLED ist KEIN OAK-Ausschlusskriterium; Fokus: Risikofaktoren modifizieren
-  if (score <= 2) {
-    return "Niedrig–moderates Blutungsrisiko. Standardvorgehen; modifizierbare Risikofaktoren beachten.";
-  }
-  return "Erhöhtes Blutungsrisiko (häufig ab ≥3). Engmaschige Kontrolle und Modifikation von Risikofaktoren (z. B. Blutdruck, NSAR/Plättchenhemmer, Alkohol, INR-Qualität bei VKA).";
-}
-
-function calculateCHA() {
-  let score = 0;
-
-  const age65 = document.getElementById("cha_age65");
-  const age75 = document.getElementById("cha_age75");
-
-  // gegenseitiger Ausschluss
-  if (age75.checked) {
-    age65.checked = false;
-    score += 2;
-  } else if (age65.checked) {
-    score += 1;
-  }
-
-  if (document.getElementById("cha_c").checked) score += 1;
-  if (document.getElementById("cha_h").checked) score += 1;
-  if (document.getElementById("cha_d").checked) score += 1;
-  if (document.getElementById("cha_v").checked) score += 1;
-  if (document.getElementById("cha_s2").checked) score += 2;
-
-  document.getElementById("cha_result").textContent = score;
-
-  updateBandCHA(score);
-
-  // Interpretation anzeigen (nicht kopieren)
-  document.getElementById("cha_interpret").innerHTML =
-    `<strong>Interpretation:</strong> ${interpretCHA(score)}`;
-
-  return score;
-}
-
-function calculateHAS() {
-  let score = 0;
-
-  if (document.getElementById("has_h").checked) score += 1;
-
-  // A: renal + liver zählen jeweils separat (max 2)
-  if (document.getElementById("has_a_renal").checked) score += 1;
-  if (document.getElementById("has_a_liver").checked) score += 1;
-
-  if (document.getElementById("has_s").checked) score += 1;
-  if (document.getElementById("has_b_bleed").checked) score += 1;
-  if (document.getElementById("has_l_inr").checked) score += 1;
-  if (document.getElementById("has_e").checked) score += 1;
-
-  // D: drugs + alcohol zählen jeweils separat (max 2)
-  if (document.getElementById("has_d_drugs").checked) score += 1;
-  if (document.getElementById("has_d_alcohol").checked) score += 1;
-
-  document.getElementById("has_result").textContent = score;
-
-  updateBandHAS(score);
-
-  // Interpretation anzeigen (nicht kopieren)
-  document.getElementById("has_interpret").innerHTML =
-    `<strong>Interpretation:</strong> ${interpretHAS(score)}`;
-
-  return score;
-}
-
-function calculateAll() {
-  // Hide "copied" messages when something changes
-  document.getElementById("cha_copied").style.display = "none";
-  document.getElementById("has_copied").style.display = "none";
-
-  calculateCHA();
-  calculateHAS();
-}
-
-/* ===== Events ===== */
-
-// score view toggles
-document.getElementById("view_cha").addEventListener("change", () => showScore("cha"));
-document.getElementById("view_has").addEventListener("change", () => showScore("has"));
-
-// live recalculation
-document.querySelectorAll("input[type=checkbox]").forEach(cb => {
-  cb.addEventListener("change", calculateAll);
-});
-
-// copy buttons (kopieren NUR den Score, NICHT die Interpretation)
-document.getElementById("cha_copy").addEventListener("click", () => {
-  const score = Number(document.getElementById("cha_result").textContent);
-  const text = `CHA₂DS₂-VA-Score: ${score} ${punktText(score)}`;
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("cha_copied");
-    msg.style.display = "inline";
-    setTimeout(() => msg.style.display = "none", 1500);
-  });
-});
-
-document.getElementById("has_copy").addEventListener("click", () => {
-  const score = Number(document.getElementById("has_result").textContent);
-  const text = `HAS-BLED-Score: ${score} ${punktText(score)}`;
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("has_copied");
-    msg.style.display = "inline";
-    setTimeout(() => msg.style.display = "none", 1500);
-  });
-});
-
-// reset
-document.getElementById("reset").addEventListener("click", () => {
-  document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
-  document.getElementById("cha_copied").style.display = "none";
-  document.getElementById("has_copied").style.display = "none";
-  calculateAll();
-});
-
-// initial
-showScore("cha");
+function calculateAll(){ calculateCHA(); calculateHAS(); }
+document.querySelectorAll("input").forEach(i=>i.addEventListener("change",calculateAll));
+view_cha.addEventListener("change",()=>section_cha.classList.remove("hidden"));
+view_has.addEventListener("change",()=>section_has.classList.remove("hidden"));
+view_cha.addEventListener("change",()=>section_has.classList.add("hidden"));
+view_has.addEventListener("change",()=>section_cha.classList.add("hidden"));
+reset.addEventListener("click",()=>{ document.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.checked=false); calculateAll(); });
 calculateAll();
 </script>
 
@@ -557,5 +246,3 @@ calculateAll();
 
 </body>
 </html>
-
-
