@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HIT-Diagnostik Tool (4T-Score + Laboralgorithmus)</title>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    /* Grundlayout kommt aus style.css */
     h1 { font-size: 22px; margin: 0 0 10px; }
     h2 { font-size: 18px; margin: 22px 0 10px; }
     .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 980px; border-radius: 10px; }
 
     .switch {
       display: flex; gap: 10px; flex-wrap: wrap;
@@ -154,257 +156,263 @@
 
     .smallnote { font-size: 12px; color: #555; margin-top: 6px; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+    /* Card aus style.css etwas luftiger */
+    .card { padding: 20px; }
   </style>
 </head>
+
 <body>
 
-<h1>HIT-Diagnostik Tool (4T-Score + Laboralgorithmus)</h1>
-<div class="muted">
-  Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Thromboserisiko/Blutungsrisiko/OP-Setting/Intensivmedizin).
-</div>
+<div class="container">
+  <div class="card">
 
-<div class="box">
+    <h1>HIT-Diagnostik Tool (4T-Score + Laboralgorithmus)</h1>
+    <div class="muted">
+      Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Thromboserisiko/Blutungsrisiko/OP-Setting/Intensivmedizin).
+    </div>
 
-  <!-- ===== View Switch ===== -->
-  <div class="switch">
-    <strong>Ansicht:</strong>
-    <label><input type="radio" name="view" id="view_algo" checked> Algorithmus</label>
-    <label><input type="radio" name="view" id="view_4t"> 4T-Score</label>
-    <label><input type="radio" name="view" id="view_lab"> Labor</label>
-    <span style="flex:1;"></span>
-    <button id="reset">Alles zurücksetzen</button>
+    <div class="box" style="border:none; padding:0; max-width:none; border-radius:0;">
+
+      <!-- ===== View Switch ===== -->
+      <div class="switch">
+        <strong>Ansicht:</strong>
+        <label><input type="radio" name="view" id="view_algo" checked> Algorithmus</label>
+        <label><input type="radio" name="view" id="view_4t"> 4T-Score</label>
+        <label><input type="radio" name="view" id="view_lab"> Labor</label>
+        <span style="flex:1;"></span>
+        <button id="reset">Alles zurücksetzen</button>
+      </div>
+
+      <!-- ===================== ALGORITHMUS ===================== -->
+      <div id="section_algo">
+        <h2>Algorithmus (kompletter Ablauf)</h2>
+
+        <div class="interpret" id="algo_summary">
+          <strong>Status:</strong> —
+        </div>
+
+        <div class="band band-3" id="band_4t_algo">
+          <div id="band_low_algo" class="bandbox">
+            <strong>4T 0–3</strong>
+            niedrige Vortest-Wahrscheinlichkeit
+          </div>
+          <div id="band_int_algo" class="bandbox">
+            <strong>4T 4–5</strong>
+            intermediär
+          </div>
+          <div id="band_high_algo" class="bandbox">
+            <strong>4T 6–8</strong>
+            hoch
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="item">
+          <div class="title">1) 4T-Score erheben</div>
+          <div class="explain">
+            Der 4T-Score steuert den kompletten diagnostischen Workflow: bei 0–3 ist HIT II sehr unwahrscheinlich; ab ≥4 wird labordiagnostisch abgeklärt und Heparin i.d.R. gestoppt.
+          </div>
+          <div class="row">
+            <button id="jump_4t">Zum 4T-Score</button>
+            <span class="pill">aktueller 4T: <span class="mono" id="algo_4t_val">0</span></span>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">2) Sofortmaßnahmen (abhängig vom 4T-Score)</div>
+          <div class="explain" id="algo_immediate">
+            —
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">3) Labordiagnostik (Stufe 1: Immunoassay)</div>
+          <div class="explain">
+            PF4/Heparin-Antikörpertest (z. B. ELISA/CLIA/EIA) ist hochsensitiv. Ein negatives Ergebnis macht HIT II sehr unwahrscheinlich. Ein positives Ergebnis erfordert Einordnung im Kontext (Vortestwahrscheinlichkeit, Signalstärke) und i. d. R. Bestätigung per funktionellem Test.
+          </div>
+          <div class="row">
+            <button id="jump_lab">Zum Labor</button>
+            <span class="pill">PF4-Status: <span class="mono" id="algo_pf4_val">nicht gesetzt</span></span>
+          </div>
+          <div class="smallnote">
+            Hinweis: Viele Labore berichten zusätzlich eine <span class="mono">OD</span> bzw. Signalstärke. Hohe Signale korrelieren stärker mit plättchenaktivierenden Antikörpern, ersetzen aber keinen funktionellen Test.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">4) Labordiagnostik (Stufe 2: Funktioneller Test)</div>
+          <div class="explain">
+            Funktionelle Tests (z. B. SRA, HIPA) zeigen plättchenaktivierende Antikörper und bestätigen HIT II bei passender Klinik.
+          </div>
+          <div class="row">
+            <span class="pill">Funktionell: <span class="mono" id="algo_func_val">nicht gesetzt</span></span>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">5) Gesamteinordnung & nächster Schritt</div>
+          <div class="explain" id="algo_conclusion">
+            —
+          </div>
+
+          <div class="scoreline">
+            <button id="copy_summary">Zusammenfassung kopieren</button>
+            <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== 4T SCORE ===================== -->
+      <div id="section_4t" class="hidden">
+        <h2>4T-Score (Vortest-Wahrscheinlichkeit)</h2>
+
+        <div class="item">
+          <div class="title">T1 – Thrombozytenabfall</div>
+          <div class="explain">Wähle genau eine Option.</div>
+          <div class="row">
+            <select id="t_platelets">
+              <option value="0">Bitte auswählen…</option>
+              <option value="2">&gt;50% Abfall UND Nadir ≥20 G/l (2 Punkte)</option>
+              <option value="1">30–50% Abfall ODER Nadir 10–19 G/l (1 Punkt)</option>
+              <option value="0x">&lt;30% Abfall ODER Nadir &lt;10 G/l (0 Punkte)</option>
+            </select>
+          </div>
+          <div class="smallnote">
+            Praxis: HIT II zeigt häufig einen Abfall um &gt;50% mit Nadir typischerweise &gt;20 G/l (sehr niedrige Nadirs sprechen eher für andere Ursachen, z. B. Sepsis/DIC, Medikamente).
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">T2 – Timing in Relation zur Heparingabe</div>
+          <div class="explain">Wähle genau eine Option.</div>
+          <div class="row">
+            <select id="t_timing">
+              <option value="0">Bitte auswählen…</option>
+              <option value="2">Beginn Tag 5–10 nach Start ODER ≤1 Tag bei Heparinexposition &lt;30 Tage (2 Punkte)</option>
+              <option value="1">Konsistent, aber nicht klar (z. B. Tag 5–10 unklar, oder Exposition 30–100 Tage) (1 Punkt)</option>
+              <option value="0x">Beginn &lt;4 Tage ohne Vorheparinisierung (0 Punkte)</option>
+            </select>
+          </div>
+          <div class="smallnote">
+            “Rapid-onset” ist typisch bei kürzlicher Heparinexposition. Ein sehr früher Abfall ohne Vorheparin spricht gegen HIT II.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">T3 – Thrombose / andere klinische Ereignisse</div>
+          <div class="explain">Wähle genau eine Option.</div>
+          <div class="row">
+            <select id="t_thrombosis">
+              <option value="0">Bitte auswählen…</option>
+              <option value="2">Neue Thrombose/Embolie, Hautnekrose, akute systemische Reaktion nach Heparinbolus (2 Punkte)</option>
+              <option value="1">Progressive/rezidivierende Thrombose, “suspected” Thrombose (noch nicht bestätigt) (1 Punkt)</option>
+              <option value="0x">Keine (0 Punkte)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">T4 – Andere Ursachen für Thrombozytopenie</div>
+          <div class="explain">Wähle genau eine Option.</div>
+          <div class="row">
+            <select id="t_other">
+              <option value="0">Bitte auswählen…</option>
+              <option value="2">Keine plausible andere Ursache (2 Punkte)</option>
+              <option value="1">Mögliche andere Ursache (1 Punkt)</option>
+              <option value="0x">Sichere andere Ursache (0 Punkte)</option>
+            </select>
+          </div>
+          <div class="smallnote">
+            Typische Alternativen: Sepsis, DIC, massive Transfusion/Verdünnung, post-OP, ECMO/CRRT, Medikamente (z. B. Linezolid), TMA, ITP.
+          </div>
+        </div>
+
+        <div class="scoreline">
+          <div>4T-Score:</div>
+          <div class="score" id="t_result">0</div>
+          <button id="t_copy">4T-Score kopieren</button>
+          <span class="copied" id="t_copied" style="display:none;">✓ kopiert</span>
+        </div>
+
+        <div class="band band-3" id="band_4t">
+          <div id="band_low" class="bandbox">
+            <strong>0–3</strong>
+            niedrig
+          </div>
+          <div id="band_int" class="bandbox">
+            <strong>4–5</strong>
+            intermediär
+          </div>
+          <div id="band_high" class="bandbox">
+            <strong>6–8</strong>
+            hoch
+          </div>
+        </div>
+
+        <div class="interpret" id="t_interpret">
+          <strong>Interpretation:</strong> —
+        </div>
+      </div>
+
+      <!-- ===================== LABOR ===================== -->
+      <div id="section_lab" class="hidden">
+        <h2>Labor (Stufe 1 & 2)</h2>
+
+        <div class="item">
+          <div class="title">Stufe 1: PF4/Heparin-Antikörper (Immunoassay)</div>
+          <div class="explain">
+            Ergebnis auswählen. Optional: Signalstärke/OD eintragen (falls vorhanden).
+          </div>
+
+          <div class="row">
+            <select id="pf4_result">
+              <option value="unset">Bitte auswählen…</option>
+              <option value="neg">Negativ</option>
+              <option value="pos">Positiv</option>
+              <option value="ind">Grenzwertig/unklar</option>
+            </select>
+
+            <span class="pill">optional: OD/Signal</span>
+            <input type="number" id="pf4_od" step="0.1" min="0" placeholder="z.B. 0.9">
+          </div>
+
+          <div class="smallnote">
+            OD/Signal ist laborabhängig und nicht 1:1 vergleichbar. Tendenziell spricht ein stark positives Signal eher für plättchenaktivierende Antikörper – die klinische Einordnung bleibt entscheidend.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="title">Stufe 2: Funktioneller Test (SRA/HIPA o.ä.)</div>
+          <div class="explain">Ergebnis auswählen (sofern veranlasst/verfügbar).</div>
+
+          <div class="row">
+            <select id="func_result">
+              <option value="unset">Bitte auswählen…</option>
+              <option value="pos">Positiv</option>
+              <option value="neg">Negativ</option>
+              <option value="pend">Ausstehend</option>
+              <option value="na">Nicht veranlasst / nicht verfügbar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="interpret" id="lab_interpret">
+          <strong>Labor-Interpretation:</strong> —
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="item">
+          <div class="title">Automatische Gesamteinordnung (Klinik + Labor)</div>
+          <div class="explain" id="lab_conclusion">—</div>
+        </div>
+      </div>
+
+    </div><!-- /box reset -->
+
   </div>
-
-  <!-- ===================== ALGORITHMUS ===================== -->
-  <div id="section_algo">
-    <h2>Algorithmus (kompletter Ablauf)</h2>
-
-    <div class="interpret" id="algo_summary">
-      <strong>Status:</strong> —
-    </div>
-
-    <div class="band band-3" id="band_4t_algo">
-      <div id="band_low_algo" class="bandbox">
-        <strong>4T 0–3</strong>
-        niedrige Vortest-Wahrscheinlichkeit
-      </div>
-      <div id="band_int_algo" class="bandbox">
-        <strong>4T 4–5</strong>
-        intermediär
-      </div>
-      <div id="band_high_algo" class="bandbox">
-        <strong>4T 6–8</strong>
-        hoch
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="item">
-      <div class="title">1) 4T-Score erheben</div>
-      <div class="explain">
-        Der 4T-Score steuert den kompletten diagnostischen Workflow: bei 0–3 ist HIT II sehr unwahrscheinlich; ab ≥4 wird labordiagnostisch abgeklärt und Heparin i.d.R. gestoppt.
-      </div>
-      <div class="row">
-        <button id="jump_4t">Zum 4T-Score</button>
-        <span class="pill">aktueller 4T: <span class="mono" id="algo_4t_val">0</span></span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="title">2) Sofortmaßnahmen (abhängig vom 4T-Score)</div>
-      <div class="explain" id="algo_immediate">
-        —
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="title">3) Labordiagnostik (Stufe 1: Immunoassay)</div>
-      <div class="explain">
-        PF4/Heparin-Antikörpertest (z. B. ELISA/CLIA/EIA) ist hochsensitiv. Ein negatives Ergebnis macht HIT II sehr unwahrscheinlich. Ein positives Ergebnis erfordert Einordnung im Kontext (Vortestwahrscheinlichkeit, Signalstärke) und i. d. R. Bestätigung per funktionellem Test.
-      </div>
-      <div class="row">
-        <button id="jump_lab">Zum Labor</button>
-        <span class="pill">PF4-Status: <span class="mono" id="algo_pf4_val">nicht gesetzt</span></span>
-      </div>
-      <div class="smallnote">
-        Hinweis: Viele Labore berichten zusätzlich eine <span class="mono">OD</span> bzw. Signalstärke. Hohe Signale korrelieren stärker mit plättchenaktivierenden Antikörpern, ersetzen aber keinen funktionellen Test.
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="title">4) Labordiagnostik (Stufe 2: Funktioneller Test)</div>
-      <div class="explain">
-        Funktionelle Tests (z. B. SRA, HIPA) zeigen plättchenaktivierende Antikörper und bestätigen HIT II bei passender Klinik.
-      </div>
-      <div class="row">
-        <span class="pill">Funktionell: <span class="mono" id="algo_func_val">nicht gesetzt</span></span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="title">5) Gesamteinordnung & nächster Schritt</div>
-      <div class="explain" id="algo_conclusion">
-        —
-      </div>
-
-      <div class="scoreline">
-        <button id="copy_summary">Zusammenfassung kopieren</button>
-        <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== 4T SCORE ===================== -->
-  <div id="section_4t" class="hidden">
-    <h2>4T-Score (Vortest-Wahrscheinlichkeit)</h2>
-
-    <!-- Thrombocytopenia -->
-    <div class="item">
-      <div class="title">T1 – Thrombozytenabfall</div>
-      <div class="explain">Wähle genau eine Option.</div>
-      <div class="row">
-        <select id="t_platelets">
-          <option value="0">Bitte auswählen…</option>
-          <option value="2">>50% Abfall UND Nadir ≥20 G/l (2 Punkte)</option>
-          <option value="1">30–50% Abfall ODER Nadir 10–19 G/l (1 Punkt)</option>
-          <option value="0x"><30% Abfall ODER Nadir &lt;10 G/l (0 Punkte)</option>
-        </select>
-      </div>
-      <div class="smallnote">
-        Praxis: HIT II zeigt häufig einen Abfall um >50% mit Nadir typischerweise >20 G/l (sehr niedrige Nadirs sprechen eher für andere Ursachen, z. B. Sepsis/DIC, Medikamente).
-      </div>
-    </div>
-
-    <!-- Timing -->
-    <div class="item">
-      <div class="title">T2 – Timing in Relation zur Heparingabe</div>
-      <div class="explain">Wähle genau eine Option.</div>
-      <div class="row">
-        <select id="t_timing">
-          <option value="0">Bitte auswählen…</option>
-          <option value="2">Beginn Tag 5–10 nach Start ODER ≤1 Tag bei Heparinexposition &lt;30 Tage (2 Punkte)</option>
-          <option value="1">Konsistent, aber nicht klar (z. B. Tag 5–10 unklar, oder Exposition 30–100 Tage) (1 Punkt)</option>
-          <option value="0x">Beginn &lt;4 Tage ohne Vorheparinisierung (0 Punkte)</option>
-        </select>
-      </div>
-      <div class="smallnote">
-        “Rapid-onset” ist typisch bei kürzlicher Heparinexposition. Ein sehr früher Abfall ohne Vorheparin spricht gegen HIT II.
-      </div>
-    </div>
-
-    <!-- Thrombosis -->
-    <div class="item">
-      <div class="title">T3 – Thrombose / andere klinische Ereignisse</div>
-      <div class="explain">Wähle genau eine Option.</div>
-      <div class="row">
-        <select id="t_thrombosis">
-          <option value="0">Bitte auswählen…</option>
-          <option value="2">Neue Thrombose/Embolie, Hautnekrose, akute systemische Reaktion nach Heparinbolus (2 Punkte)</option>
-          <option value="1">Progressive/rezidivierende Thrombose, “suspected” Thrombose (noch nicht bestätigt) (1 Punkt)</option>
-          <option value="0x">Keine (0 Punkte)</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Other causes -->
-    <div class="item">
-      <div class="title">T4 – Andere Ursachen für Thrombozytopenie</div>
-      <div class="explain">Wähle genau eine Option.</div>
-      <div class="row">
-        <select id="t_other">
-          <option value="0">Bitte auswählen…</option>
-          <option value="2">Keine plausible andere Ursache (2 Punkte)</option>
-          <option value="1">Mögliche andere Ursache (1 Punkt)</option>
-          <option value="0x">Sichere andere Ursache (0 Punkte)</option>
-        </select>
-      </div>
-      <div class="smallnote">
-        Typische Alternativen: Sepsis, DIC, massive Transfusion/Verdünnung, post-OP, ECMO/CRRT, Medikamente (z. B. Linezolid), TMA, ITP.
-      </div>
-    </div>
-
-    <div class="scoreline">
-      <div>4T-Score:</div>
-      <div class="score" id="t_result">0</div>
-      <button id="t_copy">4T-Score kopieren</button>
-      <span class="copied" id="t_copied" style="display:none;">✓ kopiert</span>
-    </div>
-
-    <div class="band band-3" id="band_4t">
-      <div id="band_low" class="bandbox">
-        <strong>0–3</strong>
-        niedrig
-      </div>
-      <div id="band_int" class="bandbox">
-        <strong>4–5</strong>
-        intermediär
-      </div>
-      <div id="band_high" class="bandbox">
-        <strong>6–8</strong>
-        hoch
-      </div>
-    </div>
-
-    <div class="interpret" id="t_interpret">
-      <strong>Interpretation:</strong> —
-    </div>
-  </div>
-
-  <!-- ===================== LABOR ===================== -->
-  <div id="section_lab" class="hidden">
-    <h2>Labor (Stufe 1 & 2)</h2>
-
-    <div class="item">
-      <div class="title">Stufe 1: PF4/Heparin-Antikörper (Immunoassay)</div>
-      <div class="explain">
-        Ergebnis auswählen. Optional: Signalstärke/OD eintragen (falls vorhanden).
-      </div>
-
-      <div class="row">
-        <select id="pf4_result">
-          <option value="unset">Bitte auswählen…</option>
-          <option value="neg">Negativ</option>
-          <option value="pos">Positiv</option>
-          <option value="ind">Grenzwertig/unklar</option>
-        </select>
-
-        <span class="pill">optional: OD/Signal</span>
-        <input type="number" id="pf4_od" step="0.1" min="0" placeholder="z.B. 0.9">
-      </div>
-
-      <div class="smallnote">
-        OD/Signal ist laborabhängig und nicht 1:1 vergleichbar. Tendenziell spricht ein stark positives Signal eher für plättchenaktivierende Antikörper – die klinische Einordnung bleibt entscheidend.
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="title">Stufe 2: Funktioneller Test (SRA/HIPA o.ä.)</div>
-      <div class="explain">Ergebnis auswählen (sofern veranlasst/verfügbar).</div>
-
-      <div class="row">
-        <select id="func_result">
-          <option value="unset">Bitte auswählen…</option>
-          <option value="pos">Positiv</option>
-          <option value="neg">Negativ</option>
-          <option value="pend">Ausstehend</option>
-          <option value="na">Nicht veranlasst / nicht verfügbar</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="interpret" id="lab_interpret">
-      <strong>Labor-Interpretation:</strong> —
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="item">
-      <div class="title">Automatische Gesamteinordnung (Klinik + Labor)</div>
-      <div class="explain" id="lab_conclusion">—</div>
-    </div>
-  </div>
-
 </div>
 
 <script>
@@ -491,10 +499,8 @@ function labInterpretation(pret) {
   const od = (odRaw === "" ? NaN : Number(odRaw));
   const func = document.getElementById("func_result").value;
 
-  // PF4 text
   const pf4Text = interpretPF4(pf4, od);
 
-  // Basic lab interpretation block
   let labText = "";
   if (pf4 === "unset") {
     labText = "PF4/Heparin-Antikörper nicht gesetzt.";
@@ -506,7 +512,6 @@ function labInterpretation(pret) {
     labText = "PF4/Heparin-Antikörper positiv → kann HIT II bedeuten, aber auch falsch positiv sein (v. a. postoperativ/Intensiv). Ein funktioneller Test klärt plättchenaktivierende Antikörper.";
   }
 
-  // Functional add-on
   if (func === "pos") labText += " Funktioneller Test positiv → plättchenaktivierende Antikörper nachgewiesen.";
   else if (func === "neg") labText += " Funktioneller Test negativ → HIT II eher unwahrscheinlich, v. a. bei niedriger/intermediärer Vortestwahrscheinlichkeit.";
   else if (func === "pend") labText += " Funktioneller Test ausstehend → bis zum Ergebnis klinisch risikoorientiert weiterführen.";
@@ -514,13 +519,10 @@ function labInterpretation(pret) {
 
   document.getElementById("lab_interpret").innerHTML = `<strong>Labor-Interpretation:</strong> ${labText}`;
 
-  // Now combined conclusion in Lab section
   const { score, allSelected } = pret;
-
   const riskCat = !allSelected ? "unvollständig" : (score <= 3 ? "low" : (score <= 5 ? "int" : "high"));
 
   let conclusion = "";
-  // Conservative, algorithmic wording
   if (!allSelected) {
     conclusion = "Bitte zunächst den 4T-Score vollständig erheben, dann Labor im Kontext interpretieren.";
   } else if (riskCat === "low") {
@@ -531,7 +533,7 @@ function labInterpretation(pret) {
     } else {
       conclusion = "Gesamtbild: niedrige Vortestwahrscheinlichkeit. PF4-Test ist in der Regel nicht erforderlich; wenn bereits abgenommen, Ergebnis klinisch zurückhaltend interpretieren.";
     }
-  } else { // int/high
+  } else {
     if (pf4 === "neg") {
       conclusion = "Gesamtbild: 4T ≥4, aber PF4 negativ → HIT II sehr unwahrscheinlich. Alternative Ursachen suchen; ggf. Rücksprache Hämostaseologie/Transfusionsmedizin bei hoher klinischer Diskrepanz.";
     } else if (pf4 === "pos") {
@@ -541,7 +543,7 @@ function labInterpretation(pret) {
         conclusion = "Gesamtbild: 4T ≥4 + PF4 positiv, aber funktionell negativ → HIT II eher unwahrscheinlich. Konstellation diskutieren (Assay/Timing/Interferenzen); häufig kann Heparin wieder erwogen werden, wenn klinisch vertretbar.";
       } else if (func === "pend") {
         conclusion = "Gesamtbild: 4T ≥4 + PF4 positiv, funktionell ausstehend → bis Klärung HIT-sicheres Vorgehen (Heparin vermeiden, alternative Antikoagulation gemäß Risiko).";
-      } else { // na/unset
+      } else {
         conclusion = "Gesamtbild: 4T ≥4 + PF4 positiv → HIT II möglich. Wenn klinisch relevant, funktionellen Test veranlassen (Bestätigung) und bis zur Klärung HIT-sicher managen.";
       }
     } else if (pf4 === "ind") {
@@ -552,14 +554,13 @@ function labInterpretation(pret) {
       } else {
         conclusion = "Gesamtbild: 4T ≥4 + PF4 grenzwertig → funktioneller Test/Repeat sinnvoll; bis zur Klärung risikoorientiert HIT-sicher handeln.";
       }
-    } else { // pf4 unset
+    } else {
       conclusion = "Gesamtbild: 4T ≥4 ohne PF4-Ergebnis → PF4/Heparin-Antikörpertest veranlassen. Bis dahin Heparin meiden und alternative Antikoagulation je nach klinischem Risiko.";
     }
   }
 
   document.getElementById("lab_conclusion").textContent = conclusion;
 
-  // Update algorithm section pills
   document.getElementById("algo_pf4_val").textContent = pf4Text;
   document.getElementById("algo_func_val").textContent =
     (func === "unset") ? "nicht gesetzt" :
@@ -585,7 +586,6 @@ function immediateActions(pret, lab) {
   } else {
     text = "Bei 4T ≥4: HIT II möglich/wahrscheinlich → Heparin sofort absetzen (inkl. Spülungen/Heparinbeschichtungen), HIT-sichere Antikoagulation erwägen/initiieren und PF4-Test veranlassen. Bei hoher Wahrscheinlichkeit meist unmittelbar alternative Antikoagulation beginnen.";
     cls = "danger";
-    // refine if PF4 negative already
     if (lab && lab.pf4 === "neg") {
       text += " PF4 ist negativ: HIT II wird dadurch sehr unwahrscheinlich; Management kann je nach Klinik reevaluiert werden.";
       cls = "warn";
@@ -599,7 +599,6 @@ function immediateActions(pret, lab) {
 }
 
 function updateAlgorithm() {
-  // hide copied messages when changes
   document.getElementById("copied").style.display = "none";
   document.getElementById("t_copied").style.display = "none";
 
@@ -608,7 +607,6 @@ function updateAlgorithm() {
 
   const lab = labInterpretation(pret);
 
-  // Algorithm conclusion summary
   let status = "";
   if (!pret.allSelected) status = "Bitte 4T-Score vervollständigen.";
   else if (pret.score <= 3) status = "4T niedrig → HIT II unwahrscheinlich.";
@@ -618,14 +616,11 @@ function updateAlgorithm() {
   const sumEl = document.getElementById("algo_summary");
   sumEl.innerHTML = `<strong>Status:</strong> ${status}`;
 
-  // Immediate actions block
   immediateActions(pret, lab);
 
-  // Final combined conclusion in algorithm section
   const concEl = document.getElementById("algo_conclusion");
   concEl.textContent = lab.conclusion;
 
-  // Styling: highlight summary box based on risk
   sumEl.classList.remove("ok","warn","danger");
   if (!pret.allSelected) sumEl.classList.add("warn");
   else if (pret.score <= 3) sumEl.classList.add("ok");
@@ -717,6 +712,8 @@ document.getElementById("reset").addEventListener("click", () => {
 showSection("algo");
 updateAlgorithm();
 </script>
+
+<script src="nav.js"></script>
 
 </body>
 </html>
