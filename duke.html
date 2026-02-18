@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modifizierte Duke-Kriterien (ESC 2023) – Infektiöse Endokarditis</title>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    /* Grundlayout kommt aus style.css */
     h1 { font-size: 22px; margin: 0 0 10px; }
     h2 { font-size: 18px; margin: 22px 0 10px; }
     .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 920px; border-radius: 10px; }
 
     .switch {
       display: flex; gap: 10px; flex-wrap: wrap;
@@ -145,249 +147,254 @@
       font-size: 13px;
     }
     details.info .small strong { display:block; margin: 8px 0 4px; }
+
+    /* Card aus style.css etwas luftiger */
+    .card { padding: 20px; }
   </style>
 </head>
+
 <body>
 
-<h1>Infektiöse Endokarditis: Modifizierte Duke-Kriterien (ESC 2023)</h1>
-<div class="muted">
-  Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Gesamtbild, Bildgebung, Mikrobiologie, Verlauf).
-</div>
+<div class="container">
+  <div class="card">
 
-<div class="box">
-
-  <div class="switch">
-    <strong>ESC 2023:</strong>
-    <span class="pill">Hauptkriterien / Nebenkriterien</span>
-    <span style="flex:1;"></span>
-    <button id="reset">Alles zurücksetzen</button>
-  </div>
-
-  <div class="grid2">
-    <div>
-      <h2>Hauptkriterien</h2>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="maj_path">
-          <div class="content">
-            <div class="title">Pathologische Kriterien erfüllt</div>
-            <div class="explain">
-              Z. B. Mikroorganismen oder histopathologischer Nachweis in operativem/postmortalem Material.
-              <br>Wenn erfüllt: Klassifikation als <b>Endokarditis definitiv</b> (unabhängig von klinischen Haupt-/Nebenkriterien).
-            </div>
-          </div>
-          <span class="pts">definitiv</span>
-        </label>
-      </div>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="maj_bc_typical">
-          <div class="content">
-            <div class="title">Blutkulturen positiv: typische Erreger aus 2 separaten Blutkulturen</div>
-            <div class="explain">
-              Typische Mikroorganismen konsistent mit IE (ESC 2023):<br>
-              Oralstreptokokken, <i>Streptococcus gallolyticus</i>, HACEK, <i>Staphylococcus aureus</i>, <i>Enterococcus faecalis</i>.
-            </div>
-          </div>
-          <span class="pts">Hauptkriterium</span>
-        </label>
-      </div>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="maj_bc_cont">
-          <div class="content">
-            <div class="title">Blutkulturen positiv: kontinuierlich positive Blutkulturen (Erreger konsistent mit IE)</div>
-            <div class="explain">
-              Definition (ESC 2023):<br>
-              • ≥2 positive Blutkulturen aus Proben &gt;12 h auseinander, <b>oder</b><br>
-              • alle von 3 oder Mehrheit von ≥4 separaten Blutkulturen (erste und letzte Probe ≥1 h auseinander).
-            </div>
-          </div>
-          <span class="pts">Hauptkriterium</span>
-        </label>
-      </div>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="maj_cburnetii">
-          <div class="content">
-            <div class="title">Einzelne positive Blutkultur für <i>Coxiella burnetii</i> oder Phase-I-IgG &gt; 1:800</div>
-            <div class="explain">
-              Entspricht einem Hauptkriterium in den ESC 2023 Kriterien.
-            </div>
-          </div>
-          <span class="pts">Hauptkriterium</span>
-        </label>
-      </div>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="maj_imaging">
-          <div class="content">
-            <div class="title">Bildgebung positiv für Endokarditis</div>
-            <div class="explain">
-              Valvuläre, perivalvuläre/periprothetische oder Fremdmaterial-Läsionen (anatomisch/metabolisch), charakteristisch für Endokarditis, nachweisbar durch:
-              <ul class="compact">
-                <li>Echokardiographie (TTE/TEE)</li>
-                <li>Kardio-CT</li>
-                <li>[18F]-FDG-PET/CT</li>
-                <li>WBC-SPECT/CT</li>
-              </ul>
-            </div>
-          </div>
-          <span class="pts">Hauptkriterium</span>
-        </label>
-      </div>
-
+    <h1>Infektiöse Endokarditis: Modifizierte Duke-Kriterien (ESC 2023)</h1>
+    <div class="muted">
+      Arbeits-/Lernhilfe. Keine Patientendaten speichern. Klinische Entscheidung immer im Kontext (Gesamtbild, Bildgebung, Mikrobiologie, Verlauf).
     </div>
 
-    <div>
-      <h2>Nebenkriterien</h2>
+    <div class="switch">
+      <strong>ESC 2023:</strong>
+      <span class="pill">Hauptkriterien / Nebenkriterien</span>
+      <span style="flex:1;"></span>
+      <button id="reset">Alles zurücksetzen</button>
+    </div>
 
-      <div class="item">
-        <label>
-          <input type="checkbox" id="min_pred">
-          <div class="content">
-            <div class="title">Prädisposition</div>
-            <div class="explain">
-              Prädisponierende Herzerkrankung (hohes oder intermediäres Endokarditis-Risiko) <b>oder</b> i. v. Drogenkonsum.
+    <div class="grid2">
+      <div>
+        <h2>Hauptkriterien</h2>
 
-              <!-- ===== Aufklappbare Info (neu) ===== -->
-              <details class="info">
-                <summary>Was bedeutet „hohes“ bzw. „intermediäres“ Endokarditis-Risiko?</summary>
-                <div class="small">
-                  <strong>Hohes Risiko (Beispiele nach ESC 2023):</strong>
-                  <ul class="compact">
-                    <li>Endokarditis in der Vorgeschichte</li>
-                    <li>Prothetische Klappen (chirurgisch) oder transkathetergestützte Klappen (TAVI/TBPV) sowie Material bei Klappenrekonstruktion</li>
-                    <li>Angeborene Herzfehler mit hohem Risiko: unkorrekt zyanotische CHD; CHD nach Reparatur mit prothetischem Material (insbesondere frühe Phase nach Eingriff / bei Residuen)</li>
-                    <li>Ventrikuläre Unterstützungssysteme (VAD) als Destination-Therapie</li>
-                  </ul>
+        <div class="item">
+          <label>
+            <input type="checkbox" id="maj_path">
+            <div class="content">
+              <div class="title">Pathologische Kriterien erfüllt</div>
+              <div class="explain">
+                Z. B. Mikroorganismen oder histopathologischer Nachweis in operativem/postmortalem Material.
+                <br>Wenn erfüllt: Klassifikation als <b>Endokarditis definitiv</b> (unabhängig von klinischen Haupt-/Nebenkriterien).
+              </div>
+            </div>
+            <span class="pts">definitiv</span>
+          </label>
+        </div>
 
-                  <strong>Intermediäres Risiko (Beispiele nach ESC 2023):</strong>
-                  <ul class="compact">
-                    <li>Rheumatische Herzerkrankung</li>
-                    <li>Degenerative (nicht-rheumatische) Klappenerkrankung</li>
-                    <li>Angeborene Klappenanomalien (inkl. bikuspide Aortenklappe)</li>
-                    <li>Kardiale implantierbare elektronische Geräte (CIED: PM/ICD/CRT)</li>
-                    <li>Hypertrophe Kardiomyopathie</li>
-                  </ul>
+        <div class="item">
+          <label>
+            <input type="checkbox" id="maj_bc_typical">
+            <div class="content">
+              <div class="title">Blutkulturen positiv: typische Erreger aus 2 separaten Blutkulturen</div>
+              <div class="explain">
+                Typische Mikroorganismen konsistent mit IE (ESC 2023):<br>
+                Oralstreptokokken, <i>Streptococcus gallolyticus</i>, HACEK, <i>Staphylococcus aureus</i>, <i>Enterococcus faecalis</i>.
+              </div>
+            </div>
+            <span class="pts">Hauptkriterium</span>
+          </label>
+        </div>
 
-                  <div style="margin-top:8px; color:#555;">
-                    Hinweis: Die Einordnung ist als klinische Orientierung gedacht; im Zweifel Einzelfall (z. B. Residualdefekte, Zeitpunkt nach Intervention, Art des Fremdmaterials) berücksichtigen.
+        <div class="item">
+          <label>
+            <input type="checkbox" id="maj_bc_cont">
+            <div class="content">
+              <div class="title">Blutkulturen positiv: kontinuierlich positive Blutkulturen (Erreger konsistent mit IE)</div>
+              <div class="explain">
+                Definition (ESC 2023):<br>
+                • ≥2 positive Blutkulturen aus Proben &gt;12 h auseinander, <b>oder</b><br>
+                • alle von 3 oder Mehrheit von ≥4 separaten Blutkulturen (erste und letzte Probe ≥1 h auseinander).
+              </div>
+            </div>
+            <span class="pts">Hauptkriterium</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="maj_cburnetii">
+            <div class="content">
+              <div class="title">Einzelne positive Blutkultur für <i>Coxiella burnetii</i> oder Phase-I-IgG &gt; 1:800</div>
+              <div class="explain">
+                Entspricht einem Hauptkriterium in den ESC 2023 Kriterien.
+              </div>
+            </div>
+            <span class="pts">Hauptkriterium</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="maj_imaging">
+            <div class="content">
+              <div class="title">Bildgebung positiv für Endokarditis</div>
+              <div class="explain">
+                Valvuläre, perivalvuläre/periprothetische oder Fremdmaterial-Läsionen (anatomisch/metabolisch), charakteristisch für Endokarditis, nachweisbar durch:
+                <ul class="compact">
+                  <li>Echokardiographie (TTE/TEE)</li>
+                  <li>Kardio-CT</li>
+                  <li>[18F]-FDG-PET/CT</li>
+                  <li>WBC-SPECT/CT</li>
+                </ul>
+              </div>
+            </div>
+            <span class="pts">Hauptkriterium</span>
+          </label>
+        </div>
+
+      </div>
+
+      <div>
+        <h2>Nebenkriterien</h2>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="min_pred">
+            <div class="content">
+              <div class="title">Prädisposition</div>
+              <div class="explain">
+                Prädisponierende Herzerkrankung (hohes oder intermediäres Endokarditis-Risiko) <b>oder</b> i. v. Drogenkonsum.
+
+                <details class="info">
+                  <summary>Was bedeutet „hohes“ bzw. „intermediäres“ Endokarditis-Risiko?</summary>
+                  <div class="small">
+                    <strong>Hohes Risiko (Beispiele nach ESC 2023):</strong>
+                    <ul class="compact">
+                      <li>Endokarditis in der Vorgeschichte</li>
+                      <li>Prothetische Klappen (chirurgisch) oder transkathetergestützte Klappen (TAVI/TBPV) sowie Material bei Klappenrekonstruktion</li>
+                      <li>Angeborene Herzfehler mit hohem Risiko: unkorrekt zyanotische CHD; CHD nach Reparatur mit prothetischem Material (insbesondere frühe Phase nach Eingriff / bei Residuen)</li>
+                      <li>Ventrikuläre Unterstützungssysteme (VAD) als Destination-Therapie</li>
+                    </ul>
+
+                    <strong>Intermediäres Risiko (Beispiele nach ESC 2023):</strong>
+                    <ul class="compact">
+                      <li>Rheumatische Herzerkrankung</li>
+                      <li>Degenerative (nicht-rheumatische) Klappenerkrankung</li>
+                      <li>Angeborene Klappenanomalien (inkl. bikuspide Aortenklappe)</li>
+                      <li>Kardiale implantierbare elektronische Geräte (CIED: PM/ICD/CRT)</li>
+                      <li>Hypertrophe Kardiomyopathie</li>
+                    </ul>
+
+                    <div style="margin-top:8px; color:#555;">
+                      Hinweis: Die Einordnung ist als klinische Orientierung gedacht; im Zweifel Einzelfall (z. B. Residualdefekte, Zeitpunkt nach Intervention, Art des Fremdmaterials) berücksichtigen.
+                    </div>
                   </div>
-                </div>
-              </details>
+                </details>
+              </div>
             </div>
-          </div>
-          <span class="pts">Nebenkriterium</span>
-        </label>
-      </div>
+            <span class="pts">Nebenkriterium</span>
+          </label>
+        </div>
 
-      <div class="item">
-        <label>
-          <input type="checkbox" id="min_fever">
-          <div class="content">
-            <div class="title">Fieber &gt; 38°C</div>
-            <div class="explain">Temperatur &gt; 38°C (Mess-/Dokumentationskontext beachten).</div>
-          </div>
-          <span class="pts">Nebenkriterium</span>
-        </label>
-      </div>
-
-      <div class="item">
-        <label>
-          <input type="checkbox" id="min_vascular">
-          <div class="content">
-            <div class="title">Embolische/vaskuläre Dissemination <span style="font-weight:normal;">(inkl. asymptomatisch, nur bildgebend detektiert)</span></div>
-            <div class="explain">
-              Beispiele (ESC 2023):
-              <ul class="compact">
-                <li>Systemische oder pulmonale Embolien/Infarkte, Abszesse</li>
-                <li>Hämatogene osteoartikuläre septische Komplikationen (z. B. Spondylodiszitis)</li>
-                <li>Mykotische Aneurysmen</li>
-                <li>Intrakranielle ischämische/hämorrhagische Läsionen</li>
-                <li>Konjunktivale Blutungen</li>
-                <li>Janeway-Läsionen</li>
-              </ul>
+        <div class="item">
+          <label>
+            <input type="checkbox" id="min_fever">
+            <div class="content">
+              <div class="title">Fieber &gt; 38°C</div>
+              <div class="explain">Temperatur &gt; 38°C (Mess-/Dokumentationskontext beachten).</div>
             </div>
-          </div>
-          <span class="pts">Nebenkriterium</span>
-        </label>
-      </div>
+            <span class="pts">Nebenkriterium</span>
+          </label>
+        </div>
 
-      <div class="item">
-        <label>
-          <input type="checkbox" id="min_immun">
-          <div class="content">
-            <div class="title">Immunologische Phänomene</div>
-            <div class="explain">
-              Beispiele (ESC 2023):
-              <ul class="compact">
-                <li>Glomerulonephritis</li>
-                <li>Osler-Knötchen und Roth-Flecken</li>
-                <li>Rheumafaktor</li>
-              </ul>
+        <div class="item">
+          <label>
+            <input type="checkbox" id="min_vascular">
+            <div class="content">
+              <div class="title">Embolische/vaskuläre Dissemination <span style="font-weight:normal;">(inkl. asymptomatisch, nur bildgebend detektiert)</span></div>
+              <div class="explain">
+                Beispiele (ESC 2023):
+                <ul class="compact">
+                  <li>Systemische oder pulmonale Embolien/Infarkte, Abszesse</li>
+                  <li>Hämatogene osteoartikuläre septische Komplikationen (z. B. Spondylodiszitis)</li>
+                  <li>Mykotische Aneurysmen</li>
+                  <li>Intrakranielle ischämische/hämorrhagische Läsionen</li>
+                  <li>Konjunktivale Blutungen</li>
+                  <li>Janeway-Läsionen</li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <span class="pts">Nebenkriterium</span>
-        </label>
-      </div>
+            <span class="pts">Nebenkriterium</span>
+          </label>
+        </div>
 
-      <div class="item">
-        <label>
-          <input type="checkbox" id="min_micro">
-          <div class="content">
-            <div class="title">Mikrobiologischer Hinweis (ohne Hauptkriterium)</div>
-            <div class="explain">
-              • Positive Blutkultur, die <b>kein</b> Hauptkriterium erfüllt, <b>oder</b><br>
-              • Serologischer Hinweis auf aktive Infektion mit einem für Endokarditis konsistenten Erreger.
+        <div class="item">
+          <label>
+            <input type="checkbox" id="min_immun">
+            <div class="content">
+              <div class="title">Immunologische Phänomene</div>
+              <div class="explain">
+                Beispiele (ESC 2023):
+                <ul class="compact">
+                  <li>Glomerulonephritis</li>
+                  <li>Osler-Knötchen und Roth-Flecken</li>
+                  <li>Rheumafaktor</li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <span class="pts">Nebenkriterium</span>
-        </label>
+            <span class="pts">Nebenkriterium</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="min_micro">
+            <div class="content">
+              <div class="title">Mikrobiologischer Hinweis (ohne Hauptkriterium)</div>
+              <div class="explain">
+                • Positive Blutkultur, die <b>kein</b> Hauptkriterium erfüllt, <b>oder</b><br>
+                • Serologischer Hinweis auf aktive Infektion mit einem für Endokarditis konsistenten Erreger.
+              </div>
+            </div>
+            <span class="pts">Nebenkriterium</span>
+          </label>
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  <div class="scoreline">
-    <div><b>Hauptkriterien:</b> <span class="score" id="maj_count">0</span></div>
-    <div><b>Nebenkriterien:</b> <span class="score" id="min_count">0</span></div>
-    <span style="flex:1;"></span>
-    <button id="copy">Ergebnis kopieren</button>
-    <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
-  </div>
-
-  <div class="band band-3" id="band">
-    <div id="band_def" class="bandbox">
-      <strong>DEFINITIV</strong>
-      Kriterien erfüllt
+    <div class="scoreline">
+      <div><b>Hauptkriterien:</b> <span class="score" id="maj_count">0</span></div>
+      <div><b>Nebenkriterien:</b> <span class="score" id="min_count">0</span></div>
+      <span style="flex:1;"></span>
+      <button id="copy">Ergebnis kopieren</button>
+      <span class="copied" id="copied" style="display:none;">✓ kopiert</span>
     </div>
-    <div id="band_pos" class="bandbox">
-      <strong>MÖGLICH</strong>
-      Kriterien erfüllt
+
+    <div class="band band-3" id="band">
+      <div id="band_def" class="bandbox">
+        <strong>DEFINITIV</strong>
+        Kriterien erfüllt
+      </div>
+      <div id="band_pos" class="bandbox">
+        <strong>MÖGLICH</strong>
+        Kriterien erfüllt
+      </div>
+      <div id="band_rej" class="bandbox">
+        <strong>AUSGESCHLOSSEN</strong>
+        Kriterien nicht erfüllt
+      </div>
     </div>
-    <div id="band_rej" class="bandbox">
-      <strong>AUSGESCHLOSSEN</strong>
-      Kriterien nicht erfüllt
+
+    <div class="interpret" id="interpret">
+      <strong>Klassifikation:</strong> —
     </div>
-  </div>
 
-  <div class="interpret" id="interpret">
-    <strong>Klassifikation:</strong> —
-  </div>
+    <div class="muted" style="margin-top:10px;">
+      Klinische Kriterien (ESC 2023):<br>
+      <b>Endokarditis definitiv</b>: 2 Hauptkriterien <i>oder</i> 1 Hauptkriterium + ≥3 Nebenkriterien <i>oder</i> 5 Nebenkriterien (oder pathologisch definitiv).<br>
+      <b>Endokarditis möglich</b>: 1 Hauptkriterium + 1–2 Nebenkriterien <i>oder</i> 3–4 Nebenkriterien.<br>
+      <b>Endokarditis ausgeschlossen</b>: erfüllt weder „definitiv“ noch „möglich“.
+    </div>
 
-  <div class="muted" style="margin-top:10px;">
-    Klinische Kriterien (ESC 2023):<br>
-    <b>Endokarditis definitiv</b>: 2 Hauptkriterien <i>oder</i> 1 Hauptkriterium + ≥3 Nebenkriterien <i>oder</i> 5 Nebenkriterien (oder pathologisch definitiv).<br>
-    <b>Endokarditis möglich</b>: 1 Hauptkriterium + 1–2 Nebenkriterien <i>oder</i> 3–4 Nebenkriterien.<br>
-    <b>Endokarditis ausgeschlossen</b>: erfüllt weder „definitiv“ noch „möglich“.
   </div>
-
 </div>
 
 <script>
@@ -478,6 +485,8 @@ document.getElementById("reset").addEventListener("click", () => {
 // initial
 calculate();
 </script>
+
+<script src="nav.js"></script>
 
 </body>
 </html>
