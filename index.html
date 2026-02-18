@@ -111,6 +111,22 @@
   </div>
 
   <script src="nav.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.querySelector(".grid");
+    if (!grid) return;
 
+    const cards = Array.from(grid.querySelectorAll("a.score-card"));
+
+    cards.sort((a, b) => {
+      const at = (a.querySelector(".score-title")?.textContent || "").trim();
+      const bt = (b.querySelector(".score-title")?.textContent || "").trim();
+      return at.localeCompare(bt, "de-DE", { sensitivity: "base", numeric: true });
+    });
+
+    // Re-append in sorted order
+    cards.forEach(card => grid.appendChild(card));
+  });
+</script>
 </body>
 </html>
