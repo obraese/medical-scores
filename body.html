@@ -1,101 +1,110 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bodyplethysmographie – strukturierte Befundhilfe</title>
-<style>
-body { font-family: Arial, sans-serif; margin:30px; line-height:1.35; }
-h1 { font-size:22px; margin-bottom:10px; }
-h2 { font-size:18px; margin-top:22px; }
-.muted { font-size:13px; color:#666; margin-bottom:12px; }
-.box { border:1px solid #ccc; padding:16px; border-radius:10px; max-width:980px; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bodyplethysmographie – strukturierte Befundhilfe</title>
 
-.item { border:1px solid #eee; border-radius:10px; padding:12px 14px; margin:12px 0; background:#fff; }
-label { display:flex; gap:8px; align-items:flex-start; cursor:pointer; }
-.group { margin-top:12px; }
-.group strong { display:block; margin-bottom:6px; }
+  <link rel="stylesheet" href="style.css">
 
-.small { font-size:13px; color:#444; }
+  <style>
+    /* Body/Background/Grundfont kommen aus style.css */
+    h1 { font-size:22px; margin-bottom:10px; }
+    h2 { font-size:18px; margin-top:22px; }
+    .muted { font-size:13px; color:#666; margin-bottom:12px; }
 
-.result {
-  margin-top:14px; padding:12px;
-  border:1px solid #eee; border-radius:10px; background:#fcfcfc;
-}
+    /* Deine bisherigen Bausteine */
+    .item { border:1px solid #eee; border-radius:10px; padding:12px 14px; margin:12px 0; background:#fff; }
+    label { display:flex; gap:8px; align-items:flex-start; cursor:pointer; }
+    .group { margin-top:12px; }
+    .group strong { display:block; margin-bottom:6px; }
 
-button {
-  padding:8px 12px; border-radius:10px;
-  border:1px solid #ddd; background:#fafafa; cursor:pointer;
-}
-button:hover { background:#f2f2f2; }
-.copied { color:green; font-size:13px; display:none; margin-left:8px; }
+    .small { font-size:13px; color:#444; }
 
-/* disabled group styling */
-.group-disabled { opacity: 0.55; }
-.group-disabled label { cursor: not-allowed; }
-</style>
+    .result {
+      margin-top:14px; padding:12px;
+      border:1px solid #eee; border-radius:10px; background:#fcfcfc;
+    }
+
+    button {
+      padding:8px 12px; border-radius:10px;
+      border:1px solid #ddd; background:#fafafa; cursor:pointer;
+    }
+    button:hover { background:#f2f2f2; }
+    .copied { color:green; font-size:13px; display:none; margin-left:8px; }
+
+    /* disabled group styling */
+    .group-disabled { opacity: 0.55; }
+    .group-disabled label { cursor: not-allowed; }
+
+    /* Card aus style.css etwas luftiger */
+    .card { padding: 20px; }
+  </style>
 </head>
+
 <body>
 
-<h1>Bodyplethysmographie – strukturierte Befundhilfe</h1>
-<div class="muted">
-  Strukturierte Formulierungshilfe
-</div>
+<div class="container">
+  <div class="card">
 
-<div class="box">
+    <h1>Bodyplethysmographie – strukturierte Befundhilfe</h1>
+    <div class="muted">
+      Strukturierte Formulierungshilfe
+    </div>
 
-<!-- Muster -->
-<div class="item">
-<h2>Ventilatorisches Muster</h2>
-<label><input type="checkbox" id="obs"> Obstruktion (FEV1/FVC oder FEV1/VCmax unter LLN)</label>
-<label><input type="checkbox" id="res"> Restriktion (TLC unter LLN)</label>
-<label><input type="checkbox" id="air"> Air trapping (RV/TLC über ULN)</label>
+    <!-- Muster -->
+    <div class="item">
+      <h2>Ventilatorisches Muster</h2>
+      <label><input type="checkbox" id="obs"> Obstruktion (FEV1/FVC oder FEV1/VCmax unter LLN)</label>
+      <label><input type="checkbox" id="res"> Restriktion (TLC unter LLN)</label>
+      <label><input type="checkbox" id="air"> Air trapping (RV/TLC über ULN)</label>
 
-<div class="small" style="margin-top:8px;">
-<b>Interpretation ohne LLN/ULN:</b> Z-Score &lt; −1,645 ≙ unter LLN, Z-Score &gt; +1,645 ≙ über ULN.
-</div>
-</div>
+      <div class="small" style="margin-top:8px;">
+        <b>Interpretation ohne LLN/ULN:</b> Z-Score &lt; −1,645 ≙ unter LLN, Z-Score &gt; +1,645 ≙ über ULN.
+      </div>
+    </div>
 
-<!-- Schweregrade -->
-<div class="item">
-<h2>Schweregrade</h2>
+    <!-- Schweregrade -->
+    <div class="item">
+      <h2>Schweregrade</h2>
 
-<div class="group" id="grp_obssev">
-<strong>Obstruktion – FEV1 (Z-Score)</strong>
-<label><input type="radio" name="obs_sev" value=""> nicht angegeben</label>
-<label><input type="radio" name="obs_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
-<label><input type="radio" name="obs_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
-<label><input type="radio" name="obs_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
-</div>
+      <div class="group" id="grp_obssev">
+        <strong>Obstruktion – FEV1 (Z-Score)</strong>
+        <label><input type="radio" name="obs_sev" value=""> nicht angegeben</label>
+        <label><input type="radio" name="obs_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
+        <label><input type="radio" name="obs_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
+        <label><input type="radio" name="obs_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
+      </div>
 
-<div class="group" id="grp_gold">
-<strong>Optional: GOLD (nur bei Obstruktion)</strong>
-<label><input type="radio" name="gold" value=""> nicht angegeben</label>
-<label><input type="radio" name="gold" value="GOLD 1"> GOLD 1 <span class="small">(FEV1 ≥ 80 %Soll)</span></label>
-<label><input type="radio" name="gold" value="GOLD 2"> GOLD 2 <span class="small">(FEV1 50–79 %Soll)</span></label>
-<label><input type="radio" name="gold" value="GOLD 3"> GOLD 3 <span class="small">(FEV1 30–49 %Soll)</span></label>
-<label><input type="radio" name="gold" value="GOLD 4"> GOLD 4 <span class="small">(FEV1 &lt; 30 %Soll)</span></label>
-</div>
+      <div class="group" id="grp_gold">
+        <strong>Optional: GOLD (nur bei Obstruktion)</strong>
+        <label><input type="radio" name="gold" value=""> nicht angegeben</label>
+        <label><input type="radio" name="gold" value="GOLD 1"> GOLD 1 <span class="small">(FEV1 ≥ 80 %Soll)</span></label>
+        <label><input type="radio" name="gold" value="GOLD 2"> GOLD 2 <span class="small">(FEV1 50–79 %Soll)</span></label>
+        <label><input type="radio" name="gold" value="GOLD 3"> GOLD 3 <span class="small">(FEV1 30–49 %Soll)</span></label>
+        <label><input type="radio" name="gold" value="GOLD 4"> GOLD 4 <span class="small">(FEV1 &lt; 30 %Soll)</span></label>
+      </div>
 
-<div class="group" id="grp_ressev">
-<strong>Restriktion – TLC (Z-Score)</strong>
-<label><input type="radio" name="res_sev" value=""> nicht angegeben</label>
-<label><input type="radio" name="res_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
-<label><input type="radio" name="res_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
-<label><input type="radio" name="res_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
-</div>
+      <div class="group" id="grp_ressev">
+        <strong>Restriktion – TLC (Z-Score)</strong>
+        <label><input type="radio" name="res_sev" value=""> nicht angegeben</label>
+        <label><input type="radio" name="res_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
+        <label><input type="radio" name="res_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
+        <label><input type="radio" name="res_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
+      </div>
 
-</div>
+    </div>
 
-<!-- Ergebnis -->
-<div class="result" id="result"><strong>Befund:</strong> —</div>
+    <!-- Ergebnis -->
+    <div class="result" id="result"><strong>Befund:</strong> —</div>
 
-<div style="margin-top:14px;">
-<button id="copy">Befund kopieren</button>
-<button id="reset">Zurücksetzen</button>
-<span class="copied" id="copied">✓ kopiert</span>
-</div>
+    <div style="margin-top:14px;">
+      <button id="copy">Befund kopieren</button>
+      <button id="reset">Zurücksetzen</button>
+      <span class="copied" id="copied">✓ kopiert</span>
+    </div>
 
+  </div>
 </div>
 
 <script>
@@ -260,6 +269,8 @@ document.querySelectorAll('input[type="radio"][value=""]').forEach(r => r.checke
 updateEnableStates();
 build();
 </script>
+
+<script src="nav.js"></script>
 
 </body>
 </html>
