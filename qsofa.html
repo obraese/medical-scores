@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>qSOFA – Sepsis-Screening</title>
 
-  <!-- Global Styles / Navbar -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,14 +12,16 @@
 <div class="container">
   <div class="card">
     <h1>qSOFA (Sepsis-Screening)</h1>
+
     <div class="footer-note" style="margin-top:6px;">
       Arbeits-/Lernhilfe ohne Speicherung. Klinische Entscheidung immer im Kontext.
-      (Kopiert wird nur Score + Kategorie.)
+      (Kopiert wird nur Score.)
     </div>
 
     <div style="height:14px;"></div>
 
-    <div class="card" style="box-shadow:none; border-radius:14px; padding:14px;">
+    <!-- Kriterien -->
+    <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border);">
       <div style="font-weight:700; margin-bottom:8px;">Kriterien</div>
 
       <!-- RR -->
@@ -28,9 +29,7 @@
         <input type="checkbox" id="q_rr" style="margin-top:3px;">
         <div style="flex:1;">
           <div style="font-weight:600; margin-bottom:4px;">Atemfrequenz ≥ 22/min</div>
-          <div style="color:var(--muted); font-size:13px;">
-            Tachypnoe ≥22/min.
-          </div>
+          <div style="color:var(--muted); font-size:13px;">Tachypnoe ≥22/min.</div>
         </div>
         <div style="color:var(--muted); font-size:13px; white-space:nowrap;">+1</div>
       </label>
@@ -40,9 +39,7 @@
         <input type="checkbox" id="q_sbp" style="margin-top:3px;">
         <div style="flex:1;">
           <div style="font-weight:600; margin-bottom:4px;">RR systolisch ≤ 100 mmHg</div>
-          <div style="color:var(--muted); font-size:13px;">
-            Hypotonie-Schwelle im qSOFA.
-          </div>
+          <div style="color:var(--muted); font-size:13px;">Hypotonie-Schwelle im qSOFA.</div>
         </div>
         <div style="color:var(--muted); font-size:13px; white-space:nowrap;">+1</div>
       </label>
@@ -65,12 +62,12 @@
       <div style="font-weight:600;">qSOFA:</div>
       <div id="score" style="font-size:34px; font-weight:800;">0</div>
 
-      <button id="copyBtn" class="navbtn" style="cursor:pointer;">kopieren</button>
+      <button id="copyBtn" class="navbtn" type="button" style="cursor:pointer;">kopieren</button>
       <span id="copied" style="display:none; color:green; font-size:13px;">✓ kopiert</span>
 
       <span style="flex:1;"></span>
 
-      <button id="resetBtn" class="navbtn" style="cursor:pointer;">Zurücksetzen</button>
+      <button id="resetBtn" class="navbtn" type="button" style="cursor:pointer;">Zurücksetzen</button>
     </div>
 
     <!-- Band -->
@@ -82,6 +79,7 @@
       <div id="b1" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
         <strong style="display:block; margin-bottom:4px;">≥2</strong>
         erhöhtes Risiko
+      </div>
     </div>
 
     <!-- Interpretation -->
@@ -93,6 +91,7 @@
       qSOFA ist ein <b>Screening-Tool</b> (v. a. außerhalb ICU) zur Identifikation von Patient*innen mit erhöhtem Risiko bei vermuteter Infektion.
       Ein qSOFA ≥2 sollte zu <b>rascher Reevaluation</b> und klinischem Sepsis-Workup führen (Vitalparameter, Laktat, Organdysfunktion, Blutkulturen/Infektfokus, frühzeitige Therapie).
     </div>
+
   </div>
 </div>
 
@@ -144,10 +143,8 @@
       `<b>Einordnung:</b> ${cls}. (${s} Punkt${s===1?"":"e"}). ${rec}`;
 
     window.__qsofa_last = { score: s, cls };
-    return s;
   }
 
-  // Events
   ["q_rr","q_sbp","q_ams"].forEach(id => {
     document.getElementById(id).addEventListener("change", calc);
   });
@@ -158,7 +155,7 @@
   });
 
   document.getElementById("copyBtn").addEventListener("click", () => {
-    const r = window.__qsofa_last || { score: Number(document.getElementById("score").textContent || "0"), cls: "" };
+    const r = window.__qsofa_last || { score: Number(document.getElementById("score").textContent || "0") };
     const text = `qSOFA: ${r.score} Punkt${r.score===1?"":"e"}`;
     navigator.clipboard.writeText(text).then(() => {
       const msg = document.getElementById("copied");
@@ -167,7 +164,6 @@
     });
   });
 
-  // Initial
   calc();
 </script>
 
