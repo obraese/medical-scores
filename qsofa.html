@@ -77,16 +77,11 @@
     <div id="band" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:12px;">
       <div id="b0" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
         <strong style="display:block; margin-bottom:4px;">0–1</strong>
-        kein/geringes Signal
+        niedriges Risiko
       </div>
       <div id="b1" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
         <strong style="display:block; margin-bottom:4px;">≥2</strong>
         erhöhtes Risiko
-      </div>
-      <div id="b2" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
-        <strong style="display:block; margin-bottom:4px;">Hinweis</strong>
-        Screen, kein Dx
-      </div>
     </div>
 
     <!-- Interpretation -->
@@ -96,7 +91,7 @@
 
     <div class="footer-note" style="margin-top:12px;">
       qSOFA ist ein <b>Screening-Tool</b> (v. a. außerhalb ICU) zur Identifikation von Patient*innen mit erhöhtem Risiko bei vermuteter Infektion.
-      Ein qSOFA ≥2 sollte zu <b>rascher Reevaluation</b> und klinischem Sepsis-Workup führen (Vitalparameter, Laktat, Organdysfunktion, Blutkulturen/Infektfokus, frühzeitige Therapie nach lokalem Standard).
+      Ein qSOFA ≥2 sollte zu <b>rascher Reevaluation</b> und klinischem Sepsis-Workup führen (Vitalparameter, Laktat, Organdysfunktion, Blutkulturen/Infektfokus, frühzeitige Therapie).
     </div>
   </div>
 </div>
@@ -164,7 +159,7 @@
 
   document.getElementById("copyBtn").addEventListener("click", () => {
     const r = window.__qsofa_last || { score: Number(document.getElementById("score").textContent || "0"), cls: "" };
-    const text = `qSOFA: ${r.score} Punkt${r.score===1?"":"e"} (${r.cls || "—"})`;
+    const text = `qSOFA: ${r.score} Punkt${r.score===1?"":"e"}`;
     navigator.clipboard.writeText(text).then(() => {
       const msg = document.getElementById("copied");
       msg.style.display = "inline";
