@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>qSOFA – Sepsis-Screening</title>
+
+  <!-- Global Styles / Navbar -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>qSOFA (Sepsis-Screening)</h1>
+    <div class="footer-note" style="margin-top:6px;">
+      Arbeits-/Lernhilfe ohne Speicherung. Klinische Entscheidung immer im Kontext.
+      (Kopiert wird nur Score + Kategorie.)
+    </div>
+
+    <div style="height:14px;"></div>
+
+    <div class="card" style="box-shadow:none; border-radius:14px; padding:14px;">
+      <div style="font-weight:700; margin-bottom:8px;">Kriterien</div>
+
+      <!-- RR -->
+      <label style="display:flex; gap:12px; align-items:flex-start; cursor:pointer; padding:10px 12px; border:1px solid var(--border); border-radius:14px; background:var(--card); margin-bottom:10px;">
+        <input type="checkbox" id="q_rr" style="margin-top:3px;">
+        <div style="flex:1;">
+          <div style="font-weight:600; margin-bottom:4px;">Atemfrequenz ≥ 22/min</div>
+          <div style="color:var(--muted); font-size:13px;">
+            Tachypnoe ≥22/min.
+          </div>
+        </div>
+        <div style="color:var(--muted); font-size:13px; white-space:nowrap;">+1</div>
+      </label>
+
+      <!-- SBP -->
+      <label style="display:flex; gap:12px; align-items:flex-start; cursor:pointer; padding:10px 12px; border:1px solid var(--border); border-radius:14px; background:var(--card); margin-bottom:10px;">
+        <input type="checkbox" id="q_sbp" style="margin-top:3px;">
+        <div style="flex:1;">
+          <div style="font-weight:600; margin-bottom:4px;">RR systolisch ≤ 100 mmHg</div>
+          <div style="color:var(--muted); font-size:13px;">
+            Hypotonie-Schwelle im qSOFA.
+          </div>
+        </div>
+        <div style="color:var(--muted); font-size:13px; white-space:nowrap;">+1</div>
+      </label>
+
+      <!-- Mentation -->
+      <label style="display:flex; gap:12px; align-items:flex-start; cursor:pointer; padding:10px 12px; border:1px solid var(--border); border-radius:14px; background:var(--card);">
+        <input type="checkbox" id="q_ams" style="margin-top:3px;">
+        <div style="flex:1;">
+          <div style="font-weight:600; margin-bottom:4px;">Veränderter mentaler Status</div>
+          <div style="color:var(--muted); font-size:13px;">
+            Bewusstseins-/Vigilanzänderung (z. B. GCS &lt; 15, neu delirant/verwirrt).
+          </div>
+        </div>
+        <div style="color:var(--muted); font-size:13px; white-space:nowrap;">+1</div>
+      </label>
+    </div>
+
+    <!-- Score line -->
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+      <div style="font-weight:600;">qSOFA:</div>
+      <div id="score" style="font-size:34px; font-weight:800;">0</div>
+
+      <button id="copyBtn" class="navbtn" style="cursor:pointer;">kopieren</button>
+      <span id="copied" style="display:none; color:green; font-size:13px;">✓ kopiert</span>
+
+      <span style="flex:1;"></span>
+
+      <button id="resetBtn" class="navbtn" style="cursor:pointer;">Zurücksetzen</button>
+    </div>
+
+    <!-- Band -->
+    <div id="band" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:12px;">
+      <div id="b0" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">0–1</strong>
+        kein/geringes Signal
+      </div>
+      <div id="b1" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">≥2</strong>
+        erhöhtes Risiko
+      </div>
+      <div id="b2" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">Hinweis</strong>
+        Screen, kein Dx
+      </div>
+    </div>
+
+    <!-- Interpretation -->
+    <div id="interp" class="footer-note" style="margin-top:12px; border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:rgba(244,246,248,.7);">
+      <b>Einordnung:</b> —
+    </div>
+
+    <div class="footer-note" style="margin-top:12px;">
+      qSOFA ist ein <b>Screening-Tool</b> (v. a. außerhalb ICU) zur Identifikation von Patient*innen mit erhöhtem Risiko bei vermuteter Infektion.
+      Ein qSOFA ≥2 sollte zu <b>rascher Reevaluation</b> und klinischem Sepsis-Workup führen (Vitalparameter, Laktat, Organdysfunktion, Blutkulturen/Infektfokus, frühzeitige Therapie nach lokalem Standard).
+    </div>
+  </div>
+</div>
+
+<script>
+  function clearActive() {
+    ["b0","b1"].forEach(id => {
+      const el = document.getElementById(id);
+      el.style.background = "#fafafa";
+      el.style.border = "1px solid var(--border)";
+      el.style.fontWeight = "normal";
+      el.style.fontSize = "13px";
+    });
+  }
+
+  function setActive(id) {
+    const el = document.getElementById(id);
+    el.style.background = "#eef6ff";
+    el.style.border = "2px solid #7aa7e6";
+    el.style.fontWeight = "bold";
+    el.style.fontSize = "15px";
+  }
+
+  function calc() {
+    document.getElementById("copied").style.display = "none";
+
+    let s = 0;
+    if (document.getElementById("q_rr").checked) s += 1;
+    if (document.getElementById("q_sbp").checked) s += 1;
+    if (document.getElementById("q_ams").checked) s += 1;
+
+    document.getElementById("score").textContent = String(s);
+
+    clearActive();
+
+    let cls = "";
+    let rec = "";
+
+    if (s >= 2) {
+      setActive("b1");
+      cls = "erhöhtes Risiko (qSOFA ≥2)";
+      rec = "qSOFA ≥2 bei vermuteter Infektion: erhöhtes Risiko für ungünstigen Verlauf → rasche klinische Reevaluation/Sepsis-Workup und engmaschiges Monitoring.";
+    } else {
+      setActive("b0");
+      cls = "kein/geringes Signal (qSOFA 0–1)";
+      rec = "qSOFA 0–1 schließt Sepsis nicht aus. Bei klinischem Verdacht trotzdem Workup/Verlaufskontrolle gemäß Situation.";
+    }
+
+    document.getElementById("interp").innerHTML =
+      `<b>Einordnung:</b> ${cls}. (${s} Punkt${s===1?"":"e"}). ${rec}`;
+
+    window.__qsofa_last = { score: s, cls };
+    return s;
+  }
+
+  // Events
+  ["q_rr","q_sbp","q_ams"].forEach(id => {
+    document.getElementById(id).addEventListener("change", calc);
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    ["q_rr","q_sbp","q_ams"].forEach(id => document.getElementById(id).checked = false);
+    calc();
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", () => {
+    const r = window.__qsofa_last || { score: Number(document.getElementById("score").textContent || "0"), cls: "" };
+    const text = `qSOFA: ${r.score} Punkt${r.score===1?"":"e"} (${r.cls || "—"})`;
+    navigator.clipboard.writeText(text).then(() => {
+      const msg = document.getElementById("copied");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 1500);
+    });
+  });
+
+  // Initial
+  calc();
+</script>
+
+<script src="nav.js"></script>
+</body>
+</html>
