@@ -2,52 +2,115 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Medical Scores</title>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 40px;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .container {
-      max-width: 700px;
-      margin: auto;
-    }
-    .button {
+
+    .score-card {
       display: block;
-      background-color: #1f2937;
-      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
       text-decoration: none;
-      padding: 16px;
-      margin: 12px 0;
-      text-align: center;
-      border-radius: 8px;
-      font-size: 18px;
-      transition: background-color 0.2s ease;
+      color: #111827;
+      box-shadow: 0 6px 20px rgba(0,0,0,.06);
+      transition: transform .12s ease, box-shadow .12s ease;
     }
-    .button:hover {
-      background-color: #374151;
+
+    .score-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.08);
+    }
+
+    .score-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .score-desc {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    h1 {
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 24px;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>Klinische Score-Rechner</h1>
 
-    <a class="button" href="cha2ds2-va.html">CHA₂DS₂-VA Score & HAS-BLED</a>
-    <a class="button" href="child-pugh-meld.html">Child-Pugh & MELD</a>
-    <a class="button" href="duke.html">Duke-Kriterien</a>
-    <a class="button" href="hit.html">HIT-Abklärung</a>
-    <a class="button" href="pesi.html">PESI-Score</a>
-    <a class="button" href="score2.html">SCORE2-Rechner</a>
-    <a class="button" href="wells.html">Wells-Score (LAE & TVT)</a>
-    <a class="button" href="body.html">Body-Interpretation</a>
+<body>
+
+  <div class="container">
+
+    <h1>Klinische Score-Rechner</h1>
+    <div class="subtitle">Interne Entscheidungsunterstützung</div>
+
+    <div class="grid">
+
+      <a class="score-card" href="cha2ds2-va.html">
+        <div class="score-title">CHA₂DS₂-VA</div>
+        <div class="score-desc">Schlaganfallrisiko bei VHF</div>
+      </a>
+
+      <a class="score-card" href="score2.html">
+        <div class="score-title">SCORE2</div>
+        <div class="score-desc">10-Jahres-CV-Risiko</div>
+      </a>
+
+      <a class="score-card" href="wells.html">
+        <div class="score-title">Wells Score</div>
+        <div class="score-desc">TVT / LAE Wahrscheinlichkeit</div>
+      </a>
+
+      <a class="score-card" href="pesi.html">
+        <div class="score-title">PESI</div>
+        <div class="score-desc">Risikostratifizierung bei LAE</div>
+      </a>
+
+      <a class="score-card" href="hit.html">
+        <div class="score-title">HIT-Abklärung</div>
+        <div class="score-desc">4T-Score & Bewertung</div>
+      </a>
+
+      <a class="score-card" href="duke.html">
+        <div class="score-title">Duke-Kriterien</div>
+        <div class="score-desc">Diagnose Endokarditis</div>
+      </a>
+
+      <a class="score-card" href="child-pugh-meld.html">
+        <div class="score-title">Child-Pugh / MELD</div>
+        <div class="score-desc">Leberfunktionsbewertung</div>
+      </a>
+
+      <a class="score-card" href="body.html">
+        <div class="score-title">Body-Interpretation</div>
+        <div class="score-desc">Labor- / Parameterinterpretation</div>
+      </a>
+
+    </div>
+
+    <div class="footer-note">
+      Nur zur klinischen Unterstützung. Keine Haftung. Letzte Aktualisierung: 2026.
+    </div>
 
   </div>
+
+  <script src="nav.js"></script>
+
 </body>
 </html>
