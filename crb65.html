@@ -183,7 +183,7 @@
 
   document.getElementById("copyBtn").addEventListener("click", () => {
     const r = window.__crb65_last || { score: Number(document.getElementById("score").textContent || "0"), cls: "" };
-    const text = `CRB-65: ${r.score} Punkt${r.score===1?"":"e"} (${r.cls || "—"})`;
+    const text = `CRB-65: ${r.score} Punkt${r.score===1?"":"e"}`;
     navigator.clipboard.writeText(text).then(() => {
       const msg = document.getElementById("copied");
       msg.style.display = "inline";
