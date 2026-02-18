@@ -4,16 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Wells-Score Rechner (LAE & TVT)</title>
+
+  <!-- Global -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Page-local (nur wells-spezifisch) -->
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    :root{
+      /* falls global nicht vorhanden */
+      --radius-sm: 12px;
+    }
+
     h1 { font-size: 22px; margin: 0 0 10px; }
     h2 { font-size: 18px; margin: 18px 0 10px; }
-    .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 980px; border-radius: 10px; }
+
+    .muted { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
 
     .switch {
       display: flex; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
       align-items: center;
       background: #fcfcfc;
     }
@@ -21,23 +33,27 @@
 
     .agebox {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
       background: #fcfcfc;
     }
     .agebox input {
-      width: 90px;
+      width: 100px;
       padding: 8px 10px;
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       border: 1px solid #ddd;
       background: #fff;
+      font-size: 14px;
     }
     .agehint { font-size: 13px; color: #444; }
     .cutoff { font-size: 13px; color: #333; }
 
     .item {
-      border: 1px solid #eee;
+      border: 1px solid var(--border);
       padding: 12px 14px;
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       margin: 12px 0;
       background: #fff;
     }
@@ -48,7 +64,7 @@
       cursor: pointer;
     }
     .content { flex: 1; }
-    .title { font-weight: bold; margin-bottom: 4px; }
+    .title { font-weight: 700; margin-bottom: 4px; }
     .explain { font-size: 13px; color: #444; margin-left: 22px; }
 
     .pts { color: #444; font-size: 13px; white-space: nowrap; margin-left: 10px; }
@@ -56,22 +72,13 @@
     .scoreline {
       margin-top: 16px;
       padding-top: 12px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid var(--border);
       display: flex;
       gap: 12px;
       align-items: center;
       flex-wrap: wrap;
     }
-    .score { font-size: 30px; font-weight: bold; }
-
-    button {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #fafafa;
-      cursor: pointer;
-    }
-    button:hover { background: #f2f2f2; }
+    .score { font-size: 30px; font-weight: 800; }
 
     .copied { font-size: 13px; color: green; }
 
@@ -80,13 +87,13 @@
       font-size: 13px;
       color: #333;
       padding: 10px 12px;
-      border: 1px solid #eee;
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       background: #fcfcfc;
     }
     .interpret strong { margin-right: 6px; }
 
-    /* ===== Kategorieband (neu) ===== */
+    /* ===== Kategorieband ===== */
     .band {
       display: grid;
       gap: 10px;
@@ -94,10 +101,13 @@
     }
     .band-3 { grid-template-columns: repeat(3, 1fr); }
     .band-2 { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 800px){
+      .band-3, .band-2 { grid-template-columns: 1fr; }
+    }
 
     .bandbox {
-      border: 1px solid #eee;
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       padding: 10px 12px;
       background: #fafafa;
       font-size: 13px;
@@ -109,7 +119,7 @@
       background: #eef6ff;
       border: 2px solid #7aa7e6;
       font-size: 15px;
-      font-weight: bold;
+      font-weight: 800;
     }
 
     .hidden { display: none; }
@@ -117,307 +127,282 @@
 </head>
 <body>
 
-<h1>Wells-Score Rechner</h1>
-<div class="muted">
-  Arbeits-/Lernhilfe ohne Speicherung. (Kopiert wird nur der Score, nicht die Empfehlung.)
-</div>
+  <div class="container">
+    <div class="card">
 
-<div class="box">
+      <h1>Wells-Score Rechner</h1>
+      <div class="muted">
+        Arbeits-/Lernhilfe ohne Speicherung. (Kopiert wird nur der Score, nicht die Empfehlung.)
+      </div>
 
-  <div class="switch">
-    <strong>Modus:</strong>
-    <label><input type="radio" name="mode" id="mode_lae" checked> Wells LAE</label>
-    <label><input type="radio" name="mode" id="mode_dvt"> Wells TVT</label>
+      <div class="switch">
+        <strong>Modus:</strong>
+        <label><input type="radio" name="mode" id="mode_lae" checked> Wells LAE</label>
+        <label><input type="radio" name="mode" id="mode_dvt"> Wells TVT</label>
+      </div>
+
+      <!-- Alter / D-Dimer Cutoff -->
+      <div class="agebox">
+        <strong>Alter:</strong>
+        <input type="number" id="age_years" min="0" max="120" placeholder="Jahre">
+        <span class="agehint">D-Dimer Cutoff (FEU): ≤50 J. 500 µg/L, &gt;50 J. Alter×10 µg/L</span>
+        <span style="flex:1;"></span>
+        <span class="cutoff" id="ddimer_cutoff_display"><strong>Aktueller Cutoff:</strong> 500 µg/L FEU</span>
+      </div>
+
+      <!-- ===================== WELLS LAE ===================== -->
+      <div id="section_lae">
+        <h2>Wells-Score – Lungenarterienembolie (LAE)</h2>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_dvt_signs">
+            <div class="content">
+              <div class="title">Klinische Zeichen einer TVT</div>
+              <div class="explain">Beinschwellung und Schmerz bei Palpation entlang des tiefen Venensystems.</div>
+            </div>
+            <span class="pts">Wells I: +3 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_alt_less_likely">
+            <div class="content">
+              <div class="title">LAE ist wahrscheinlicher als alternative Diagnose</div>
+              <div class="explain">Klinische Gesamteinschätzung: alternative Erklärung weniger wahrscheinlich.</div>
+            </div>
+            <span class="pts">Wells I: +3 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_hr">
+            <div class="content">
+              <div class="title">Herzfrequenz &gt; 100/min</div>
+              <div class="explain">Tachykardie als Risiko-/Hinweisfaktor.</div>
+            </div>
+            <span class="pts">Wells I: +1.5 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_immob_surg">
+            <div class="content">
+              <div class="title">Immobilisation/Operation</div>
+              <div class="explain">Immobilisation ≥3 Tage oder größere OP in den letzten 4 Wochen.</div>
+            </div>
+            <span class="pts">Wells I: +1.5 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_prev_vte">
+            <div class="content">
+              <div class="title">Frühere TVT/LAE</div>
+              <div class="explain">Z. n. venöser Thromboembolie.</div>
+            </div>
+            <span class="pts">Wells I: +1.5 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_hemo">
+            <div class="content">
+              <div class="title">Hämoptyse</div>
+              <div class="explain">Bluthusten.</div>
+            </div>
+            <span class="pts">Wells I: +1 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="lae_cancer">
+            <div class="content">
+              <div class="title">Malignom</div>
+              <div class="explain">Aktive Krebserkrankung (Behandlung laufend, in den letzten 6 Monaten oder palliativ).</div>
+            </div>
+            <span class="pts">Wells I: +1 | Wells II: +1</span>
+          </label>
+        </div>
+
+        <div class="scoreline">
+          <div>Wells I (klassisch):</div>
+          <div class="score" id="lae_result_w1">0</div>
+          <button id="lae_copy_w1">Wells I (LAE) kopieren</button>
+          <span class="copied" id="lae_copied_w1" style="display:none;">✓ kopiert</span>
+
+          <span style="flex-basis:100%; height:0;"></span>
+
+          <div>Wells II (vereinfacht):</div>
+          <div class="score" id="lae_result_w2">0</div>
+          <button id="lae_copy_w2">Wells II (LAE) kopieren</button>
+          <span class="copied" id="lae_copied_w2" style="display:none;">✓ kopiert</span>
+
+          <span style="flex:1;"></span>
+          <button id="reset_lae">Zurücksetzen (LAE)</button>
+        </div>
+
+        <div class="band band-3" id="band_lae_w1">
+          <div id="lae_w1_low" class="bandbox"><strong>niedrig</strong>&lt;2</div>
+          <div id="lae_w1_mod" class="bandbox"><strong>moderat</strong>2–6</div>
+          <div id="lae_w1_high" class="bandbox"><strong>hoch</strong>&gt;6</div>
+        </div>
+
+        <div class="band band-2" id="band_lae_w2">
+          <div id="lae_w2_unlikely" class="bandbox"><strong>unwahrscheinlich</strong>0–1</div>
+          <div id="lae_w2_likely" class="bandbox"><strong>wahrscheinlich</strong>≥2</div>
+        </div>
+
+        <div class="interpret" id="lae_wells1"><strong>Wells I (3-stufig):</strong> —</div>
+        <div class="interpret" id="lae_wells2"><strong>Wells II (2-stufig, vereinfacht):</strong> —</div>
+
+        <div class="muted" style="margin-top:10px;">
+          Wells II (LAE): 1 Punkt pro Item (0–7).
+        </div>
+      </div>
+
+      <!-- ===================== WELLS DVT ===================== -->
+      <div id="section_dvt" class="hidden">
+        <h2>Wells-Score – TVT</h2>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_cancer">
+            <div class="content">
+              <div class="title">Aktives Malignom</div>
+              <div class="explain">Behandlung laufend, innerhalb der letzten 6 Monate oder palliativ.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_paralysis">
+            <div class="content">
+              <div class="title">Parese/Paralyse oder Gips</div>
+              <div class="explain">Paresen/Paralysen oder Immobilisation der unteren Extremität (z. B. Gips).</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_bed_surg">
+            <div class="content">
+              <div class="title">Bettruhe oder größere Operation</div>
+              <div class="explain">Bettruhe ≥3 Tage oder größere OP innerhalb der letzten 12 Wochen (mit Narkose).</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_tenderness">
+            <div class="content">
+              <div class="title">Druckschmerz entlang der tiefen Venen</div>
+              <div class="explain">Lokalisierter Druckschmerz im Verlauf des tiefen Venensystems.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_entire_leg">
+            <div class="content">
+              <div class="title">Ganzes Bein geschwollen</div>
+              <div class="explain">Diffuse Schwellung der gesamten betroffenen Extremität.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_calf">
+            <div class="content">
+              <div class="title">Wadenschwellung &gt; 3 cm</div>
+              <div class="explain">Vergleich 10 cm unterhalb der Tuberositas tibiae.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_edema">
+            <div class="content">
+              <div class="title">Eindrückbares Ödem (nur symptomatisches Bein)</div>
+              <div class="explain">Pitting-Ödem, auf das betroffene Bein beschränkt.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_collateral">
+            <div class="content">
+              <div class="title">Kollateralen oberflächlicher Venen</div>
+              <div class="explain">Nicht-variköse, sichtbare Kollateralvenen.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_prev">
+            <div class="content">
+              <div class="title">Frühere TVT</div>
+              <div class="explain">Z. n. TVT</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="dvt_alt_dx">
+            <div class="content">
+              <div class="title">Alternative Diagnose mindestens ebenso wahrscheinlich</div>
+              <div class="explain">Z. B. Muskelfaserriss, Zellulitis, Baker-Zyste etc.</div>
+            </div>
+            <span class="pts">−2</span>
+          </label>
+        </div>
+
+        <div class="scoreline">
+          <div>Wells (TVT):</div>
+          <div class="score" id="dvt_result">0</div>
+
+          <button id="dvt_copy">Wells (TVT) kopieren</button>
+          <span class="copied" id="dvt_copied" style="display:none;">✓ kopiert</span>
+
+          <span style="flex:1;"></span>
+          <button id="reset_dvt">Zurücksetzen (TVT)</button>
+        </div>
+
+        <div class="band band-3" id="band_dvt">
+          <div id="dvt_low" class="bandbox"><strong>niedrig</strong>≤0</div>
+          <div id="dvt_mod" class="bandbox"><strong>moderat</strong>1–2</div>
+          <div id="dvt_high" class="bandbox"><strong>hoch</strong>≥3</div>
+        </div>
+
+        <div class="interpret" id="dvt_interpret"><strong>Wells (3-stufig):</strong> —</div>
+      </div>
+
+    </div>
   </div>
-
-  <!-- Alter / D-Dimer Cutoff -->
-  <div class="agebox">
-    <strong>Alter:</strong>
-    <input type="number" id="age_years" min="0" max="120" placeholder="Jahre">
-    <span class="agehint">D-Dimer Cutoff (FEU): ≤50 J. 500 µg/L, &gt;50 J. Alter×10 µg/L</span>
-    <span style="flex:1;"></span>
-    <span class="cutoff" id="ddimer_cutoff_display"><strong>Aktueller Cutoff:</strong> 500 µg/L FEU</span>
-  </div>
-
-  <!-- ===================== WELLS LAE ===================== -->
-  <div id="section_lae">
-    <h2>Wells-Score – Lungenarterienembolie (LAE)</h2>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_dvt_signs">
-        <div class="content">
-          <div class="title">Klinische Zeichen einer TVT</div>
-          <div class="explain">Beinschwellung und Schmerz bei Palpation entlang des tiefen Venensystems.</div>
-        </div>
-        <span class="pts">Wells I: +3 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_alt_less_likely">
-        <div class="content">
-          <div class="title">LAE ist wahrscheinlicher als alternative Diagnose</div>
-          <div class="explain">Klinische Gesamteinschätzung: alternative Erklärung weniger wahrscheinlich.</div>
-        </div>
-        <span class="pts">Wells I: +3 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_hr">
-        <div class="content">
-          <div class="title">Herzfrequenz &gt; 100/min</div>
-          <div class="explain">Tachykardie als Risiko-/Hinweisfaktor.</div>
-        </div>
-        <span class="pts">Wells I: +1.5 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_immob_surg">
-        <div class="content">
-          <div class="title">Immobilisation/Operation</div>
-          <div class="explain">Immobilisation ≥3 Tage oder größere OP in den letzten 4 Wochen.</div>
-        </div>
-        <span class="pts">Wells I: +1.5 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_prev_vte">
-        <div class="content">
-          <div class="title">Frühere TVT/LAE</div>
-          <div class="explain">Z. n. venöser Thromboembolie.</div>
-        </div>
-        <span class="pts">Wells I: +1.5 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_hemo">
-        <div class="content">
-          <div class="title">Hämoptyse</div>
-          <div class="explain">Bluthusten.</div>
-        </div>
-        <span class="pts">Wells I: +1 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="lae_cancer">
-        <div class="content">
-          <div class="title">Malignom</div>
-          <div class="explain">Aktive Krebserkrankung (Behandlung laufend, in den letzten 6 Monaten oder palliativ).</div>
-        </div>
-        <span class="pts">Wells I: +1 | Wells II: +1</span>
-      </label>
-    </div>
-
-    <div class="scoreline">
-      <div>Wells I (klassisch):</div>
-      <div class="score" id="lae_result_w1">0</div>
-      <button id="lae_copy_w1">Wells I (LAE) kopieren</button>
-      <span class="copied" id="lae_copied_w1" style="display:none;">✓ kopiert</span>
-
-      <span style="flex-basis:100%; height:0;"></span>
-
-      <div>Wells II (vereinfacht):</div>
-      <div class="score" id="lae_result_w2">0</div>
-      <button id="lae_copy_w2">Wells II (LAE) kopieren</button>
-      <span class="copied" id="lae_copied_w2" style="display:none;">✓ kopiert</span>
-
-      <span style="flex:1;"></span>
-      <button id="reset_lae">Zurücksetzen (LAE)</button>
-    </div>
-
-    <!-- ===== Kategorieband LAE Wells I (3-stufig) (neu) ===== -->
-    <div class="band band-3" id="band_lae_w1">
-      <div id="lae_w1_low" class="bandbox">
-        <strong>niedrig</strong>
-        &lt;2
-      </div>
-      <div id="lae_w1_mod" class="bandbox">
-        <strong>moderat</strong>
-        2–6
-      </div>
-      <div id="lae_w1_high" class="bandbox">
-        <strong>hoch</strong>
-        &gt;6
-      </div>
-    </div>
-
-    <!-- ===== Kategorieband LAE Wells II (2-stufig, vereinfacht) (neu) ===== -->
-    <div class="band band-2" id="band_lae_w2">
-      <div id="lae_w2_unlikely" class="bandbox">
-        <strong>unwahrscheinlich</strong>
-        0–1
-      </div>
-      <div id="lae_w2_likely" class="bandbox">
-        <strong>wahrscheinlich</strong>
-        ≥2
-      </div>
-    </div>
-
-    <div class="interpret" id="lae_wells1"><strong>Wells I (3-stufig):</strong> —</div>
-    <div class="interpret" id="lae_wells2"><strong>Wells II (2-stufig, vereinfacht):</strong> —</div>
-
-    <div class="muted" style="margin-top:10px;">
-      Wells II (LAE): 1 Punkt pro Item (0–7).
-    </div>
-  </div>
-
-  <!-- ===================== WELLS DVT ===================== -->
-  <div id="section_dvt" class="hidden">
-    <h2>Wells-Score – TVT</h2>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_cancer">
-        <div class="content">
-          <div class="title">Aktives Malignom</div>
-          <div class="explain">Behandlung laufend, innerhalb der letzten 6 Monate oder palliativ.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_paralysis">
-        <div class="content">
-          <div class="title">Parese/Paralyse oder Gips</div>
-          <div class="explain">Paresen/Paralysen oder Immobilisation der unteren Extremität (z. B. Gips).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_bed_surg">
-        <div class="content">
-          <div class="title">Bettruhe oder größere Operation</div>
-          <div class="explain">Bettruhe ≥3 Tage oder größere OP innerhalb der letzten 12 Wochen (mit Narkose).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_tenderness">
-        <div class="content">
-          <div class="title">Druckschmerz entlang der tiefen Venen</div>
-          <div class="explain">Lokalisierter Druckschmerz im Verlauf des tiefen Venensystems.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_entire_leg">
-        <div class="content">
-          <div class="title">Ganzes Bein geschwollen</div>
-          <div class="explain">Diffuse Schwellung der gesamten betroffenen Extremität.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_calf">
-        <div class="content">
-          <div class="title">Wadenschwellung &gt; 3 cm</div>
-          <div class="explain">Vergleich 10 cm unterhalb der Tuberositas tibiae.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_edema">
-        <div class="content">
-          <div class="title">Eindrückbares Ödem (nur symptomatisches Bein)</div>
-          <div class="explain">Pitting-Ödem, auf das betroffene Bein beschränkt.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_collateral">
-        <div class="content">
-          <div class="title">Kollateralen oberflächlicher Venen</div>
-          <div class="explain">Nicht-variköse, sichtbare Kollateralvenen.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_prev">
-        <div class="content">
-          <div class="title">Frühere TVT</div>
-          <div class="explain">Z. n. TVT</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
-
-    <div class="item">
-      <label>
-        <input type="checkbox" id="dvt_alt_dx">
-        <div class="content">
-          <div class="title">Alternative Diagnose mindestens ebenso wahrscheinlich</div>
-          <div class="explain">Z. B. Muskelfaserriss, Zellulitis, Baker-Zyste etc.</div>
-        </div>
-        <span class="pts">−2</span>
-      </label>
-    </div>
-
-    <div class="scoreline">
-      <div>Wells (TVT):</div>
-      <div class="score" id="dvt_result">0</div>
-
-      <button id="dvt_copy">Wells (TVT) kopieren</button>
-      <span class="copied" id="dvt_copied" style="display:none;">✓ kopiert</span>
-
-      <span style="flex:1;"></span>
-      <button id="reset_dvt">Zurücksetzen (TVT)</button>
-    </div>
-
-    <!-- ===== Kategorieband TVT Wells (3-stufig) (neu) ===== -->
-    <div class="band band-3" id="band_dvt">
-      <div id="dvt_low" class="bandbox">
-        <strong>niedrig</strong>
-        ≤0
-      </div>
-      <div id="dvt_mod" class="bandbox">
-        <strong>moderat</strong>
-        1–2
-      </div>
-      <div id="dvt_high" class="bandbox">
-        <strong>hoch</strong>
-        ≥3
-      </div>
-    </div>
-
-    <div class="interpret" id="dvt_interpret"><strong>Wells (3-stufig):</strong> —</div>
-  </div>
-
-</div>
 
 <script>
 function punktText(n) { return (n === 1) ? "Punkt" : "Punkte"; }
@@ -427,7 +412,7 @@ function show(mode) {
   document.getElementById("section_dvt").classList.toggle("hidden", mode !== "dvt");
 }
 
-/* ===== Kategorieband helpers (neu) ===== */
+/* ===== Kategorieband helpers ===== */
 function clearBand(ids) {
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -487,7 +472,7 @@ function updateCutoffDisplay() {
 }
 
 /* =========================
-   LAE: Interpretation + Empfehlung
+   LAE
    ========================= */
 function interpretLAE_WellsI_3stufig(score) {
   if (score > 6) return "hoch (3-stufig: >6)";
@@ -496,7 +481,6 @@ function interpretLAE_WellsI_3stufig(score) {
 }
 
 function interpretLAE_WellsII_2stufig_simple(scoreSimple) {
-  // Vereinfachte Zählweise (0..7): pragmatischer Cutoff ≥2
   return (scoreSimple >= 2)
     ? "LAE wahrscheinlich (vereinfacht: ≥2)"
     : "LAE unwahrscheinlich (vereinfacht: 0–1)";
@@ -560,10 +544,9 @@ function calcLAE() {
 }
 
 /* =========================
-   TVT: nur Wells (3-stufig) + konkrete Empfehlung
+   TVT
    ========================= */
 function interpretDVT_3stufig(score) {
-  // 3-stufig (häufig genutzt): ≤0 niedrig, 1–2 moderat, ≥3 hoch
   if (score >= 3) return "hoch (3-stufig: ≥3)";
   if (score >= 1) return "moderat (3-stufig: 1–2)";
   return "niedrig (3-stufig: ≤0)";
@@ -576,7 +559,6 @@ function recommendationDVT_from_3stufig(score) {
     return "→ hohe Vortestwahrscheinlichkeit: zeitnahe Kompressionssonografie direkt. Bei negativer Sonografie trotz weiterhin hoher klinischer Wahrscheinlichkeit: Wiederholung nach 5–7 Tagen und/oder komplette Beinvenensonografie.";
   }
 
-  // niedrig oder moderat:
   return `→ niedrige/moderate Vortestwahrscheinlichkeit: D-Dimer (Cutoff: ${info.text}); bei Positivität Kompressionssonografie.`;
 }
 
@@ -676,5 +658,7 @@ show("lae");
 recalcAll();
 </script>
 
+<!-- Navbar -->
+<script src="nav.js"></script>
 </body>
 </html>
