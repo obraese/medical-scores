@@ -1,20 +1,45 @@
 (function () {
-  const bar = document.createElement("div");
-  bar.className = "appbar";
-  bar.innerHTML = `
-    <div class="appbar-inner">
-      <a class="brand" href="index.html">Medical Scores</a>
-      <span class="spacer"></span>
-      <a class="navbtn" href="index.html">🏠 Startseite</a>
-      <a class="navbtn" href="#" onclick="history.back(); return false;">↩︎ Zurück</a>
-    </div>
-  `;
+  function isIndexPage() {
+    const path = (window.location.pathname || "").toLowerCase();
+    // funktioniert für .../ , .../index.html, .../index.htm
+    return (
+      path.endsWith("/") ||
+      path.endsWith("/index.html") ||
+      path.endsWith("/index.htm")
+    );
+  }
 
-  // Navbar ganz oben in den Body
-  document.addEventListener("DOMContentLoaded", () => {
+  function buildNav() {
+    const onIndex = isIndexPage();
+
+    const bar = document.createElement("div");
+    bar.className = "appbar";
+
+    // Nur auf Nicht-Index-Seiten den Zurück-Button anzeigen
+    const backBtn = onIndex
+      ? ""
+      : `<a class="navbtn" href="#" id="nav_back">↩︎ Zurück</a>`;
+
+    bar.innerHTML = `
+      <div class="appbar-inner">
+        <a class="brand" href="index.html">Medical Scores</a>
+        <span class="spacer"></span>
+        <a class="navbtn" href="index.html">🏠 Startseite</a>
+        ${backBtn}
+      </div>
+    `;
+
     document.body.prepend(bar);
 
-    // Optional: Inhalte etwas nach unten schieben, falls eine Seite am oberen Rand "klebt"
-    // Viele deiner Rechner haben vermutlich schon eigene Layouts – das hier ist bewusst minimal.
-  });
+    // Click-Handler nur, wenn Button existiert
+    const back = document.getElementById("nav_back");
+    if (back) {
+      back.addEventListener("click", (e) => {
+        e.preventDefault();
+        history.back();
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", buildNav);
 })();
