@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Child-Pugh & MELD (Na / 3.0)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
+    h1 { font-size: 22px; margin: 0 0 10px; }
+    h2 { font-size: 18px; margin: 18px 0 10px; }
+    .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
+    .box { border: 1px solid #ccc; padding: 16px; max-width: 1060px; border-radius: 10px; }
+
+    .switch {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
+      align-items: center; background: #fcfcfc;
+    }
+    .switch label { cursor: pointer; margin-right: 10px; }
+
+    .group {
+      border: 1px solid #eee; border-radius: 10px;
+      padding: 12px 14px; background: #fff; margin: 12px 0;
+    }
+    .group .gtitle { font-weight: bold; margin-bottom: 8px; }
+    .group .explain { font-size: 13px; color: #444; margin-top: 6px; }
+
+    .radio-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .radio-row label {
+      border: 1px solid #eee; border-radius: 999px;
+      padding: 8px 10px; cursor: pointer; background: #fafafa;
+      display: inline-flex; gap: 8px; align-items: center;
+    }
+    .radio-row input { margin: 0; }
+    .pts { color: #444; font-size: 13px; white-space: nowrap; margin-left: 6px; }
+
+    .rowbox {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin: 12px 0;
+      background: #fff;
+    }
+    .rowbox input, .rowbox select {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+    .rowbox input { width: 140px; }
+    .rowbox .small { width: 120px; }
+    .rowbox .hint { font-size: 13px; color: #444; }
+
+    .scoreline {
+      margin-top: 16px; padding-top: 12px;
+      border-top: 1px solid #eee;
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    }
+    .score { font-size: 30px; font-weight: bold; }
+
+    button {
+      padding: 8px 12px; border-radius: 10px;
+      border: 1px solid #ddd; background: #fafafa; cursor: pointer;
+    }
+    button:hover { background: #f2f2f2; }
+
+    .copied { font-size: 13px; color: green; }
+
+    .interpret {
+      margin-top: 10px; font-size: 13px; color: #333;
+      padding: 10px 12px; border: 1px solid #eee;
+      border-radius: 10px; background: #fcfcfc;
+    }
+    .interpret strong { margin-right: 6px; }
+
+    .warn {
+      color: #8a3b00;
+      background: #fff4e6;
+      border: 1px solid #ffe2bf;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .hidden { display: none; }
+
+    /* ===== Child-Pugh Übersicht ===== */
+    .ctp-overview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .ctp-box {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fafafa;
+      font-size: 13px;
+      text-align: center;
+    }
+    .ctp-box strong { display: block; margin-bottom: 4px; }
+    .ctp-active {
+      background: #eef6ff;
+      border: 2px solid #7aa7e6;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    /* ===== MELD Kategorieband ===== */
+    .meld-band {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .meld-band .bandbox {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fafafa;
+      font-size: 13px;
+      text-align: center;
+    }
+    .meld-band .bandbox strong { display:block; margin-bottom: 4px; }
+    .meld-band .active {
+      background: #eef6ff;
+      border: 2px solid #7aa7e6;
+      font-size: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Child-Pugh & MELD</h1>
+<div class="muted">
+  Arbeits-/Lernhilfe ohne Speicherung. (MELD-Anzeige wird bei 40 gedeckelt. Kopieren: immer nur ein Score pro Button.)
+</div>
+
+<div class="box">
+
+  <div class="switch">
+    <strong>Modus:</strong>
+    <label><input type="radio" name="mode" id="mode_ctp" checked> Child-Pugh</label>
+    <label><input type="radio" name="mode" id="mode_meld"> MELD</label>
+  </div>
+
+  <!-- ===================== CHILD-PUGH ===================== -->
+  <div id="section_ctp">
+    <h2>Child-Pugh</h2>
+
+    <div class="group">
+      <div class="gtitle">Aszites</div>
+      <div class="radio-row">
+        <label><input type="radio" name="ctp_asc" value="1" checked> keiner <span class="pts">1</span></label>
+        <label><input type="radio" name="ctp_asc" value="2"> leicht, kontrolliert <span class="pts">2</span></label>
+        <label><input type="radio" name="ctp_asc" value="3"> moderat–refraktär <span class="pts">3</span></label>
+      </div>
+      <div class="explain">„Kontrolliert“ = diuretisch gut beherrschbar. „Refraktär“ = trotz Therapie/Parazentese relevant.</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Enzephalopathie</div>
+      <div class="radio-row">
+        <label><input type="radio" name="ctp_he" value="1" checked> keine <span class="pts">1</span></label>
+        <label><input type="radio" name="ctp_he" value="2"> Grad I–II <span class="pts">2</span></label>
+        <label><input type="radio" name="ctp_he" value="3"> Grad III–IV <span class="pts">3</span></label>
+      </div>
+      <div class="explain">I–II: Schlaf-Wach-Umkehr, Asterixis. III–IV: Somnolenz bis Koma.</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Bilirubin</div>
+      <div class="radio-row">
+        <label><input type="radio" name="ctp_bili" value="1" checked> &lt;2 mg/dL <span class="pts">1</span></label>
+        <label><input type="radio" name="ctp_bili" value="2"> 2–3 mg/dL <span class="pts">2</span></label>
+        <label><input type="radio" name="ctp_bili" value="3"> &gt;3 mg/dL <span class="pts">3</span></label>
+      </div>
+      <div class="explain">Gesamtbilirubin (Standard-Child-Pugh).</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">Albumin</div>
+      <div class="radio-row">
+        <label><input type="radio" name="ctp_alb" value="1" checked> &gt;3.5 g/dL <span class="pts">1</span></label>
+        <label><input type="radio" name="ctp_alb" value="2"> 2.8–3.5 g/dL <span class="pts">2</span></label>
+        <label><input type="radio" name="ctp_alb" value="3"> &lt;2.8 g/dL <span class="pts">3</span></label>
+      </div>
+      <div class="explain">Serumalbumin.</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">INR</div>
+      <div class="radio-row">
+        <label><input type="radio" name="ctp_inr" value="1" checked> &lt;1.7 <span class="pts">1</span></label>
+        <label><input type="radio" name="ctp_inr" value="2"> 1.7–2.3 <span class="pts">2</span></label>
+        <label><input type="radio" name="ctp_inr" value="3"> &gt;2.3 <span class="pts">3</span></label>
+      </div>
+      <div class="explain">Nur leberbedingt interpretieren (Vitamin-K-Mangel/Antikoagulation beachten).</div>
+    </div>
+
+    <div class="scoreline">
+      <div>Child-Pugh:</div>
+      <div class="score" id="ctp_score">5</div>
+      <button id="ctp_copy">kopieren</button>
+      <span class="copied" id="ctp_copied" style="display:none;">✓ kopiert</span>
+      <span style="flex:1;"></span>
+      <button id="ctp_reset">Zurücksetzen</button>
+    </div>
+
+    <div class="ctp-overview">
+      <div id="ctp_A" class="ctp-box">
+        <strong>Child-Pugh A</strong>
+        5–6 Punkte<br>kompensiert / mild
+      </div>
+      <div id="ctp_B" class="ctp-box">
+        <strong>Child-Pugh B</strong>
+        7–9 Punkte<br>moderat dekompensiert
+      </div>
+      <div id="ctp_C" class="ctp-box">
+        <strong>Child-Pugh C</strong>
+        10–15 Punkte<br>schwer dekompensiert
+      </div>
+    </div>
+
+    <div class="interpret" id="ctp_rec"><strong>Empfehlung:</strong> —</div>
+  </div>
+
+  <!-- ===================== MELD ===================== -->
+  <div id="section_meld" class="hidden">
+    <h2>MELD</h2>
+
+    <div class="switch" style="margin-top:10px;">
+      <strong>Rechner:</strong>
+      <label><input type="radio" name="meld_type" id="meld_type_na" checked> MELD / MELD-Na</label>
+      <label><input type="radio" name="meld_type" id="meld_type_30"> MELD 3.0</label>
+    </div>
+
+    <div class="rowbox">
+      <strong>Bilirubin:</strong>
+      <input type="number" id="meld_bili" step="0.1" min="0" placeholder="z. B. 3.2">
+      <select id="meld_bili_unit" class="small">
+        <option value="mgdl" selected>mg/dL</option>
+        <option value="umol">µmol/L</option>
+      </select>
+
+      <strong>INR:</strong>
+      <input type="number" id="meld_inr" step="0.01" min="0" placeholder="z. B. 1.8" class="small">
+
+      <strong>Kreatinin:</strong>
+      <input type="number" id="meld_crea" step="0.1" min="0" placeholder="z. B. 1.6">
+      <select id="meld_crea_unit" class="small">
+        <option value="mgdl" selected>mg/dL</option>
+        <option value="umol">µmol/L</option>
+      </select>
+
+      <strong>Natrium:</strong>
+      <input type="number" id="meld_na" step="1" min="80" max="200" placeholder="mmol/L" class="small">
+
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="meld_dialysis">
+        Dialyse (oder ≥2×/Woche)
+      </label>
+
+      <span class="hint">Anzeige ist bei 40 gedeckelt. Na wird auf 125–137 geklemmt.</span>
+    </div>
+
+    <div id="meld30_extras" class="rowbox hidden">
+      <strong>Geschlecht:</strong>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="radio" name="meld_sex" id="meld_sex_m" checked> männlich
+      </label>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="radio" name="meld_sex" id="meld_sex_f"> weiblich
+      </label>
+
+      <strong>Albumin:</strong>
+      <input type="number" id="meld_alb" step="0.1" min="0" placeholder="z. B. 2.9" class="small">
+      <select id="meld_alb_unit" class="small">
+        <option value="gdl" selected>g/dL</option>
+        <option value="gl">g/L</option>
+      </select>
+
+      <span class="hint">MELD 3.0: Albumin 1.5–3.5 g/dL, Kreatinin max. 3.0 mg/dL.</span>
+    </div>
+
+    <!-- Classic scoreline -->
+    <div class="scoreline" id="meld_scoreline_na">
+      <div>MELD(i):</div>
+      <div class="score" id="meld_score">—</div>
+      <button id="meld_copy_meldi">kopieren</button>
+      <span class="copied" id="meld_copied_meldi" style="display:none;">✓ kopiert</span>
+
+      <div style="margin-left:14px;">MELD-Na:</div>
+      <div class="score" id="meldna_score">—</div>
+      <button id="meld_copy_meldna">kopieren</button>
+      <span class="copied" id="meld_copied_meldna" style="display:none;">✓ kopiert</span>
+
+      <span style="flex:1;"></span>
+      <button id="meld_reset">Zurücksetzen</button>
+    </div>
+
+    <!-- MELD 3.0 scoreline -->
+    <div class="scoreline hidden" id="meld_scoreline_30">
+      <div>MELD 3.0:</div>
+      <div class="score" id="meld30_score">—</div>
+      <button id="meld_copy_meld30">kopieren</button>
+      <span class="copied" id="meld_copied_meld30" style="display:none;">✓ kopiert</span>
+
+      <span style="flex:1;"></span>
+      <button id="meld30_reset">Zurücksetzen</button>
+    </div>
+
+    <!-- Kategorieband (immer sichtbar im MELD-Modus, markiert wird je nach aktivem Score) -->
+    <div class="meld-band" id="meld_band">
+      <div id="band_0" class="bandbox"><strong>≤ 9</strong> sehr niedrig</div>
+      <div id="band_1" class="bandbox"><strong>10–19</strong> niedrig–moderat</div>
+      <div id="band_2" class="bandbox"><strong>20–29</strong> moderat–hoch</div>
+      <div id="band_3" class="bandbox"><strong>30–39</strong> hoch</div>
+      <div id="band_4" class="bandbox"><strong>40</strong> sehr hoch</div>
+    </div>
+
+    <div class="interpret" id="meld_interp"><strong>Einordnung:</strong> —</div>
+    <div class="interpret" id="meld_rec"><strong>Empfehlung:</strong> —</div>
+    <div class="warn hidden" id="meld_warn"><strong>Achtung:</strong> —</div>
+  </div>
+
+</div>
+
+<script>
+/* ===== Helpers ===== */
+function show(mode) {
+  document.getElementById("section_ctp").classList.toggle("hidden", mode !== "ctp");
+  document.getElementById("section_meld").classList.toggle("hidden", mode !== "meld");
+}
+function flashCopied(id) {
+  const el = document.getElementById(id);
+  el.style.display = "inline";
+  setTimeout(() => el.style.display = "none", 1500);
+}
+function numOrNull(id) {
+  const v = document.getElementById(id).value;
+  if (v === "" || v === null) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+function isChecked(id) { return document.getElementById(id).checked; }
+
+/* ===== Child-Pugh ===== */
+function getRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? Number(el.value) : 1;
+}
+function classifyCTP(sum) {
+  if (sum <= 6) return "A";
+  if (sum <= 9) return "B";
+  return "C";
+}
+function updateCTPHighlight(cls) {
+  ["ctp_A","ctp_B","ctp_C"].forEach(id => document.getElementById(id).classList.remove("ctp-active"));
+  document.getElementById("ctp_" + cls).classList.add("ctp-active");
+}
+function recCTP(cls) {
+  if (cls === "A") return "Kompensiert/mild: ambulant möglich; Ursache/Trigger behandeln, Varizen-/HCC-Screening, NSAR meiden.";
+  if (cls === "B") return "Moderat dekompensiert: engmaschige Kontrolle, Komplikationsmanagement (Aszites/HE/Varizen), niedrige Schwelle für stationär.";
+  return "Schwer dekompensiert: meist stationär; Komplikationsmanagement, Infekt-/Blutungssuche, frühzeitige Transplantabklärung erwägen.";
+}
+function calcCTP() {
+  const sum =
+    getRadio("ctp_asc") +
+    getRadio("ctp_he") +
+    getRadio("ctp_bili") +
+    getRadio("ctp_alb") +
+    getRadio("ctp_inr");
+
+  document.getElementById("ctp_score").textContent = String(sum);
+  const cls = classifyCTP(sum);
+  updateCTPHighlight(cls);
+  document.getElementById("ctp_rec").innerHTML = `<strong>Empfehlung:</strong> ${recCTP(cls)}`;
+  return { sum, cls };
+}
+
+/* ===== Units ===== */
+function toMgDl_Bili(x, unit) { return (unit === "umol") ? (x / 17.1) : x; }  // 1 mg/dL = 17.1 µmol/L
+function toMgDl_Crea(x, unit) { return (unit === "umol") ? (x / 88.4) : x; }  // 1 mg/dL ≈ 88.4 µmol/L
+function toGdL_Alb(x, unit)   { return (unit === "gl")   ? (x / 10.0) : x; }  // 1 g/dL = 10 g/L
+
+/* ===== MELD text ===== */
+function meldRiskBucketLabel(m) {
+  if (m <= 9) return "sehr niedrig (~1–2% 3-Monats-Mortalität)";
+  if (m <= 19) return "niedrig–moderat (~6%)";
+  if (m <= 29) return "moderat–hoch (~20%)";
+  if (m <= 39) return "hoch (~50%)";
+  return "sehr hoch (40; Anzeige gedeckelt)";
+}
+function meldRecommendation(driverScore, naRaw, dial) {
+  const parts = [];
+  if (driverScore >= 30) parts.push("Sehr hohes Risiko: i. d. R. stationär/engmaschig, rasche hepatologische Mitbeurteilung, Transplantoptionen prüfen.");
+  else if (driverScore >= 20) parts.push("Erhöhtes Risiko: enge hepatologische Kontrolle; bei Verschlechterung/Infekt/Blutung/HE/Nierenverschlechterung niedrigschwellig stationär.");
+  else parts.push("Niedriger–moderater Bereich: Verlaufskontrollen, Komplikationsprophylaxe und Trigger-/Ursachenmanagement.");
+
+  if (naRaw !== null && naRaw < 130) parts.push("Hyponatriämie: Volumenstatus/Diuretika prüfen, engmaschige Na-Kontrollen (Korrektur nicht zu schnell).");
+  if (dial) parts.push("Dialyse/Nierenbeteiligung: deutlich erhöhtes Risiko → enges Monitoring, nephrologische Mitbeurteilung.");
+  return parts.join(" ");
+}
+
+/* ===== Kategorieband ===== */
+function clearBand() {
+  ["band_0","band_1","band_2","band_3","band_4"].forEach(id => document.getElementById(id).classList.remove("active"));
+}
+function bandIndex(score) {
+  if (score === null) return null;
+  if (score >= 40) return 4;
+  if (score >= 30) return 3;
+  if (score >= 20) return 2;
+  if (score >= 10) return 1;
+  return 0;
+}
+function setBand(score) {
+  clearBand();
+  if (score === null) return;
+  const idx = bandIndex(score);
+  document.getElementById("band_" + idx).classList.add("active");
+}
+
+/* ===== MELD classic ===== */
+function calcMELDClassic() {
+  const warn = document.getElementById("meld_warn");
+  warn.classList.add("hidden");
+  warn.innerHTML = "<strong>Achtung:</strong> —";
+
+  const biliRaw = numOrNull("meld_bili");
+  const inrRaw  = numOrNull("meld_inr");
+  const creaRaw = numOrNull("meld_crea");
+  const naRaw   = numOrNull("meld_na");
+  const dial    = isChecked("meld_dialysis");
+
+  if (biliRaw === null || inrRaw === null || creaRaw === null || naRaw === null) return null;
+
+  const biliUnit = document.getElementById("meld_bili_unit").value;
+  const creaUnit = document.getElementById("meld_crea_unit").value;
+
+  let bili = toMgDl_Bili(biliRaw, biliUnit);
+  let inr  = inrRaw;
+  let crea = toMgDl_Crea(creaRaw, creaUnit);
+  let na   = naRaw;
+
+  // Mindestwerte für ln
+  bili = Math.max(1.0, bili);
+  inr  = Math.max(1.0, inr);
+
+  // Dialyse: creatinin 4.0 (klassisch)
+  if (dial) crea = 4.0;
+
+  // Kreatinin cap 1.0..4.0
+  crea = clamp(crea, 1.0, 4.0);
+
+  // MELD(i)
+  const meld = 10 * (0.957 * Math.log(crea) + 0.378 * Math.log(bili) + 1.120 * Math.log(inr) + 0.643);
+
+  // Na clamp 125..137
+  const naC = clamp(na, 125, 137);
+  const delta = (137 - naC);
+
+  // Häufige Implementationsregel: MELD-Na nur bei MELD>11, sonst = MELD
+  let meldNa = meld;
+  if (meld > 11) {
+    meldNa = meld + 1.32 * delta - 0.033 * meld * delta;
+  }
+
+  const meldShown   = Math.min(40, Math.round(meld));
+  const meldNaShown = Math.min(40, Math.round(meldNa));
+
+  // Plausibilität (optional)
+  const suspicious = [];
+  if (naRaw < 110 || naRaw > 160) suspicious.push("Natrium wirkt unplausibel");
+  if (inrRaw > 10) suspicious.push("INR extrem hoch");
+  if (suspicious.length) {
+    warn.classList.remove("hidden");
+    warn.innerHTML = `<strong>Achtung:</strong> ${suspicious.join("; ")}.`;
+  }
+
+  return { meldShown, meldNaShown, naRaw, dial };
+}
+
+/* ===== MELD 3.0 ===== */
+function calcMELD30() {
+  const warn = document.getElementById("meld_warn");
+  warn.classList.add("hidden");
+  warn.innerHTML = "<strong>Achtung:</strong> —";
+
+  const biliRaw = numOrNull("meld_bili");
+  const inrRaw  = numOrNull("meld_inr");
+  const creaRaw = numOrNull("meld_crea");
+  const naRaw   = numOrNull("meld_na");
+  const albRaw  = numOrNull("meld_alb");
+  const dial    = isChecked("meld_dialysis");
+  const female  = isChecked("meld_sex_f");
+
+  if (biliRaw === null || inrRaw === null || creaRaw === null || naRaw === null || albRaw === null) return null;
+
+  const biliUnit = document.getElementById("meld_bili_unit").value;
+  const creaUnit = document.getElementById("meld_crea_unit").value;
+  const albUnit  = document.getElementById("meld_alb_unit").value;
+
+  let bili = toMgDl_Bili(biliRaw, biliUnit);
+  let inr  = inrRaw;
+  let crea = toMgDl_Crea(creaRaw, creaUnit);
+  let na   = naRaw;
+  let alb  = toGdL_Alb(albRaw, albUnit);
+
+  // Caps / Mindestwerte (MELD 3.0)
+  bili = Math.max(1.0, bili);
+  inr  = Math.max(1.0, inr);
+
+  if (dial) crea = 3.0;
+  crea = clamp(crea, 1.0, 3.0);
+
+  na = clamp(na, 125, 137);
+  alb = clamp(alb, 1.5, 3.5);
+
+  const deltaNa = (137 - na);
+  const deltaAlb = (3.5 - alb);
+
+  // MELD 3.0 (Kim et al.)
+  const meld30 =
+    (female ? 1.33 : 0) +
+    4.56 * Math.log(bili) +
+    0.82 * deltaNa -
+    0.24 * deltaNa * Math.log(bili) +
+    9.09 * Math.log(inr) +
+    11.14 * Math.log(crea) +
+    1.85 * deltaAlb -
+    1.83 * deltaAlb * Math.log(crea) +
+    6;
+
+  const meld30Shown = Math.min(40, Math.round(meld30));
+
+  const suspicious = [];
+  if (naRaw < 110 || naRaw > 160) suspicious.push("Natrium wirkt unplausibel");
+  if (inrRaw > 10) suspicious.push("INR extrem hoch");
+  if (suspicious.length) {
+    warn.classList.remove("hidden");
+    warn.innerHTML = `<strong>Achtung:</strong> ${suspicious.join("; ")}.`;
+  }
+
+  return { meld30Shown, naRaw, dial };
+}
+
+/* ===== MELD UI coordinator ===== */
+function isMeld30Mode() { return isChecked("meld_type_30"); }
+
+function updateMeldModeUI() {
+  const m30 = isMeld30Mode();
+  document.getElementById("meld30_extras").classList.toggle("hidden", !m30);
+  document.getElementById("meld_scoreline_na").classList.toggle("hidden", m30);
+  document.getElementById("meld_scoreline_30").classList.toggle("hidden", !m30);
+
+  recalcMeld();
+}
+
+function recalcMeld() {
+  const m30 = isMeld30Mode();
+
+  if (!m30) {
+    const r = calcMELDClassic();
+    if (!r) {
+      document.getElementById("meld_score").textContent = "—";
+      document.getElementById("meldna_score").textContent = "—";
+      document.getElementById("meld_interp").innerHTML = "<strong>Einordnung:</strong> —";
+      document.getElementById("meld_rec").innerHTML = "<strong>Empfehlung:</strong> —";
+      setBand(null);
+      return;
+    }
+
+    document.getElementById("meld_score").textContent = String(r.meldShown);
+    document.getElementById("meldna_score").textContent = String(r.meldNaShown);
+
+    // Kategorieband: markiere "schlechteren" (max) für schnellen Überblick
+    const driver = Math.max(r.meldShown, r.meldNaShown);
+    setBand(driver);
+
+    document.getElementById("meld_interp").innerHTML =
+      `<strong>Einordnung:</strong> MELD(i) ${r.meldShown} → ${meldRiskBucketLabel(r.meldShown)}. MELD-Na ${r.meldNaShown} (Na-korrigiert).`;
+
+    document.getElementById("meld_rec").innerHTML =
+      `<strong>Empfehlung:</strong> ${meldRecommendation(driver, r.naRaw, r.dial)}`;
+
+  } else {
+    const r = calcMELD30();
+    if (!r) {
+      document.getElementById("meld30_score").textContent = "—";
+      document.getElementById("meld_interp").innerHTML = "<strong>Einordnung:</strong> —";
+      document.getElementById("meld_rec").innerHTML = "<strong>Empfehlung:</strong> —";
+      setBand(null);
+      return;
+    }
+
+    document.getElementById("meld30_score").textContent = String(r.meld30Shown);
+
+    setBand(r.meld30Shown);
+
+    document.getElementById("meld_interp").innerHTML =
+      `<strong>Einordnung:</strong> MELD 3.0 ${r.meld30Shown} → ${meldRiskBucketLabel(r.meld30Shown)}.`;
+
+    document.getElementById("meld_rec").innerHTML =
+      `<strong>Empfehlung:</strong> ${meldRecommendation(r.meld30Shown, r.naRaw, r.dial)}`;
+  }
+}
+
+/* ===== Events ===== */
+// Top mode
+document.getElementById("mode_ctp").addEventListener("change", () => show("ctp"));
+document.getElementById("mode_meld").addEventListener("change", () => show("meld"));
+
+// Child recalculation
+document.querySelectorAll('#section_ctp input').forEach(el => el.addEventListener("change", calcCTP));
+
+// MELD type switch
+document.getElementById("meld_type_na").addEventListener("change", updateMeldModeUI);
+document.getElementById("meld_type_30").addEventListener("change", updateMeldModeUI);
+
+// MELD inputs
+document.querySelectorAll('#section_meld input, #section_meld select').forEach(el => {
+  el.addEventListener("change", recalcMeld);
+  el.addEventListener("input",  recalcMeld);
+});
+
+// Copy buttons (ein Wert pro Button!)
+document.getElementById("ctp_copy").addEventListener("click", () => {
+  const sum = Number(document.getElementById("ctp_score").textContent);
+  const cls = classifyCTP(sum);
+  navigator.clipboard.writeText(`Child-Pugh: ${sum} Punkte (Klasse ${cls})`).then(() => flashCopied("ctp_copied"));
+});
+
+document.getElementById("meld_copy_meldi").addEventListener("click", () => {
+  const v = document.getElementById("meld_score").textContent;
+  if (v === "—") return;
+  navigator.clipboard.writeText(`MELD(i): ${v} Punkte`).then(() => flashCopied("meld_copied_meldi"));
+});
+
+document.getElementById("meld_copy_meldna").addEventListener("click", () => {
+  const v = document.getElementById("meldna_score").textContent;
+  if (v === "—") return;
+  navigator.clipboard.writeText(`MELD-Na: ${v} Punkte`).then(() => flashCopied("meld_copied_meldna"));
+});
+
+document.getElementById("meld_copy_meld30").addEventListener("click", () => {
+  const v = document.getElementById("meld30_score").textContent;
+  if (v === "—") return;
+  navigator.clipboard.writeText(`MELD 3.0: ${v} Punkte`).then(() => flashCopied("meld_copied_meld30"));
+});
+
+// Reset
+document.getElementById("ctp_reset").addEventListener("click", () => {
+  document.querySelector('input[name="ctp_asc"][value="1"]').checked = true;
+  document.querySelector('input[name="ctp_he"][value="1"]').checked = true;
+  document.querySelector('input[name="ctp_bili"][value="1"]').checked = true;
+  document.querySelector('input[name="ctp_alb"][value="1"]').checked = true;
+  document.querySelector('input[name="ctp_inr"][value="1"]').checked = true;
+  calcCTP();
+});
+
+function resetMeldCommon() {
+  ["meld_bili","meld_inr","meld_crea","meld_na","meld_alb"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  document.getElementById("meld_bili_unit").value = "mgdl";
+  document.getElementById("meld_crea_unit").value = "mgdl";
+  document.getElementById("meld_alb_unit").value = "gdl";
+  document.getElementById("meld_dialysis").checked = false;
+  document.getElementById("meld_sex_m").checked = true;
+  document.getElementById("meld_warn").classList.add("hidden");
+
+  // hide copied markers
+  ["meld_copied_meldi","meld_copied_meldna","meld_copied_meld30"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+}
+
+document.getElementById("meld_reset").addEventListener("click", () => {
+  resetMeldCommon();
+  recalcMeld();
+});
+
+document.getElementById("meld30_reset").addEventListener("click", () => {
+  resetMeldCommon();
+  recalcMeld();
+});
+
+/* ===== Initial ===== */
+show("ctp");
+calcCTP();
+updateMeldModeUI();
+</script>
+
+</body>
+</html>

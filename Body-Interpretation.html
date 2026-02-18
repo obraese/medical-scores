@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bodyplethysmographie – strukturierte Befundhilfe</title>
+<style>
+body { font-family: Arial, sans-serif; margin:30px; line-height:1.35; }
+h1 { font-size:22px; margin-bottom:10px; }
+h2 { font-size:18px; margin-top:22px; }
+.muted { font-size:13px; color:#666; margin-bottom:12px; }
+.box { border:1px solid #ccc; padding:16px; border-radius:10px; max-width:980px; }
+
+.item { border:1px solid #eee; border-radius:10px; padding:12px 14px; margin:12px 0; background:#fff; }
+label { display:flex; gap:8px; align-items:flex-start; cursor:pointer; }
+.group { margin-top:12px; }
+.group strong { display:block; margin-bottom:6px; }
+
+.small { font-size:13px; color:#444; }
+
+.result {
+  margin-top:14px; padding:12px;
+  border:1px solid #eee; border-radius:10px; background:#fcfcfc;
+}
+
+button {
+  padding:8px 12px; border-radius:10px;
+  border:1px solid #ddd; background:#fafafa; cursor:pointer;
+}
+button:hover { background:#f2f2f2; }
+.copied { color:green; font-size:13px; display:none; margin-left:8px; }
+
+/* disabled group styling */
+.group-disabled { opacity: 0.55; }
+.group-disabled label { cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<h1>Bodyplethysmographie – strukturierte Befundhilfe</h1>
+<div class="muted">
+  Strukturierte Formulierungshilfe
+</div>
+
+<div class="box">
+
+<!-- Muster -->
+<div class="item">
+<h2>Ventilatorisches Muster</h2>
+<label><input type="checkbox" id="obs"> Obstruktion (FEV1/FVC oder FEV1/VCmax unter LLN)</label>
+<label><input type="checkbox" id="res"> Restriktion (TLC unter LLN)</label>
+<label><input type="checkbox" id="air"> Air trapping (RV/TLC über ULN)</label>
+
+<div class="small" style="margin-top:8px;">
+<b>Interpretation ohne LLN/ULN:</b> Z-Score &lt; −1,645 ≙ unter LLN, Z-Score &gt; +1,645 ≙ über ULN.
+</div>
+</div>
+
+<!-- Schweregrade -->
+<div class="item">
+<h2>Schweregrade</h2>
+
+<div class="group" id="grp_obssev">
+<strong>Obstruktion – FEV1 (Z-Score)</strong>
+<label><input type="radio" name="obs_sev" value=""> nicht angegeben</label>
+<label><input type="radio" name="obs_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
+<label><input type="radio" name="obs_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
+<label><input type="radio" name="obs_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
+</div>
+
+<div class="group" id="grp_gold">
+<strong>Optional: GOLD (nur bei Obstruktion)</strong>
+<label><input type="radio" name="gold" value=""> nicht angegeben</label>
+<label><input type="radio" name="gold" value="GOLD 1"> GOLD 1 <span class="small">(FEV1 ≥ 80 %Soll)</span></label>
+<label><input type="radio" name="gold" value="GOLD 2"> GOLD 2 <span class="small">(FEV1 50–79 %Soll)</span></label>
+<label><input type="radio" name="gold" value="GOLD 3"> GOLD 3 <span class="small">(FEV1 30–49 %Soll)</span></label>
+<label><input type="radio" name="gold" value="GOLD 4"> GOLD 4 <span class="small">(FEV1 &lt; 30 %Soll)</span></label>
+</div>
+
+<div class="group" id="grp_ressev">
+<strong>Restriktion – TLC (Z-Score)</strong>
+<label><input type="radio" name="res_sev" value=""> nicht angegeben</label>
+<label><input type="radio" name="res_sev" value="leicht"> leicht <span class="small">(Z −1,65 bis −2,5)</span></label>
+<label><input type="radio" name="res_sev" value="mittelgradig"> mittelgradig <span class="small">(Z −2,5 bis −4,0)</span></label>
+<label><input type="radio" name="res_sev" value="schwer"> schwer <span class="small">(Z &lt; −4,0)</span></label>
+</div>
+
+</div>
+
+<!-- Ergebnis -->
+<div class="result" id="result"><strong>Befund:</strong> —</div>
+
+<div style="margin-top:14px;">
+<button id="copy">Befund kopieren</button>
+<button id="reset">Zurücksetzen</button>
+<span class="copied" id="copied">✓ kopiert</span>
+</div>
+
+</div>
+
+<script>
+function getRadio(name){
+  const r = document.querySelector(`input[name="${name}"]:checked`);
+  return r ? r.value : "";
+}
+
+/**
+ * Returns a correctly declined adjective phrase for feminine nouns ("Obstruktion", "Restriktion")
+ * in the context "aus <...> Obstruktion" / "aus <...> Restriktion" (dative, no article).
+ *
+ * Examples:
+ *  - "leicht" -> "leichtgradiger"
+ *  - "mittelgradig" -> "mittelgradiger"
+ *  - "schwer" -> "schwerer"
+ */
+function adjForFemInAus(grade){
+  if (!grade) return "";
+  if (grade === "leicht") return "leichtgradiger";
+  if (grade === "mittelgradig") return "mittelgradiger";
+  if (grade === "schwer") return "schwerer";
+  return "";
+}
+
+/**
+ * Returns a correctly declined adjective phrase for feminine nouns ("Obstruktion", "Restriktion")
+ * in the context "eine <...> Obstruktion/Restriktion" (accusative with indefinite article).
+ *
+ * Examples:
+ *  - "leicht" -> "leichtgradige"
+ *  - "mittelgradig" -> "mittelgradige"
+ *  - "schwer" -> "schwere"
+ */
+function adjForFemWithEine(grade){
+  if (!grade) return "";
+  if (grade === "leicht") return "leichtgradige";
+  if (grade === "mittelgradig") return "mittelgradige";
+  if (grade === "schwer") return "schwere";
+  return "";
+}
+
+function setGroupEnabled(groupId, enabled, radioName){
+  const grp = document.getElementById(groupId);
+  if (!grp) return;
+  grp.classList.toggle("group-disabled", !enabled);
+  grp.querySelectorAll('input[type="radio"]').forEach(r => {
+    r.disabled = !enabled;
+  });
+  if (!enabled && radioName){
+    const none = grp.querySelector(`input[name="${radioName}"][value=""]`);
+    if (none) none.checked = true;
+  }
+}
+
+function updateEnableStates(){
+  const obs = document.getElementById("obs").checked;
+  const res = document.getElementById("res").checked;
+
+  setGroupEnabled("grp_obssev", obs, "obs_sev");
+  setGroupEnabled("grp_gold", obs, "gold");
+  setGroupEnabled("grp_ressev", res, "res_sev");
+}
+
+function build(){
+  document.getElementById("copied").style.display="none";
+
+  const obs = document.getElementById("obs").checked;
+  const res = document.getElementById("res").checked;
+  const air = document.getElementById("air").checked;
+
+  const obsSev = getRadio("obs_sev");
+  const resSev = getRadio("res_sev");
+  const gold = getRadio("gold");
+
+  let sentence = "In der Bodyplethysmographie zeigte sich ";
+
+  if (obs && res) {
+    // "aus <adj> Obstruktion und <adj> Restriktion" (dative, no article)
+    let obsPart;
+    if (obsSev) {
+      obsPart = `${adjForFemInAus(obsSev)} Obstruktion`;
+      if (gold) obsPart += ` (${gold})`;
+    } else if (gold) {
+      obsPart = `Obstruktion (${gold})`;
+    } else {
+      obsPart = "Obstruktion";
+    }
+
+    let resPart = resSev ? `${adjForFemInAus(resSev)} Restriktion` : "Restriktion";
+
+    sentence += `ein Mischmuster aus ${obsPart} und ${resPart}`;
+    if (air) sentence += " mit Hinweis auf Air trapping";
+    sentence += ".";
+  }
+  else if (obs) {
+    // "eine <adj> Obstruktion" (accusative with 'eine')
+    let obsPart;
+    if (obsSev) {
+      obsPart = `${adjForFemWithEine(obsSev)} Obstruktion`;
+      if (gold) obsPart += ` (${gold})`;
+    } else if (gold) {
+      obsPart = `Obstruktion (${gold})`;
+    } else {
+      obsPart = "Obstruktion";
+    }
+
+    sentence += `eine ${obsPart}`;
+    if (air) sentence += " mit Hinweis auf Air trapping";
+    sentence += ".";
+  }
+  else if (res) {
+    // "eine <adj> Restriktion" (accusative with 'eine')
+    let resPart = resSev ? `${adjForFemWithEine(resSev)} Restriktion` : "Restriktion";
+    sentence += `eine ${resPart}`;
+    if (air) sentence += " mit Hinweis auf Air trapping";
+    sentence += ".";
+  }
+  else {
+    if (air) {
+      sentence += "kein klares obstruktives oder restriktives Ventilationsmuster, jedoch ein Hinweis auf Air trapping.";
+    } else {
+      sentence += "kein klares obstruktives oder restriktives Ventilationsmuster.";
+    }
+  }
+
+  document.getElementById("result").innerHTML =
+    `<strong>Befund:</strong> ${sentence}`;
+
+  return sentence;
+}
+
+// Events
+document.querySelectorAll("input").forEach(i => {
+  i.addEventListener("change", () => {
+    updateEnableStates();
+    build();
+  });
+});
+
+document.getElementById("copy").addEventListener("click", ()=>{
+  const t = build();
+  navigator.clipboard.writeText(t).then(()=>{
+    document.getElementById("copied").style.display="inline";
+    setTimeout(()=>document.getElementById("copied").style.display="none",1500);
+  });
+});
+
+document.getElementById("reset").addEventListener("click", ()=>{
+  document.querySelectorAll("input").forEach(i=>i.checked=false);
+
+  document.querySelectorAll('input[type="radio"][value=""]').forEach(r => r.checked = true);
+
+  updateEnableStates();
+
+  document.getElementById("result").innerHTML="<strong>Befund:</strong> —";
+  document.getElementById("copied").style.display="none";
+});
+
+// init defaults: set "nicht angegeben" as checked for all radio groups
+document.querySelectorAll('input[type="radio"][value=""]').forEach(r => r.checked = true);
+updateEnableStates();
+build();
+</script>
+
+</body>
+</html>
