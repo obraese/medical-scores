@@ -4,585 +4,578 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>sPESI / PESI (klickbasiert) – LAE</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.35; }
-    h1 { font-size: 22px; margin: 0 0 10px; }
-    h2 { font-size: 18px; margin: 18px 0 10px; }
-    .muted { color: #666; font-size: 13px; margin-bottom: 14px; }
-    .box { border: 1px solid #ccc; padding: 16px; max-width: 980px; border-radius: 10px; }
 
-    .switch {
-      display: flex; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px;
-      align-items: center;
-      background: #fcfcfc;
-    }
-    .switch label { cursor: pointer; margin-right: 10px; }
-
-    .item {
-      border: 1px solid #eee;
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin: 12px 0;
-      background: #fff;
-    }
-    .item label {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      cursor: pointer;
-    }
-    .content { flex: 1; }
-    .title { font-weight: bold; margin-bottom: 4px; }
-    .explain { font-size: 13px; color: #444; margin-left: 22px; }
-
-    .pts { color: #444; font-size: 13px; white-space: nowrap; margin-left: 10px; }
-
-    .rowbox {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 10px 12px; border: 1px solid #eee; border-radius: 10px; margin: 12px 0;
-      background: #fff;
-    }
-    .rowbox input {
-      width: 120px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #fff;
-    }
-    .rowbox .hint { font-size: 13px; color: #444; }
-
-    .scoreline {
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid #eee;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .score { font-size: 30px; font-weight: bold; }
-
-    button {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #fafafa;
-      cursor: pointer;
-    }
-    button:hover { background: #f2f2f2; }
-
-    .copied { font-size: 13px; color: green; }
-
-    .interpret {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #333;
-      padding: 10px 12px;
-      border: 1px solid #eee;
-      border-radius: 10px;
-      background: #fcfcfc;
-    }
-    .interpret strong { margin-right: 6px; }
-
-    /* ===== Kategorieband (neu) ===== */
-    .band {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .band-2 { grid-template-columns: repeat(2, 1fr); }
-    .band-5 { grid-template-columns: repeat(5, 1fr); }
-
-    .bandbox {
-      border: 1px solid #eee;
-      border-radius: 10px;
-      padding: 10px 12px;
-      background: #fafafa;
-      font-size: 13px;
-      text-align: center;
-    }
-    .bandbox strong { display:block; margin-bottom: 4px; }
-
-    .band-active {
-      background: #eef6ff;
-      border: 2px solid #7aa7e6;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .hidden { display: none; }
-  </style>
+  <!-- Globales Styling -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>sPESI / PESI (LAE)</h1>
-<div class="muted">
-  Lern-/Arbeits-Tool ohne Speicherung. (In die Zwischenablage wird nur Score + Klassifikation kopiert.)
-</div>
+  <div class="container">
+    <div class="card">
 
-<div class="box">
+      <h1>sPESI / PESI (LAE)</h1>
+      <div class="muted">
+        Lern-/Arbeits-Tool ohne Speicherung. (In die Zwischenablage wird nur Score + Klassifikation kopiert.)
+      </div>
 
-  <div class="switch">
-    <strong>Modus:</strong>
-    <label><input type="radio" name="mode" id="mode_spesi" checked> sPESI (Standard)</label>
-    <label><input type="radio" name="mode" id="mode_pesi"> PESI (optional)</label>
+      <div class="switch">
+        <strong>Modus:</strong>
+        <label><input type="radio" name="mode" id="mode_spesi" checked> sPESI (Standard)</label>
+        <label><input type="radio" name="mode" id="mode_pesi"> PESI (optional)</label>
+      </div>
+
+      <!-- ===================== sPESI ===================== -->
+      <div id="section_spesi">
+        <h2>sPESI</h2>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_age80">
+            <div class="content">
+              <div class="title">Alter &gt; 80 Jahre</div>
+              <div class="explain">Patient*in ist älter als 80 Jahre.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_cancer">
+            <div class="content">
+              <div class="title">Malignom</div>
+              <div class="explain">Aktive Tumorerkrankung oder relevante Tumoranamnese (klinisch bedeutsam).</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_cardiopulm">
+            <div class="content">
+              <div class="title">Chronische kardio-pulmonale Erkrankung</div>
+              <div class="explain">Herzinsuffizienz und/oder chronische Lungenerkrankung (z. B. COPD) als Vorerkrankung.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_hr110">
+            <div class="content">
+              <div class="title">Herzfrequenz ≥ 110/min</div>
+              <div class="explain">Aktuelle HF ≥110/min.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_sbp100">
+            <div class="content">
+              <div class="title">RR systolisch &lt; 100 mmHg</div>
+              <div class="explain">Aktueller systolischer Blutdruck &lt;100 mmHg.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="s_spo290">
+            <div class="content">
+              <div class="title">SpO₂ &lt; 90% unter Raumluft</div>
+              <div class="explain">Sättigung &lt;90% bei Messung ohne Sauerstoffgabe.</div>
+            </div>
+            <span class="pts">+1</span>
+          </label>
+        </div>
+
+        <div class="scoreline">
+          <div>sPESI:</div>
+          <div class="score" id="spesi_result">0</div>
+          <button id="spesi_copy">sPESI kopieren</button>
+          <span class="copied" id="spesi_copied" style="display:none;">✓ kopiert</span>
+          <span style="flex:1;"></span>
+          <button id="spesi_reset">Zurücksetzen</button>
+        </div>
+
+        <div id="band_spesi" class="band band-2">
+          <div id="spesi_band_0" class="bandbox">
+            <strong>sPESI = 0</strong>
+            niedrig
+          </div>
+          <div id="spesi_band_1" class="bandbox">
+            <strong>sPESI ≥ 1</strong>
+            erhöht
+          </div>
+        </div>
+
+        <div class="interpret" id="spesi_class">
+          <strong>Klassifikation:</strong> —
+        </div>
+
+        <div class="interpret" id="spesi_rec">
+          <strong>Empfehlung:</strong> —
+        </div>
+      </div>
+
+      <!-- ===================== PESI (optional) ===================== -->
+      <div id="section_pesi" class="hidden">
+        <h2>PESI (optional)</h2>
+
+        <div class="rowbox">
+          <strong>Alter (Jahre):</strong>
+          <input type="number" id="p_age_years" min="0" max="120" placeholder="z. B. 67">
+          <span class="hint">PESI: Punkte = Alter in Jahren.</span>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_male">
+            <div class="content">
+              <div class="title">Männliches Geschlecht</div>
+              <div class="explain">Patient ist männlich.</div>
+            </div>
+            <span class="pts">+10</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_cancer">
+            <div class="content">
+              <div class="title">Malignom</div>
+              <div class="explain">Aktive Tumorerkrankung oder klinisch relevante Tumoranamnese.</div>
+            </div>
+            <span class="pts">+30</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_hf">
+            <div class="content">
+              <div class="title">Herzinsuffizienz</div>
+              <div class="explain">Bekannte Herzinsuffizienz (klinische Diagnose/Anamnese).</div>
+            </div>
+            <span class="pts">+10</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_cld">
+            <div class="content">
+              <div class="title">Chronische Lungenerkrankung</div>
+              <div class="explain">z. B. COPD/Emphysem, relevante chronische respiratorische Erkrankung.</div>
+            </div>
+            <span class="pts">+10</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_ams">
+            <div class="content">
+              <div class="title">Bewusstseinsstörung</div>
+              <div class="explain">Akute Verwirrtheit / Somnolenz / deutlich veränderte Vigilanz.</div>
+            </div>
+            <span class="pts">+60</span>
+          </label>
+        </div>
+
+        <h2>Vitalparameter (Schwellen)</h2>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_hr110">
+            <div class="content">
+              <div class="title">Herzfrequenz ≥ 110/min</div>
+              <div class="explain">Aktuelle HF ≥110/min.</div>
+            </div>
+            <span class="pts">+20</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_sbp100">
+            <div class="content">
+              <div class="title">RR systolisch &lt; 100 mmHg</div>
+              <div class="explain">Aktueller systolischer Blutdruck &lt;100 mmHg.</div>
+            </div>
+            <span class="pts">+30</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_rr30">
+            <div class="content">
+              <div class="title">Atemfrequenz ≥ 30/min</div>
+              <div class="explain">Aktuelle AF ≥30/min (Tachypnoe).</div>
+            </div>
+            <span class="pts">+20</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_temp36">
+            <div class="content">
+              <div class="title">Temperatur &lt; 36.0°C</div>
+              <div class="explain">Hypothermie: Temp &lt;36.0°C.</div>
+            </div>
+            <span class="pts">+20</span>
+          </label>
+        </div>
+
+        <div class="item">
+          <label>
+            <input type="checkbox" id="p_spo290">
+            <div class="content">
+              <div class="title">SpO₂ &lt; 90% unter Raumluft</div>
+              <div class="explain">Sättigung &lt;90% bei Messung ohne Sauerstoffgabe.</div>
+            </div>
+            <span class="pts">+20</span>
+          </label>
+        </div>
+
+        <div class="scoreline">
+          <div>PESI:</div>
+          <div class="score" id="pesi_result">0</div>
+          <button id="pesi_copy">PESI kopieren</button>
+          <span class="copied" id="pesi_copied" style="display:none;">✓ kopiert</span>
+          <span style="flex:1;"></span>
+          <button id="pesi_reset">Zurücksetzen</button>
+        </div>
+
+        <div id="band_pesi" class="band band-5">
+          <div id="pesi_band_I" class="bandbox">
+            <strong>Klasse I</strong>
+            ≤65
+          </div>
+          <div id="pesi_band_II" class="bandbox">
+            <strong>Klasse II</strong>
+            66–85
+          </div>
+          <div id="pesi_band_III" class="bandbox">
+            <strong>Klasse III</strong>
+            86–105
+          </div>
+          <div id="pesi_band_IV" class="bandbox">
+            <strong>Klasse IV</strong>
+            106–125
+          </div>
+          <div id="pesi_band_V" class="bandbox">
+            <strong>Klasse V</strong>
+            &gt;125
+          </div>
+        </div>
+
+        <div class="interpret" id="pesi_class">
+          <strong>Klassifikation:</strong> —
+        </div>
+
+        <div class="interpret" id="pesi_rec">
+          <strong>Empfehlung:</strong> —
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <!-- ===================== sPESI ===================== -->
-  <div id="section_spesi">
-    <h2>sPESI</h2>
+  <!-- Seite-spezifisches CSS nur für diese Seite (weil style.css bewusst generisch ist) -->
+  <style>
+    h1 { font-size: 22px; margin: 0 0 10px; }
+    h2 { font-size: 18px; margin: 18px 0 10px; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_age80">
-        <div class="content">
-          <div class="title">Alter &gt; 80 Jahre</div>
-          <div class="explain">Patient*in ist älter als 80 Jahre.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .muted { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_cancer">
-        <div class="content">
-          <div class="title">Malignom</div>
-          <div class="explain">Aktive Tumorerkrankung oder relevante Tumoranamnese (klinisch bedeutsam).</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .switch{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      align-items:center;
+      background: #fcfcfc;
+    }
+    .switch label{ cursor:pointer; margin-right:10px; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_cardiopulm">
-        <div class="content">
-          <div class="title">Chronische kardio-pulmonale Erkrankung</div>
-          <div class="explain">Herzinsuffizienz und/oder chronische Lungenerkrankung (z. B. COPD) als Vorerkrankung.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .item{
+      border:1px solid var(--border);
+      padding:12px 14px;
+      border-radius: var(--radius-sm);
+      margin:12px 0;
+      background:#fff;
+    }
+    .item label{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      cursor:pointer;
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_hr110">
-        <div class="content">
-          <div class="title">Herzfrequenz ≥ 110/min</div>
-          <div class="explain">Aktuelle HF ≥110/min.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .content{ flex:1; }
+    .title{ font-weight:700; margin-bottom:4px; }
+    .explain{ font-size:13px; color:#444; margin-left:22px; }
+    .pts{ color:#444; font-size:13px; white-space:nowrap; margin-left:10px; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_sbp100">
-        <div class="content">
-          <div class="title">RR systolisch &lt; 100 mmHg</div>
-          <div class="explain">Aktueller systolischer Blutdruck &lt;100 mmHg.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .rowbox{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin:12px 0;
+      background:#fff;
+    }
+    .rowbox input{
+      width: 140px;
+    }
+    .rowbox .hint{ font-size:13px; color:#444; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="s_spo290">
-        <div class="content">
-          <div class="title">SpO₂ &lt; 90% unter Raumluft</div>
-          <div class="explain">Sättigung &lt;90% bei Messung ohne Sauerstoffgabe.</div>
-        </div>
-        <span class="pts">+1</span>
-      </label>
-    </div>
+    .scoreline{
+      margin-top:16px;
+      padding-top:12px;
+      border-top:1px solid var(--border);
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .score{ font-size:30px; font-weight:800; }
 
-    <div class="scoreline">
-      <div>sPESI:</div>
-      <div class="score" id="spesi_result">0</div>
-      <button id="spesi_copy">sPESI kopieren</button>
-      <span class="copied" id="spesi_copied" style="display:none;">✓ kopiert</span>
-      <span style="flex:1;"></span>
-      <button id="spesi_reset">Zurücksetzen</button>
-    </div>
+    .copied{ font-size:13px; color:green; }
+    .interpret{
+      margin-top:8px;
+      font-size:13px;
+      color:#333;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background:#fcfcfc;
+    }
+    .interpret strong{ margin-right:6px; }
 
-    <!-- ===== Kategorieband sPESI (neu) ===== -->
-    <div id="band_spesi" class="band band-2">
-      <div id="spesi_band_0" class="bandbox">
-        <strong>sPESI = 0</strong>
-        niedrig
-      </div>
-      <div id="spesi_band_1" class="bandbox">
-        <strong>sPESI ≥ 1</strong>
-        erhöht
-      </div>
-    </div>
+    .band{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+    .band-2{ grid-template-columns: repeat(2, 1fr); }
+    .band-5{
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @media (max-width: 920px){
+      .band-5{ grid-template-columns: repeat(2, 1fr); }
+    }
 
-    <div class="interpret" id="spesi_class">
-      <strong>Klassifikation:</strong> —
-    </div>
+    .bandbox{
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding:10px 12px;
+      background:#fafafa;
+      font-size:13px;
+      text-align:center;
+    }
+    .bandbox strong{ display:block; margin-bottom:4px; }
 
-    <div class="interpret" id="spesi_rec">
-      <strong>Empfehlung:</strong> —
-    </div>
-  </div>
+    .band-active{
+      background:#eef6ff;
+      border:2px solid #7aa7e6;
+      font-size:15px;
+      font-weight:800;
+    }
 
-  <!-- ===================== PESI (optional) ===================== -->
-  <div id="section_pesi" class="hidden">
-    <h2>PESI (optional)</h2>
+    .hidden{ display:none; }
+  </style>
 
-    <div class="rowbox">
-      <strong>Alter (Jahre):</strong>
-      <input type="number" id="p_age_years" min="0" max="120" placeholder="z. B. 67">
-      <span class="hint">PESI: Punkte = Alter in Jahren.</span>
-    </div>
+  <script>
+    function punktText(n) { return (n === 1) ? "Punkt" : "Punkte"; }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_male">
-        <div class="content">
-          <div class="title">Männliches Geschlecht</div>
-          <div class="explain">Patient ist männlich.</div>
-        </div>
-        <span class="pts">+10</span>
-      </label>
-    </div>
+    function show(mode) {
+      document.getElementById("section_spesi").classList.toggle("hidden", mode !== "spesi");
+      document.getElementById("section_pesi").classList.toggle("hidden", mode !== "pesi");
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_cancer">
-        <div class="content">
-          <div class="title">Malignom</div>
-          <div class="explain">Aktive Tumorerkrankung oder klinisch relevante Tumoranamnese.</div>
-        </div>
-        <span class="pts">+30</span>
-      </label>
-    </div>
+    function clearCopied() {
+      document.getElementById("spesi_copied").style.display = "none";
+      document.getElementById("pesi_copied").style.display = "none";
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_hf">
-        <div class="content">
-          <div class="title">Herzinsuffizienz</div>
-          <div class="explain">Bekannte Herzinsuffizienz (klinische Diagnose/Anamnese).</div>
-        </div>
-        <span class="pts">+10</span>
-      </label>
-    </div>
+    function numOrNull(id) {
+      const v = document.getElementById(id).value;
+      if (v === "" || v === null) return null;
+      const n = Number(v);
+      if (!Number.isFinite(n)) return null;
+      return n;
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_cld">
-        <div class="content">
-          <div class="title">Chronische Lungenerkrankung</div>
-          <div class="explain">z. B. COPD/Emphysem, relevante chronische respiratorische Erkrankung.</div>
-        </div>
-        <span class="pts">+10</span>
-      </label>
-    </div>
+    /* ===== Kategorieband helpers ===== */
+    function clearBand(ids) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove("band-active");
+      });
+    }
+    function setBandActive(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("band-active");
+    }
+    function updateBandSPESI(score) {
+      clearBand(["spesi_band_0","spesi_band_1"]);
+      if (score === 0) setBandActive("spesi_band_0");
+      else setBandActive("spesi_band_1");
+    }
+    function updateBandPESI(clsName) {
+      clearBand(["pesi_band_I","pesi_band_II","pesi_band_III","pesi_band_IV","pesi_band_V"]);
+      setBandActive("pesi_band_" + clsName);
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_ams">
-        <div class="content">
-          <div class="title">Bewusstseinsstörung</div>
-          <div class="explain">Akute Verwirrtheit / Somnolenz / deutlich veränderte Vigilanz.</div>
-        </div>
-        <span class="pts">+60</span>
-      </label>
-    </div>
+    /* ===== sPESI ===== */
+    function calcSPESI() {
+      let s = 0;
+      if (document.getElementById("s_age80").checked) s += 1;
+      if (document.getElementById("s_cancer").checked) s += 1;
+      if (document.getElementById("s_cardiopulm").checked) s += 1;
+      if (document.getElementById("s_hr110").checked) s += 1;
+      if (document.getElementById("s_sbp100").checked) s += 1;
+      if (document.getElementById("s_spo290").checked) s += 1;
 
-    <h2>Vitalparameter (Schwellen)</h2>
+      document.getElementById("spesi_result").textContent = String(s);
+      updateBandSPESI(s);
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_hr110">
-        <div class="content">
-          <div class="title">Herzfrequenz ≥ 110/min</div>
-          <div class="explain">Aktuelle HF ≥110/min.</div>
-        </div>
-        <span class="pts">+20</span>
-      </label>
-    </div>
+      const cls = (s === 0)
+        ? { name: "Low risk", detail: "0 Punkte", mortality: "sehr niedrig (typisch ~1%)" }
+        : { name: "Higher risk", detail: "≥1 Punkt", mortality: "erhöht" };
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_sbp100">
-        <div class="content">
-          <div class="title">RR systolisch &lt; 100 mmHg</div>
-          <div class="explain">Aktueller systolischer Blutdruck &lt;100 mmHg.</div>
-        </div>
-        <span class="pts">+30</span>
-      </label>
-    </div>
+      document.getElementById("spesi_class").innerHTML =
+        `<strong>Klassifikation:</strong> ${cls.name} (${cls.detail}) – grob 30-Tage-Risiko: ${cls.mortality}.`;
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_rr30">
-        <div class="content">
-          <div class="title">Atemfrequenz ≥ 30/min</div>
-          <div class="explain">Aktuelle AF ≥30/min (Tachypnoe).</div>
-        </div>
-        <span class="pts">+20</span>
-      </label>
-    </div>
+      let rec = "";
+      if (document.getElementById("s_sbp100").checked) {
+        rec = "RRsys <100: Hochrisiko-Konstellation → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
+      } else if (s === 0) {
+        rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
+      } else {
+        rec = "Erhöhtes Risiko: stationäre Aufnahme empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
+      }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_temp36">
-        <div class="content">
-          <div class="title">Temperatur &lt; 36.0°C</div>
-          <div class="explain">Hypothermie: Temp &lt;36.0°C.</div>
-        </div>
-        <span class="pts">+20</span>
-      </label>
-    </div>
+      document.getElementById("spesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
+      return s;
+    }
 
-    <div class="item">
-      <label>
-        <input type="checkbox" id="p_spo290">
-        <div class="content">
-          <div class="title">SpO₂ &lt; 90% unter Raumluft</div>
-          <div class="explain">Sättigung &lt;90% bei Messung ohne Sauerstoffgabe.</div>
-        </div>
-        <span class="pts">+20</span>
-      </label>
-    </div>
+    /* ===== PESI ===== */
+    function getPESIClass(score) {
+      if (score <= 65) return { name: "I", range: "≤65", mortality: "sehr niedrig (≈0–1.6%)" };
+      if (score <= 85) return { name: "II", range: "66–85", mortality: "niedrig (≈1.7–3.5%)" };
+      if (score <= 105) return { name: "III", range: "86–105", mortality: "moderat (≈3.2–7.1%)" };
+      if (score <= 125) return { name: "IV", range: "106–125", mortality: "hoch (≈4.0–11.4%)" };
+      return { name: "V", range: ">125", mortality: "sehr hoch (≈10–24.5%)" };
+    }
 
-    <div class="scoreline">
-      <div>PESI:</div>
-      <div class="score" id="pesi_result">0</div>
-      <button id="pesi_copy">PESI kopieren</button>
-      <span class="copied" id="pesi_copied" style="display:none;">✓ kopiert</span>
-      <span style="flex:1;"></span>
-      <button id="pesi_reset">Zurücksetzen</button>
-    </div>
+    function calcPESI() {
+      let score = 0;
 
-    <!-- ===== Kategorieband PESI (neu) ===== -->
-    <div id="band_pesi" class="band band-5">
-      <div id="pesi_band_I" class="bandbox">
-        <strong>Klasse I</strong>
-        ≤65
-      </div>
-      <div id="pesi_band_II" class="bandbox">
-        <strong>Klasse II</strong>
-        66–85
-      </div>
-      <div id="pesi_band_III" class="bandbox">
-        <strong>Klasse III</strong>
-        86–105
-      </div>
-      <div id="pesi_band_IV" class="bandbox">
-        <strong>Klasse IV</strong>
-        106–125
-      </div>
-      <div id="pesi_band_V" class="bandbox">
-        <strong>Klasse V</strong>
-        &gt;125
-      </div>
-    </div>
+      const age = numOrNull("p_age_years");
+      if (age !== null && age >= 0) score += Math.floor(age);
 
-    <div class="interpret" id="pesi_class">
-      <strong>Klassifikation:</strong> —
-    </div>
+      if (document.getElementById("p_male").checked) score += 10;
+      if (document.getElementById("p_cancer").checked) score += 30;
+      if (document.getElementById("p_hf").checked) score += 10;
+      if (document.getElementById("p_cld").checked) score += 10;
+      if (document.getElementById("p_ams").checked) score += 60;
 
-    <div class="interpret" id="pesi_rec">
-      <strong>Empfehlung:</strong> —
-    </div>
-  </div>
+      if (document.getElementById("p_hr110").checked) score += 20;
+      if (document.getElementById("p_sbp100").checked) score += 30;
+      if (document.getElementById("p_rr30").checked) score += 20;
+      if (document.getElementById("p_temp36").checked) score += 20;
+      if (document.getElementById("p_spo290").checked) score += 20;
 
-</div>
+      document.getElementById("pesi_result").textContent = String(score);
 
-<script>
-function punktText(n) { return (n === 1) ? "Punkt" : "Punkte"; }
+      const cls = getPESIClass(score);
+      updateBandPESI(cls.name);
 
-function show(mode) {
-  document.getElementById("section_spesi").classList.toggle("hidden", mode !== "spesi");
-  document.getElementById("section_pesi").classList.toggle("hidden", mode !== "pesi");
-}
+      document.getElementById("pesi_class").innerHTML =
+        `<strong>Klassifikation:</strong> Klasse ${cls.name} (${cls.range}) – grob 30-Tage-Mortalität: ${cls.mortality}.`;
 
-function clearCopied() {
-  document.getElementById("spesi_copied").style.display = "none";
-  document.getElementById("pesi_copied").style.display = "none";
-}
+      let rec = "";
+      if (document.getElementById("p_sbp100").checked || document.getElementById("p_ams").checked) {
+        rec = "Hochrisiko (RRsys <100 oder Bewusstseinsstörung) → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
+      } else if (cls.name === "I" || cls.name === "II") {
+        rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
+      } else if (cls.name === "III") {
+        rec = "Intermediäres Risiko: stationär empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
+      } else {
+        rec = "Hohes Risiko: stationär mit Überwachung (mindestens Monitorbett/IMC). Engmaschige Reevaluation (Kreislauf, Oxygenierung, RV-Belastung).";
+      }
 
-function numOrNull(id) {
-  const v = document.getElementById(id).value;
-  if (v === "" || v === null) return null;
-  const n = Number(v);
-  if (!Number.isFinite(n)) return null;
-  return n;
-}
+      document.getElementById("pesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
+      return score;
+    }
 
-/* ===== Kategorieband helpers (neu) ===== */
-function clearBand(ids) {
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("band-active");
-  });
-}
-function setBandActive(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.add("band-active");
-}
-function updateBandSPESI(score) {
-  clearBand(["spesi_band_0","spesi_band_1"]);
-  if (score === 0) setBandActive("spesi_band_0");
-  else setBandActive("spesi_band_1");
-}
-function updateBandPESI(clsName) {
-  clearBand(["pesi_band_I","pesi_band_II","pesi_band_III","pesi_band_IV","pesi_band_V"]);
-  setBandActive("pesi_band_" + clsName);
-}
+    function recalcAll() {
+      clearCopied();
+      calcSPESI();
+      calcPESI();
+    }
 
-/* ===== sPESI ===== */
-function calcSPESI() {
-  let s = 0;
-  if (document.getElementById("s_age80").checked) s += 1;
-  if (document.getElementById("s_cancer").checked) s += 1;
-  if (document.getElementById("s_cardiopulm").checked) s += 1;
-  if (document.getElementById("s_hr110").checked) s += 1;
-  if (document.getElementById("s_sbp100").checked) s += 1;
-  if (document.getElementById("s_spo290").checked) s += 1;
+    /* ===== Mode toggles ===== */
+    document.getElementById("mode_spesi").addEventListener("change", () => show("spesi"));
+    document.getElementById("mode_pesi").addEventListener("change", () => show("pesi"));
 
-  document.getElementById("spesi_result").textContent = String(s);
+    /* ===== Live recalculation ===== */
+    document.querySelectorAll("input").forEach(el => el.addEventListener("change", recalcAll));
+    document.getElementById("p_age_years").addEventListener("input", recalcAll);
 
-  updateBandSPESI(s); // neu
+    /* ===== Copy buttons ===== */
+    document.getElementById("spesi_copy").addEventListener("click", () => {
+      const s = Number(document.getElementById("spesi_result").textContent);
+      const cls = (s === 0) ? "geringes Risiko" : "hohes Risiko";
+      const text = `sPESI: ${s} ${punktText(s)} (${cls})`;
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById("spesi_copied");
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 1500);
+      });
+    });
 
-  const cls = (s === 0)
-    ? { name: "Low risk", detail: "0 Punkte", mortality: "sehr niedrig (typisch ~1%)" }
-    : { name: "Higher risk", detail: "≥1 Punkt", mortality: "erhöht" };
+    document.getElementById("pesi_copy").addEventListener("click", () => {
+      const s = Number(document.getElementById("pesi_result").textContent);
+      const cls = getPESIClass(s).name;
+      const text = `PESI: ${s} ${punktText(s)} (Klasse ${cls})`;
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById("pesi_copied");
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 1500);
+      });
+    });
 
-  document.getElementById("spesi_class").innerHTML =
-    `<strong>Klassifikation:</strong> ${cls.name} (${cls.detail}) – grob 30-Tage-Risiko: ${cls.mortality}.`;
+    /* ===== Reset ===== */
+    document.getElementById("spesi_reset").addEventListener("click", () => {
+      ["s_age80","s_cancer","s_cardiopulm","s_hr110","s_sbp100","s_spo290"].forEach(id => {
+        document.getElementById(id).checked = false;
+      });
+      recalcAll();
+    });
 
-  let rec = "";
-  if (document.getElementById("s_sbp100").checked) {
-    rec = "RRsys <100: Hochrisiko-Konstellation → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
-  } else if (s === 0) {
-    rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
-  } else {
-    rec = "Erhöhtes Risiko: stationäre Aufnahme empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
-  }
+    document.getElementById("pesi_reset").addEventListener("click", () => {
+      document.getElementById("p_age_years").value = "";
+      ["p_male","p_cancer","p_hf","p_cld","p_ams","p_hr110","p_sbp100","p_rr30","p_temp36","p_spo290"].forEach(id => {
+        document.getElementById(id).checked = false;
+      });
+      recalcAll();
+    });
 
-  document.getElementById("spesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
-  return s;
-}
+    /* ===== Initial ===== */
+    show("spesi");
+    recalcAll();
+  </script>
 
-/* ===== PESI (klassisch, Alter als Eingabe) ===== */
-function getPESIClass(score) {
-  // Klassischer PESI: I <=65, II 66–85, III 86–105, IV 106–125, V >125
-  if (score <= 65) return { name: "I", range: "≤65", mortality: "sehr niedrig (≈0–1.6%)" };
-  if (score <= 85) return { name: "II", range: "66–85", mortality: "niedrig (≈1.7–3.5%)" };
-  if (score <= 105) return { name: "III", range: "86–105", mortality: "moderat (≈3.2–7.1%)" };
-  if (score <= 125) return { name: "IV", range: "106–125", mortality: "hoch (≈4.0–11.4%)" };
-  return { name: "V", range: ">125", mortality: "sehr hoch (≈10–24.5%)" };
-}
-
-function calcPESI() {
-  let score = 0;
-
-  // Alter in Jahren
-  const age = numOrNull("p_age_years");
-  if (age !== null && age >= 0) score += Math.floor(age);
-
-  if (document.getElementById("p_male").checked) score += 10;
-  if (document.getElementById("p_cancer").checked) score += 30;
-  if (document.getElementById("p_hf").checked) score += 10;
-  if (document.getElementById("p_cld").checked) score += 10;
-  if (document.getElementById("p_ams").checked) score += 60;
-
-  if (document.getElementById("p_hr110").checked) score += 20;
-  if (document.getElementById("p_sbp100").checked) score += 30;
-  if (document.getElementById("p_rr30").checked) score += 20;
-  if (document.getElementById("p_temp36").checked) score += 20;
-  if (document.getElementById("p_spo290").checked) score += 20;
-
-  document.getElementById("pesi_result").textContent = String(score);
-
-  const cls = getPESIClass(score);
-
-  updateBandPESI(cls.name); // neu
-
-  document.getElementById("pesi_class").innerHTML =
-    `<strong>Klassifikation:</strong> Klasse ${cls.name} (${cls.range}) – grob 30-Tage-Mortalität: ${cls.mortality}.`;
-
-  let rec = "";
-  if (document.getElementById("p_sbp100").checked || document.getElementById("p_ams").checked) {
-    rec = "Hochrisiko (RRsys <100 oder Bewusstseinsstörung) → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
-  } else if (cls.name === "I" || cls.name === "II") {
-    rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
-  } else if (cls.name === "III") {
-    rec = "Intermediäres Risiko: stationär empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
-  } else {
-    rec = "Hohes Risiko: stationär mit Überwachung (mindestens Monitorbett/IMC). Engmaschige Reevaluation (Kreislauf, Oxygenierung, RV-Belastung).";
-  }
-
-  document.getElementById("pesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
-  return score;
-}
-
-function recalcAll() {
-  clearCopied();
-  calcSPESI();
-  calcPESI();
-}
-
-/* ===== Mode toggles ===== */
-document.getElementById("mode_spesi").addEventListener("change", () => show("spesi"));
-document.getElementById("mode_pesi").addEventListener("change", () => show("pesi"));
-
-/* ===== Live recalculation ===== */
-document.querySelectorAll("input").forEach(el => {
-  el.addEventListener("change", recalcAll);
-});
-document.getElementById("p_age_years").addEventListener("input", recalcAll);
-
-/* ===== Copy buttons ===== */
-document.getElementById("spesi_copy").addEventListener("click", () => {
-  const s = Number(document.getElementById("spesi_result").textContent);
-  const cls = (s === 0) ? "geringes Risiko" : "hohes Risiko";
-  const text = `sPESI: ${s} ${punktText(s)} (${cls})`;
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("spesi_copied");
-    msg.style.display = "inline";
-    setTimeout(() => msg.style.display = "none", 1500);
-  });
-});
-
-document.getElementById("pesi_copy").addEventListener("click", () => {
-  const s = Number(document.getElementById("pesi_result").textContent);
-  const cls = getPESIClass(s).name;
-  const text = `PESI: ${s} ${punktText(s)} (Klasse ${cls})`;
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("pesi_copied");
-    msg.style.display = "inline";
-    setTimeout(() => msg.style.display = "none", 1500);
-  });
-});
-
-/* ===== Reset ===== */
-document.getElementById("spesi_reset").addEventListener("click", () => {
-  ["s_age80","s_cancer","s_cardiopulm","s_hr110","s_sbp100","s_spo290"].forEach(id => {
-    document.getElementById(id).checked = false;
-  });
-  recalcAll();
-});
-
-document.getElementById("pesi_reset").addEventListener("click", () => {
-  document.getElementById("p_age_years").value = "";
-  ["p_male","p_cancer","p_hf","p_cld","p_ams","p_hr110","p_sbp100","p_rr30","p_temp36","p_spo290"].forEach(id => {
-    document.getElementById(id).checked = false;
-  });
-  recalcAll();
-});
-
-/* ===== Initial ===== */
-show("spesi");
-recalcAll();
-</script>
-
+  <!-- Navbar (dein nav.js) -->
+  <script src="nav.js"></script>
 </body>
 </html>
