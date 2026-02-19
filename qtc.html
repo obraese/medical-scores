@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QTc-Rechner (Fridericia / Bazett)</title>
+
+  <!-- Global Styles / Navbar -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>QTc-Rechner</h1>
+
+    <div class="footer-note" style="margin-top:6px;">
+      Arbeits-/Lernhilfe ohne Speicherung. (Kopiert wird nur QTc + Methode.)
+    </div>
+
+    <!-- Methode -->
+    <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-top:14px;">
+      <div style="font-weight:700; margin-bottom:8px;">Methode</div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <label style="display:flex; gap:8px; align-items:center; cursor:pointer;">
+          <input type="radio" name="method" id="m_fri" checked>
+          <span><b>Fridericia</b> <span style="color:var(--muted); font-size:13px;">(bevorzugt)</span></span>
+        </label>
+
+        <label style="display:flex; gap:8px; align-items:center; cursor:pointer;">
+          <input type="radio" name="method" id="m_baz">
+          <span>Bazett</span>
+        </label>
+
+        <span style="flex:1;"></span>
+
+        <button id="resetBtn" class="navbtn" type="button" style="cursor:pointer;">Zurücksetzen</button>
+      </div>
+
+      <div id="methodNote" class="footer-note" style="margin-top:10px; border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:rgba(244,246,248,.7);">
+        <b>Hinweis:</b> Fridericia (QTc = QT / RR<sup>1/3</sup>) ist in vielen Settings robuster als Bazett, v. a. bei Tachy-/Bradykardie.
+      </div>
+    </div>
+
+    <!-- Eingaben -->
+    <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-top:14px;">
+      <div style="font-weight:700; margin-bottom:8px;">Eingaben</div>
+
+      <div style="display:grid; grid-template-columns: 170px 1fr; gap:10px 12px; align-items:center;">
+        <div style="font-size:13px; color:#222;">QT</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <input id="qt_ms" type="text" inputmode="decimal" placeholder="z.B. 420"
+                 style="padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff; width:160px;">
+          <span style="color:var(--muted); font-size:13px;">ms</span>
+        </div>
+
+        <div style="font-size:13px; color:#222;">RR</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <input id="rr_s" type="text" inputmode="decimal" placeholder="z.B. 0.86"
+                 style="padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff; width:160px;">
+          <span style="color:var(--muted); font-size:13px;">s</span>
+          <span style="color:var(--muted); font-size:12px;">(RR = 60 / HF)</span>
+        </div>
+
+        <div style="font-size:13px; color:#222;">HF (optional)</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <input id="hr_bpm" type="text" inputmode="decimal" placeholder="z.B. 70"
+                 style="padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff; width:160px;">
+          <span style="color:var(--muted); font-size:13px;">/min</span>
+          <button id="useHrBtn" class="navbtn" type="button" style="cursor:pointer;">RR aus HF berechnen</button>
+        </div>
+      </div>
+
+      <div id="msg" class="footer-note" style="margin-top:10px; display:none;"></div>
+    </div>
+
+    <!-- Ergebnis -->
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+      <div style="font-weight:600;">QTc:</div>
+      <div id="qtc_out" style="font-size:34px; font-weight:800;">—</div>
+      <div style="color:var(--muted); font-size:13px;">ms</div>
+
+      <span id="method_out" style="color:var(--muted); font-size:13px;"></span>
+
+      <span style="flex:1;"></span>
+
+      <button id="copyBtn" class="navbtn" type="button" style="cursor:pointer;">kopieren</button>
+      <span id="copied" style="display:none; color:green; font-size:13px;">✓ kopiert</span>
+    </div>
+
+    <!-- Band (grobe Einordnung) -->
+    <div id="band" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:12px;">
+      <div id="b_norm" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">unauffällig</strong>
+        &lt; 450–460 ms
+      </div>
+      <div id="b_border" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">grenzwertig</strong>
+        450–500 ms
+      </div>
+      <div id="b_long" style="border:1px solid var(--border); border-radius:14px; padding:10px 12px; background:#fafafa; font-size:13px; text-align:center;">
+        <strong style="display:block; margin-bottom:4px;">verlängert</strong>
+        ≥ 500 ms
+      </div>
+    </div>
+
+    <div id="interp" class="footer-note" style="margin-top:12px; border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:rgba(244,246,248,.7);">
+      <b>Einordnung:</b> —
+    </div>
+
+    <div class="footer-note" style="margin-top:12px;">
+      Formeln: <b>Fridericia</b> QTc = QT / RR<sup>1/3</sup>, <b>Bazett</b> QTc = QT / √RR (QT in Sekunden).
+      Grenzwerte sind kontextabhängig (Geschlecht, QRS-Breite, Elektrolyte, Medikamente). Bei breitem QRS ggf. JT/JTc erwägen.
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function parseNum(id) {
+    const raw = (document.getElementById(id).value || "").trim().replace(",", ".");
+    if (!raw) return NaN;
+    const v = Number(raw);
+    return Number.isFinite(v) ? v : NaN;
+  }
+
+  function setMsg(html, isError) {
+    const el = document.getElementById("msg");
+    el.style.display = "block";
+    el.style.border = "1px solid " + (isError ? "#f2b8b8" : "#f1d7a6");
+    el.style.background = isError ? "#fff0f0" : "#fff7e6";
+    el.style.color = isError ? "#7a0000" : "#6b4e00";
+    el.style.borderRadius = "14px";
+    el.style.padding = "10px 12px";
+    el.innerHTML = html;
+  }
+
+  function hideMsg() {
+    const el = document.getElementById("msg");
+    el.style.display = "none";
+    el.innerHTML = "";
+  }
+
+  function clearBand() {
+    ["b_norm","b_border","b_long"].forEach(id => {
+      const el = document.getElementById(id);
+      el.style.background = "#fafafa";
+      el.style.border = "1px solid var(--border)";
+      el.style.fontWeight = "normal";
+      el.style.fontSize = "13px";
+    });
+  }
+
+  function setActive(id) {
+    const el = document.getElementById(id);
+    el.style.background = "#eef6ff";
+    el.style.border = "2px solid #7aa7e6";
+    el.style.fontWeight = "bold";
+    el.style.fontSize = "15px";
+  }
+
+  function getMethod() {
+    return document.getElementById("m_fri").checked ? "fridericia" : "bazett";
+  }
+
+  function qtcFrom(qt_ms, rr_s, method) {
+    const qt_s = qt_ms / 1000;
+    if (method === "fridericia") {
+      return (qt_s / Math.cbrt(rr_s)) * 1000; // ms
+    }
+    // bazett
+    return (qt_s / Math.sqrt(rr_s)) * 1000; // ms
+  }
+
+  function classify(qtc_ms) {
+    // bewusst grob; zeigt Band-Highlight
+    if (!Number.isFinite(qtc_ms)) return { band: null, txt: "—" };
+    if (qtc_ms >= 500) return { band: "b_long", txt: "verlängert (≥500 ms)" };
+    if (qtc_ms >= 450) return { band: "b_border", txt: "grenzwertig (≈450–499 ms)" };
+    return { band: "b_norm", txt: "unauffällig (<450 ms)" };
+  }
+
+  function calc() {
+    document.getElementById("copied").style.display = "none";
+    hideMsg();
+
+    const qt = parseNum("qt_ms");
+    let rr = parseNum("rr_s");
+    const hr = parseNum("hr_bpm");
+
+    // wenn RR leer, aber HF vorhanden: RR intern berechnen (ohne Feld zu überschreiben)
+    if (!Number.isFinite(rr) && Number.isFinite(hr) && hr > 0) {
+      rr = 60 / hr;
+    }
+
+    // Validierung
+    const missing = [];
+    if (!Number.isFinite(qt)) missing.push("QT (ms)");
+    if (!Number.isFinite(rr)) missing.push("RR (s) oder HF (/min)");
+
+    if (missing.length) {
+      document.getElementById("qtc_out").textContent = "—";
+      document.getElementById("method_out").textContent = "";
+      clearBand();
+      document.getElementById("interp").innerHTML = "<b>Einordnung:</b> —";
+      setMsg("<b>Fehlende/ungültige Eingaben:</b> " + missing.join(", "), true);
+      return;
+    }
+
+    // Plausibilität
+    const warns = [];
+    if (qt < 200 || qt > 800) warns.push("QT wirkt unplausibel");
+    if (rr < 0.3 || rr > 2.5) warns.push("RR wirkt unplausibel");
+    if (Number.isFinite(hr) && (hr < 20 || hr > 220)) warns.push("HF wirkt unplausibel");
+    if (warns.length) setMsg("<b>Hinweis:</b> " + warns.join("; ") + ".", false);
+
+    const method = getMethod();
+    const qtc = qtcFrom(qt, rr, method);
+    const qtcRounded = Math.round(qtc);
+
+    document.getElementById("qtc_out").textContent = String(qtcRounded);
+    document.getElementById("method_out").textContent =
+      method === "fridericia" ? "Fridericia" : "Bazett";
+
+    clearBand();
+    const cls = classify(qtcRounded);
+    if (cls.band) setActive(cls.band);
+
+    const rrTxt = rr.toFixed(2) + " s" + (Number.isFinite(hr) && hr > 0 ? ` (HF ${Math.round(hr)}/min)` : "");
+    const methTxt = (method === "fridericia")
+      ? "Fridericia ist bei Tachy-/Bradykardie oft robuster als Bazett."
+      : "Bazett kann bei hoher/niedriger HF eher über-/unterkorrigieren – Fridericia ist häufig vorzuziehen.";
+
+    document.getElementById("interp").innerHTML =
+      `<b>Einordnung:</b> ${cls.txt}. ` +
+      `Berechnet mit <b>${method === "fridericia" ? "Fridericia" : "Bazett"}</b> aus QT ${Math.round(qt)} ms und RR ${rrTxt}. ` +
+      `<span style="color:var(--muted);">${methTxt}</span>`;
+
+    window.__qtc_last = { qtc: qtcRounded, method: (method === "fridericia" ? "Fridericia" : "Bazett") };
+  }
+
+  // Buttons
+  document.getElementById("useHrBtn").addEventListener("click", () => {
+    const hr = parseNum("hr_bpm");
+    if (!Number.isFinite(hr) || hr <= 0) {
+      setMsg("<b>Fehler:</b> Bitte eine gültige Herzfrequenz eingeben.", true);
+      return;
+    }
+    const rr = 60 / hr;
+    document.getElementById("rr_s").value = rr.toFixed(2);
+    calc();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    document.getElementById("qt_ms").value = "";
+    document.getElementById("rr_s").value = "";
+    document.getElementById("hr_bpm").value = "";
+    document.getElementById("m_fri").checked = true;
+    document.getElementById("copied").style.display = "none";
+    hideMsg();
+    calc();
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", () => {
+    const r = window.__qtc_last;
+    if (!r || !Number.isFinite(r.qtc)) return;
+    const text = `QTc (${r.method}): ${r.qtc} ms`;
+    navigator.clipboard.writeText(text).then(() => {
+      const msg = document.getElementById("copied");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 1500);
+    });
+  });
+
+  // Live recalculation
+  ["qt_ms","rr_s","hr_bpm","m_fri","m_baz"].forEach(id => {
+    document.getElementById(id).addEventListener("change", calc);
+    if (["qt_ms","rr_s","hr_bpm"].includes(id)) {
+      document.getElementById(id).addEventListener("input", calc);
+    }
+  });
+
+  // Initial
+  calc();
+</script>
+
+<script src="nav.js"></script>
+</body>
+</html>
