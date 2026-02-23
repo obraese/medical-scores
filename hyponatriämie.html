@@ -14,7 +14,7 @@
     <div class="card">
       <h1>Hyponatriämie – differentialdiagnostischer Algorithmus</h1>
 
-      <div class="footer-note" style="margin-top:6px;">
+      <div class="footer-note" style="margin-top:6px; font-size:14px;">
         Klick-Entscheidungsbaum (Tonicität → Urin-Osmolalität → Volumenstatus → Urin-Na).
         Keine Speicherung. (Kopiert wird die aktuelle Auswahl + Ergebnistext.)
       </div>
@@ -31,55 +31,13 @@
       <div style="display:grid; grid-template-columns: 1.15fr .85fr; gap:14px; align-items:start;">
         <!-- LEFT -->
         <div class="card" style="box-shadow:none; padding:14px; border-radius:14px;">
-          <div style="font-weight:800; margin-bottom:8px;">Durchklicken</div>
-
-          <!-- Step 0 -->
-          <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="font-weight:700;">
-                0) Symptomatik / Dringlichkeit <span style="color:var(--muted); font-weight:600;">(optional)</span>
-              </div>
-              <div id="badgeSeverity" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
-                optional
-              </div>
-            </div>
-
-            <div style="height:8px;"></div>
-
-            <div class="choicegroup" data-step="severity" style="display:grid; gap:10px;">
-              <button class="choicebtn" data-value="asymp" type="button">
-                <div class="ct">
-                  <div class="ct-title">Keine / milde Symptome</div>
-                  <div class="ct-desc">z.B. asymptomatisch, leichte Übelkeit, leichte Müdigkeit</div>
-                </div>
-                <div class="ct-pts">✓</div>
-              </button>
-
-              <button class="choicebtn" data-value="mod" type="button">
-                <div class="ct">
-                  <div class="ct-title">Moderate Symptome</div>
-                  <div class="ct-desc">z.B. Kopfschmerz, Verwirrtheit, Gangunsicherheit</div>
-                </div>
-                <div class="ct-pts">✓</div>
-              </button>
-
-              <button class="choicebtn" data-value="severe" type="button">
-                <div class="ct">
-                  <div class="ct-title">Schwere Symptome</div>
-                  <div class="ct-desc">z.B. Krampfanfall, Somnolenz/Koma, Zeichen Hirndruck</div>
-                </div>
-                <div class="ct-pts">✓</div>
-              </button>
-            </div>
-
-            <div id="hintSeverity" class="footer-note" style="display:none; margin-top:10px; border-radius:14px;"></div>
-          </div>
+          <div style="font-weight:800; margin-bottom:8px; font-size:16px;">Durchklicken</div>
 
           <!-- Step 1 -->
           <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="font-weight:700;">1) Serumosmolalität / Tonicität</div>
-              <div id="badgeTonicity" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+              <div style="font-weight:800; font-size:15px;">1) Serumosmolalität / Tonicität</div>
+              <div id="badgeTonicity" style="font-size:13px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
                 ausstehend
               </div>
             </div>
@@ -113,8 +71,8 @@
             </div>
 
             <details style="margin-top:10px;">
-              <summary style="cursor:pointer; font-weight:700;">Rechenhilfe: (geschätzte) Serumosmolalität</summary>
-              <div class="footer-note" style="margin-top:10px;">
+              <summary style="cursor:pointer; font-weight:800; font-size:14px;">Rechenhilfe: (geschätzte) Serumosmolalität</summary>
+              <div class="footer-note" style="margin-top:10px; font-size:14px;">
                 <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
                   Serumosm ≈ 2×Na + Glukose/18 + Harnstoff/2.8
                 </div>
@@ -128,8 +86,8 @@
           <!-- Step 2 -->
           <div class="card" id="stepUOsm" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="font-weight:700;">2) Urin-Osmolalität (UOsm)</div>
-              <div id="badgeUOsm" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+              <div style="font-weight:800; font-size:15px;">2) Urin-Osmolalität (UOsm)</div>
+              <div id="badgeUOsm" style="font-size:13px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
                 ausstehend
               </div>
             </div>
@@ -158,8 +116,8 @@
           <!-- Step 3 -->
           <div class="card" id="stepVolume" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="font-weight:700;">3) Klinischer Volumenstatus</div>
-              <div id="badgeVolume" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+              <div style="font-weight:800; font-size:15px;">3) Klinischer Volumenstatus</div>
+              <div id="badgeVolume" style="font-size:13px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
                 ausstehend
               </div>
             </div>
@@ -196,8 +154,8 @@
           <!-- Step 4 -->
           <div class="card" id="stepUNa" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="font-weight:700;">4) Urin-Natrium (UNa)</div>
-              <div id="badgeUNa" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+              <div style="font-weight:800; font-size:15px;">4) Urin-Natrium (UNa)</div>
+              <div id="badgeUNa" style="font-size:13px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
                 ausstehend
               </div>
             </div>
@@ -222,28 +180,28 @@
               </button>
             </div>
 
-            <div class="footer-note" style="margin-top:10px;">
+            <div class="footer-note" style="margin-top:10px; font-size:14px;">
               UNa ist besonders hilfreich bei <b>hypovolämischer</b> Hyponatriämie. Unter Diuretika kann UNa verfälscht sein.
             </div>
           </div>
 
-          <div class="footer-note" style="margin-top:12px;">
-            Tipp: <b>Strg</b> + <b>F</b> zur Suche. Klinische Entscheidung immer im Kontext (Akuität, Symptome, Komorbiditäten).
+          <div class="footer-note" style="margin-top:12px; font-size:14px;">
+            Klinische Entscheidung immer im Kontext (Akuität, Symptome, Komorbiditäten).
           </div>
         </div>
 
         <!-- RIGHT -->
         <div class="card" style="box-shadow:none; padding:14px; border-radius:14px;">
-          <div style="font-weight:800; margin-bottom:8px;">Interpretation</div>
+          <div style="font-weight:800; margin-bottom:8px; font-size:16px;">Interpretation</div>
 
           <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); background:rgba(244,246,248,.35);">
-            <div id="resHeadline" style="font-weight:800; margin-bottom:8px;">Noch keine Auswahl</div>
+            <div id="resHeadline" style="font-weight:900; margin-bottom:8px; font-size:16px;">Noch keine Auswahl</div>
 
             <div id="pillRow" style="display:none; gap:8px; flex-wrap:wrap; margin:10px 0 8px;"></div>
 
             <div style="height:1px; background:var(--border); margin:12px 0;"></div>
 
-            <div id="resBody" class="footer-note" style="margin:0;">
+            <div id="resBody" class="footer-note" style="margin:0; font-size:14px;">
               Wähle links die Knoten (Tonicität → UOsm → Volumenstatus → UNa). Das Ergebnis erscheint hier.
             </div>
           </div>
@@ -251,8 +209,8 @@
           <div style="height:12px;"></div>
 
           <details open>
-            <summary style="cursor:pointer; font-weight:800;">Standard-Labors (praktisch)</summary>
-            <div class="footer-note" style="margin-top:10px;">
+            <summary style="cursor:pointer; font-weight:900; font-size:15px;">Standard-Labors (praktisch)</summary>
+            <div class="footer-note" style="margin-top:10px; font-size:14px;">
               <ul style="margin:8px 0 0; padding-left:18px;">
                 <li>Serumosmolalität (gemessen, wenn möglich)</li>
                 <li>UOsm, UNa (ggf. auch UK, Urea), Kreatinin, Harnstoff</li>
@@ -265,8 +223,8 @@
           <div style="height:10px;"></div>
 
           <details>
-            <summary style="cursor:pointer; font-weight:800;">Therapie-Sicherheitsanker (Korrekturrate)</summary>
-            <div class="footer-note" style="margin-top:10px;">
+            <summary style="cursor:pointer; font-weight:900; font-size:15px;">Therapie-Sicherheitsanker (Korrekturrate)</summary>
+            <div class="footer-note" style="margin-top:10px; font-size:14px;">
               <ul style="margin:8px 0 0; padding-left:18px;">
                 <li>Zu schnelle Korrektur → Risiko ODS (v.a. chronisch, Alkoholismus, Mangelernährung, Leberkrankheit).</li>
                 <li>Typische Zielrahmen: <b>≤ 6–8 mmol/L / 24 h</b>, Hochrisiko eher ≤ 6.</li>
@@ -286,7 +244,7 @@
       display:flex;
       gap:12px;
       align-items:flex-start;
-      padding:10px 12px;
+      padding:12px 14px; /* etwas größer */
       border-radius:14px;
       border:1px solid var(--border);
       background:var(--card);
@@ -298,31 +256,30 @@
       background:#eef6ff;
     }
     .ct{flex:1;}
-    .ct-title{font-weight:700; margin-bottom:4px;}
-    .ct-desc{color:var(--muted); font-size:13px; line-height:1.35;}
-    .ct-pts{color:var(--muted); font-size:13px; white-space:nowrap; margin-top:2px;}
+    .ct-title{font-weight:800; margin-bottom:4px; font-size:14.5px;}
+    .ct-desc{color:var(--muted); font-size:14px; line-height:1.35;}
+    .ct-pts{color:var(--muted); font-size:14px; white-space:nowrap; margin-top:2px;}
     .pill{
       display:inline-flex;
       gap:8px;
       align-items:center;
-      padding:7px 10px;
+      padding:8px 10px;
       border-radius:999px;
       border:1px solid var(--border);
       background:var(--card);
-      font-size:12px;
+      font-size:13px; /* größer */
       color:var(--text);
     }
-    .pill b{font-weight:800;}
+    .pill b{font-weight:900;}
     @media (max-width: 900px){
       .container > .card > div[style*="grid-template-columns"]{ grid-template-columns: 1fr !important; }
     }
   </style>
 
   <script>
-    const state = { severity:null, tonicity:null, uosm:null, volume:null, una:null };
+    const state = { tonicity:null, uosm:null, volume:null, una:null };
 
     const labels = {
-      severity: { asymp:"mild/asymptomatisch", mod:"moderat symptomatisch", severe:"schwer symptomatisch" },
       tonicity: { hypertonic:"hyperton", isotonic:"isoton (Pseudo)", hypotonic:"hypoton (echt)" },
       uosm: { lt100:"UOsm <100", gt100:"UOsm >100" },
       volume: { hypovolemic:"hypovoläm", euvolemic:"euvoläm", hypervolemic:"hypervoläm" },
@@ -332,7 +289,6 @@
     const el = (id)=>document.getElementById(id);
 
     const badges = {
-      severity: el("badgeSeverity"),
       tonicity: el("badgeTonicity"),
       uosm: el("badgeUOsm"),
       volume: el("badgeVolume"),
@@ -355,7 +311,7 @@
       b.style.background = "rgba(244,246,248,.7)";
 
       if(!v){
-        b.textContent = (stepKey === "severity") ? "optional" : "ausstehend";
+        b.textContent = "ausstehend";
         return;
       }
       b.textContent = labels[stepKey]?.[v] ?? "gesetzt";
@@ -365,7 +321,7 @@
     }
 
     function clearDownstream(fromKey){
-      const order = ["severity","tonicity","uosm","volume","una"];
+      const order = ["tonicity","uosm","volume","una"];
       const idx = order.indexOf(fromKey);
       for(let i=idx+1;i<order.length;i++){
         const k = order[i];
@@ -402,28 +358,11 @@
         document.querySelectorAll(`[data-step="una"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
         setBadge("una");
       }
-
-      // Severity hint
-      const hint = el("hintSeverity");
-      if(state.severity === "severe"){
-        hint.style.display = "";
-        hint.innerHTML = "<b>Hinweis:</b> Bei schweren neurologischen Symptomen steht akute Stabilisierung/zeitnahe Therapie im Vordergrund; DDx parallel (UOsm/UNa etc.).";
-      } else if(state.severity === "mod"){
-        hint.style.display = "";
-        hint.innerHTML = "<b>Hinweis:</b> Bei moderaten Symptomen zeitnahe Diagnostik + Therapieplanung; Korrekturrate beachten.";
-      } else if(state.severity === "asymp"){
-        hint.style.display = "";
-        hint.innerHTML = "<b>Hinweis:</b> Bei milder/asymptomatischer Hyponatriämie: Ursachenfahndung + langsame/gezielte Korrektur (je nach Setting).";
-      } else {
-        hint.style.display = "none";
-        hint.innerHTML = "";
-      }
     }
 
     function buildPills(){
       const pillRow = el("pillRow");
       const pills = [];
-      if(state.severity) pills.push(["Symptome", labels.severity[state.severity]]);
       if(state.tonicity) pills.push(["Tonicität", labels.tonicity[state.tonicity]]);
       if(state.uosm) pills.push(["UOsm", labels.uosm[state.uosm]]);
       if(state.volume) pills.push(["Volumen", labels.volume[state.volume]]);
@@ -475,7 +414,7 @@
         body.innerHTML = `
           <ul style="margin:8px 0 0; padding-left:18px;">
             <li>Nächster Schritt: <b>Urin-Osmolalität</b> (ADH aktiv vs supprimiert).</li>
-            <li>Parallel: Medikamente (Thiazid, SSRI, Carbamazepin), Trinkmenge, Akuität, Symptome.</li>
+            <li>Parallel: Medikamente (Thiazid, SSRI, Carbamazepin), Trinkmenge, Akuität.</li>
           </ul>`;
         return;
       }
@@ -575,7 +514,7 @@
     }
 
     function render(){
-      setBadge("severity"); setBadge("tonicity"); setBadge("uosm"); setBadge("volume"); setBadge("una");
+      setBadge("tonicity"); setBadge("uosm"); setBadge("volume"); setBadge("una");
       revealLogic();
       buildPills();
       buildInterpretation();
@@ -600,7 +539,6 @@
     function composeCopyText(){
       const lines = [];
       lines.push("Hyponatriämie – DDx-Algorithmus (Auswahl)");
-      if(state.severity) lines.push(`- Symptome: ${labels.severity[state.severity]}`);
       if(state.tonicity) lines.push(`- Tonicität: ${labels.tonicity[state.tonicity]}`);
       if(state.uosm) lines.push(`- UOsm: ${labels.uosm[state.uosm]}`);
       if(state.volume) lines.push(`- Volumenstatus: ${labels.volume[state.volume]}`);
