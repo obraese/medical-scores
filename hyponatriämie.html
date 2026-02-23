@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyponatriämie – DDx-Algorithmus</title>
+
+  <!-- Global Styles / Navbar -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Hyponatriämie – differentialdiagnostischer Algorithmus</h1>
+
+      <div class="footer-note" style="margin-top:6px;">
+        Klick-Entscheidungsbaum (Tonicität → Urin-Osmolalität → Volumenstatus → Urin-Na).
+        Keine Speicherung. (Kopiert wird die aktuelle Auswahl + Ergebnistext.)
+      </div>
+
+      <!-- Toolbar -->
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px;">
+        <button class="navbtn" id="btnCopy" type="button" style="cursor:pointer;">Ergebnis kopieren</button>
+        <button class="navbtn" id="btnReset" type="button" style="cursor:pointer;">Zurücksetzen</button>
+        <span id="copyState" class="footer-note" style="margin:0; padding:6px 10px; display:none;">✓ kopiert</span>
+      </div>
+
+      <div style="height:14px;"></div>
+
+      <div style="display:grid; grid-template-columns: 1.15fr .85fr; gap:14px; align-items:start;">
+        <!-- LEFT -->
+        <div class="card" style="box-shadow:none; padding:14px; border-radius:14px;">
+          <div style="font-weight:800; margin-bottom:8px;">Durchklicken</div>
+
+          <!-- Step 0 -->
+          <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+              <div style="font-weight:700;">
+                0) Symptomatik / Dringlichkeit <span style="color:var(--muted); font-weight:600;">(optional)</span>
+              </div>
+              <div id="badgeSeverity" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+                optional
+              </div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="choicegroup" data-step="severity" style="display:grid; gap:10px;">
+              <button class="choicebtn" data-value="asymp" type="button">
+                <div class="ct">
+                  <div class="ct-title">Keine / milde Symptome</div>
+                  <div class="ct-desc">z.B. asymptomatisch, leichte Übelkeit, leichte Müdigkeit</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="mod" type="button">
+                <div class="ct">
+                  <div class="ct-title">Moderate Symptome</div>
+                  <div class="ct-desc">z.B. Kopfschmerz, Verwirrtheit, Gangunsicherheit</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="severe" type="button">
+                <div class="ct">
+                  <div class="ct-title">Schwere Symptome</div>
+                  <div class="ct-desc">z.B. Krampfanfall, Somnolenz/Koma, Zeichen Hirndruck</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+            </div>
+
+            <div id="hintSeverity" class="footer-note" style="display:none; margin-top:10px; border-radius:14px;"></div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+              <div style="font-weight:700;">1) Serumosmolalität / Tonicität</div>
+              <div id="badgeTonicity" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+                ausstehend
+              </div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="choicegroup" data-step="tonicity" style="display:grid; gap:10px;">
+              <button class="choicebtn" data-value="hypertonic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Hyperton (&gt; 295 mOsm/kg)</div>
+                  <div class="ct-desc">Osmotische Verschiebung (v.a. Hyperglykämie, Mannitol)</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="isotonic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Isoton (275–295)</div>
+                  <div class="ct-desc">Pseudohyponatriämie (Hyperlipid-/Hyperproteinämie; Messmethode)</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="hypotonic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Hypoton (&lt; 275)</div>
+                  <div class="ct-desc">Echte Hyponatriämie → weiter mit Urin-Osmolalität</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+            </div>
+
+            <details style="margin-top:10px;">
+              <summary style="cursor:pointer; font-weight:700;">Rechenhilfe: (geschätzte) Serumosmolalität</summary>
+              <div class="footer-note" style="margin-top:10px;">
+                <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+                  Serumosm ≈ 2×Na + Glukose/18 + Harnstoff/2.8
+                </div>
+                <div style="margin-top:8px;">
+                  Bei Hyperglykämie: korrigiertes Na erwägen (z.B. +1.6–2.4 mmol/L pro 100 mg/dl Glukose über 100).
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card" id="stepUOsm" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+              <div style="font-weight:700;">2) Urin-Osmolalität (UOsm)</div>
+              <div id="badgeUOsm" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+                ausstehend
+              </div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="choicegroup" data-step="uosm" style="display:grid; gap:10px;">
+              <button class="choicebtn" data-value="lt100" type="button">
+                <div class="ct">
+                  <div class="ct-title">&lt; 100 mOsm/kg</div>
+                  <div class="ct-desc">ADH supprimiert → Wasserexzess / Low-solute</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="gt100" type="button">
+                <div class="ct">
+                  <div class="ct-title">&gt; 100 mOsm/kg</div>
+                  <div class="ct-desc">ADH aktiv → weiter mit Volumenstatus</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card" id="stepVolume" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+              <div style="font-weight:700;">3) Klinischer Volumenstatus</div>
+              <div id="badgeVolume" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+                ausstehend
+              </div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="choicegroup" data-step="volume" style="display:grid; gap:10px;">
+              <button class="choicebtn" data-value="hypovolemic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Hypovoläm</div>
+                  <div class="ct-desc">z.B. Orthostase, Tachykardie, trockene Schleimhäute, prärenales Muster</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="euvolemic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Euvoläm</div>
+                  <div class="ct-desc">kein Ödem/keine Dehydratation → SIADH / endokrin / Medikamente / postoperativ</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="hypervolemic" type="button">
+                <div class="ct">
+                  <div class="ct-title">Hypervoläm</div>
+                  <div class="ct-desc">Ödeme/Aszites → HI, Zirrhose, nephrotisch, Niereninsuffizienz</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="card" id="stepUNa" style="display:none; box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); margin-bottom:0;">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+              <div style="font-weight:700;">4) Urin-Natrium (UNa)</div>
+              <div id="badgeUNa" style="font-size:12px; color:var(--muted); border:1px solid var(--border); padding:6px 10px; border-radius:999px; background:rgba(244,246,248,.7); white-space:nowrap;">
+                ausstehend
+              </div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="choicegroup" data-step="una" style="display:grid; gap:10px;">
+              <button class="choicebtn" data-value="lt30" type="button">
+                <div class="ct">
+                  <div class="ct-title">&lt; 30 mmol/L</div>
+                  <div class="ct-desc">Extrarenaler Na-Verlust / effektives Volumen ↓ (GI, HI/Zirrhose)</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+
+              <button class="choicebtn" data-value="gt30" type="button">
+                <div class="ct">
+                  <div class="ct-title">&gt; 30 mmol/L</div>
+                  <div class="ct-desc">Renaler Na-Verlust / Diuretika / Mineralokortikoid↓ / CSW</div>
+                </div>
+                <div class="ct-pts">✓</div>
+              </button>
+            </div>
+
+            <div class="footer-note" style="margin-top:10px;">
+              UNa ist besonders hilfreich bei <b>hypovolämischer</b> Hyponatriämie. Unter Diuretika kann UNa verfälscht sein.
+            </div>
+          </div>
+
+          <div class="footer-note" style="margin-top:12px;">
+            Tipp: <b>Strg</b> + <b>F</b> zur Suche. Klinische Entscheidung immer im Kontext (Akuität, Symptome, Komorbiditäten).
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card" style="box-shadow:none; padding:14px; border-radius:14px;">
+          <div style="font-weight:800; margin-bottom:8px;">Interpretation</div>
+
+          <div class="card" style="box-shadow:none; border-radius:14px; padding:14px; border:1px solid var(--border); background:rgba(244,246,248,.35);">
+            <div id="resHeadline" style="font-weight:800; margin-bottom:8px;">Noch keine Auswahl</div>
+
+            <div id="pillRow" style="display:none; gap:8px; flex-wrap:wrap; margin:10px 0 8px;"></div>
+
+            <div style="height:1px; background:var(--border); margin:12px 0;"></div>
+
+            <div id="resBody" class="footer-note" style="margin:0;">
+              Wähle links die Knoten (Tonicität → UOsm → Volumenstatus → UNa). Das Ergebnis erscheint hier.
+            </div>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <details open>
+            <summary style="cursor:pointer; font-weight:800;">Standard-Labors (praktisch)</summary>
+            <div class="footer-note" style="margin-top:10px;">
+              <ul style="margin:8px 0 0; padding-left:18px;">
+                <li>Serumosmolalität (gemessen, wenn möglich)</li>
+                <li>UOsm, UNa (ggf. auch UK, Urea), Kreatinin, Harnstoff</li>
+                <li>Glukose (Hypertonie-Check), ggf. TG/Proteine bei Pseudohyponatriämie</li>
+                <li>TSH/fT4 und Morgen-Cortisol (Ausschluss Hypothyreose / (sek.) NNR-Insuffizienz, v.a. bei vermutetem SIADH)</li>
+              </ul>
+            </div>
+          </details>
+
+          <div style="height:10px;"></div>
+
+          <details>
+            <summary style="cursor:pointer; font-weight:800;">Therapie-Sicherheitsanker (Korrekturrate)</summary>
+            <div class="footer-note" style="margin-top:10px;">
+              <ul style="margin:8px 0 0; padding-left:18px;">
+                <li>Zu schnelle Korrektur → Risiko ODS (v.a. chronisch, Alkoholismus, Mangelernährung, Leberkrankheit).</li>
+                <li>Typische Zielrahmen: <b>≤ 6–8 mmol/L / 24 h</b>, Hochrisiko eher ≤ 6.</li>
+                <li>Bei schweren neurologischen Symptomen: zuerst Symptomkontrolle (z.B. hypertones NaCl nach Hausstandard), dann engmaschig steuern.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Mini-UI-Klassen passend zu deinen Tools (ohne zusätzliche globale CSS-Datei) */
+    .choicebtn{
+      text-align:left;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:var(--card);
+      cursor:pointer;
+    }
+    .choicebtn:hover{ border-color:#d1d5db; }
+    .choicebtn.selected{
+      border:2px solid #7aa7e6;
+      background:#eef6ff;
+    }
+    .ct{flex:1;}
+    .ct-title{font-weight:700; margin-bottom:4px;}
+    .ct-desc{color:var(--muted); font-size:13px; line-height:1.35;}
+    .ct-pts{color:var(--muted); font-size:13px; white-space:nowrap; margin-top:2px;}
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--card);
+      font-size:12px;
+      color:var(--text);
+    }
+    .pill b{font-weight:800;}
+    @media (max-width: 900px){
+      .container > .card > div[style*="grid-template-columns"]{ grid-template-columns: 1fr !important; }
+    }
+  </style>
+
+  <script>
+    const state = { severity:null, tonicity:null, uosm:null, volume:null, una:null };
+
+    const labels = {
+      severity: { asymp:"mild/asymptomatisch", mod:"moderat symptomatisch", severe:"schwer symptomatisch" },
+      tonicity: { hypertonic:"hyperton", isotonic:"isoton (Pseudo)", hypotonic:"hypoton (echt)" },
+      uosm: { lt100:"UOsm <100", gt100:"UOsm >100" },
+      volume: { hypovolemic:"hypovoläm", euvolemic:"euvoläm", hypervolemic:"hypervoläm" },
+      una: { lt30:"UNa <30", gt30:"UNa >30" }
+    };
+
+    const el = (id)=>document.getElementById(id);
+
+    const badges = {
+      severity: el("badgeSeverity"),
+      tonicity: el("badgeTonicity"),
+      uosm: el("badgeUOsm"),
+      volume: el("badgeVolume"),
+      una: el("badgeUNa")
+    };
+
+    const steps = {
+      uosm: el("stepUOsm"),
+      volume: el("stepVolume"),
+      una: el("stepUNa")
+    };
+
+    function setBadge(stepKey){
+      const v = state[stepKey];
+      const b = badges[stepKey];
+      if(!b) return;
+
+      b.style.color = "var(--muted)";
+      b.style.border = "1px solid var(--border)";
+      b.style.background = "rgba(244,246,248,.7)";
+
+      if(!v){
+        b.textContent = (stepKey === "severity") ? "optional" : "ausstehend";
+        return;
+      }
+      b.textContent = labels[stepKey]?.[v] ?? "gesetzt";
+      b.style.color = "#0b0f17";
+      b.style.border = "1px solid rgba(122,167,230,.65)";
+      b.style.background = "#eef6ff";
+    }
+
+    function clearDownstream(fromKey){
+      const order = ["severity","tonicity","uosm","volume","una"];
+      const idx = order.indexOf(fromKey);
+      for(let i=idx+1;i<order.length;i++){
+        const k = order[i];
+        state[k]=null;
+        document.querySelectorAll(`[data-step="${k}"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
+        setBadge(k);
+      }
+    }
+
+    function revealLogic(){
+      // show UOsm only when hypotonic
+      steps.uosm.style.display = (state.tonicity === "hypotonic") ? "" : "none";
+      if(state.tonicity !== "hypotonic"){
+        state.uosm=null; state.volume=null; state.una=null;
+        document.querySelectorAll(`[data-step="uosm"] .choicebtn, [data-step="volume"] .choicebtn, [data-step="una"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
+        setBadge("uosm"); setBadge("volume"); setBadge("una");
+        steps.volume.style.display="none"; steps.una.style.display="none";
+      }
+
+      // show Volume only when UOsm >100
+      steps.volume.style.display = (state.tonicity === "hypotonic" && state.uosm === "gt100") ? "" : "none";
+      if(!(state.tonicity === "hypotonic" && state.uosm === "gt100")){
+        state.volume=null; state.una=null;
+        document.querySelectorAll(`[data-step="volume"] .choicebtn, [data-step="una"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
+        setBadge("volume"); setBadge("una");
+        steps.una.style.display="none";
+      }
+
+      // show UNa after Volume chosen (when hypotonic & UOsm >100)
+      const showUNa = (state.tonicity === "hypotonic" && state.uosm === "gt100" && !!state.volume);
+      steps.una.style.display = showUNa ? "" : "none";
+      if(!showUNa){
+        state.una=null;
+        document.querySelectorAll(`[data-step="una"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
+        setBadge("una");
+      }
+
+      // Severity hint
+      const hint = el("hintSeverity");
+      if(state.severity === "severe"){
+        hint.style.display = "";
+        hint.innerHTML = "<b>Hinweis:</b> Bei schweren neurologischen Symptomen steht akute Stabilisierung/zeitnahe Therapie im Vordergrund; DDx parallel (UOsm/UNa etc.).";
+      } else if(state.severity === "mod"){
+        hint.style.display = "";
+        hint.innerHTML = "<b>Hinweis:</b> Bei moderaten Symptomen zeitnahe Diagnostik + Therapieplanung; Korrekturrate beachten.";
+      } else if(state.severity === "asymp"){
+        hint.style.display = "";
+        hint.innerHTML = "<b>Hinweis:</b> Bei milder/asymptomatischer Hyponatriämie: Ursachenfahndung + langsame/gezielte Korrektur (je nach Setting).";
+      } else {
+        hint.style.display = "none";
+        hint.innerHTML = "";
+      }
+    }
+
+    function buildPills(){
+      const pillRow = el("pillRow");
+      const pills = [];
+      if(state.severity) pills.push(["Symptome", labels.severity[state.severity]]);
+      if(state.tonicity) pills.push(["Tonicität", labels.tonicity[state.tonicity]]);
+      if(state.uosm) pills.push(["UOsm", labels.uosm[state.uosm]]);
+      if(state.volume) pills.push(["Volumen", labels.volume[state.volume]]);
+      if(state.una) pills.push(["UNa", labels.una[state.una]]);
+
+      if(!pills.length){
+        pillRow.style.display = "none";
+        pillRow.innerHTML = "";
+        return;
+      }
+      pillRow.style.display = "flex";
+      pillRow.innerHTML = pills.map(([k,v]) => `<span class="pill"><b>${k}:</b> ${v}</span>`).join("");
+    }
+
+    function buildInterpretation(){
+      const headline = el("resHeadline");
+      const body = el("resBody");
+
+      if(!state.tonicity){
+        headline.textContent = "Noch keine Auswahl";
+        body.textContent = "Wähle links die Knoten (Tonicität → UOsm → Volumenstatus → UNa). Das Ergebnis erscheint hier.";
+        return;
+      }
+
+      if(state.tonicity === "hypertonic"){
+        headline.textContent = "Hypertonische Hyponatriämie";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Mechanismus: osmotische Verschiebung → Na „verdünnt“.</li>
+            <li>DDx: <b>Hyperglykämie</b> (häufig), Mannitol/andere osmotisch aktive Substanzen.</li>
+            <li>Praktisch: Glukose messen, ggf. <b>Na korrigieren</b> und Ursache behandeln.</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.tonicity === "isotonic"){
+        headline.textContent = "Isotone (Pseudo-)Hyponatriämie";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>DDx: schwere <b>Hyperlipidämie</b> oder <b>Hyperproteinämie</b> (Messartefakt; indirekte ISE).</li>
+            <li>Praktisch: gemessene Serumosmolalität meist normal; TG/Proteine & Messmethode prüfen.</li>
+          </ul>`;
+        return;
+      }
+
+      // hypotonic
+      if(state.tonicity === "hypotonic" && !state.uosm){
+        headline.textContent = "Hypotone Hyponatriämie (echt) – nächster Knoten: UOsm";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Nächster Schritt: <b>Urin-Osmolalität</b> (ADH aktiv vs supprimiert).</li>
+            <li>Parallel: Medikamente (Thiazid, SSRI, Carbamazepin), Trinkmenge, Akuität, Symptome.</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.uosm === "lt100"){
+        headline.textContent = "UOsm < 100 mOsm/kg → ADH supprimiert";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Typisch: <b>primäre Polydipsie</b>, <b>Low-solute</b> (Bier-Potomanie, sehr solutarme Diät).</li>
+            <li>Mechanismus: Wasserexzess übersteigt renale Ausscheidungskapazität (bei zu wenig Solute).</li>
+            <li>Praktisch: Trinkmengen/Diät klären, Solute-Intake erhöhen, Flüssigkeitsrestriktion je nach Setting.</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.uosm === "gt100" && !state.volume){
+        headline.textContent = "UOsm > 100 mOsm/kg → ADH aktiv";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Nächster Schritt: <b>Volumenstatus</b> (hypo-/eu-/hypervoläm).</li>
+            <li>Übelkeit, Schmerz, postoperativ können ADH triggern; Medikamentenliste prüfen.</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.volume === "hypervolemic"){
+        headline.textContent = "Hypervolämische hypotone Hyponatriämie";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Typisch: <b>HI</b>, <b>Zirrhose</b>, <b>nephrotisches Syndrom</b>, fortgeschrittene Niereninsuffizienz.</li>
+            <li>Mechanismus: effektives zirkulierendes Volumen ↓ → RAAS/ADH ↑ → Wasserretention &gt; Na-Retention.</li>
+            <li>UNa oft <b>niedrig</b> bei HI/Zirrhose (außer Diuretika/Nierenversagen).</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.volume === "euvolemic"){
+        if(!state.una){
+          headline.textContent = "Euvolämische hypotone Hyponatriämie – häufig SIADH";
+          body.innerHTML = `
+            <ul style="margin:8px 0 0; padding-left:18px;">
+              <li>Top-DDx: <b>SIADH</b> (Lunge/ZNS/Malignom/Medikamente).</li>
+              <li>Immer ausschließen: <b>Hypothyreose</b> und <b>(sek.) NNR-Insuffizienz</b> (TSH/fT4, Cortisol).</li>
+              <li>Typisch bei SIADH: UOsm &gt;100, UNa meist &gt;30, klinisch euvoläm.</li>
+            </ul>`;
+          return;
+        }
+        if(state.una === "gt30"){
+          headline.textContent = "Euvoläm + UNa >30 → SIADH sehr wahrscheinlich";
+          body.innerHTML = `
+            <ul style="margin:8px 0 0; padding-left:18px;">
+              <li>Konstellation passt zu <b>SIADH</b> (bei passender Klinik, ohne Diuretika-/Endokrin-Störfaktoren).</li>
+              <li>Nächste Schritte: Trigger suchen, TSH/fT4 + Cortisol, Flüssigkeitsbilanz.</li>
+              <li>Merke: Diuretika können UNa verfälschen – Verlauf/Alternativmarker erwägen.</li>
+            </ul>`;
+          return;
+        }
+        headline.textContent = "Euvoläm + UNa <30 → weniger typisch für SIADH";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>UNa &lt;30 ist für klassisches SIADH <b>weniger typisch</b>.</li>
+            <li>Mischbilder möglich (z.B. geringe Na-Zufuhr, Vorbehandlung, frühe Phase).</li>
+            <li>Praktisch: Diuretika? Solute-Intake? Effektives Volumen? Endokrin prüfen.</li>
+          </ul>`;
+        return;
+      }
+
+      if(state.volume === "hypovolemic"){
+        if(!state.una){
+          headline.textContent = "Hypovolämische hypotone Hyponatriämie – UNa zur DDx";
+          body.innerHTML = `
+            <ul style="margin:8px 0 0; padding-left:18px;">
+              <li>Nächster Schritt: <b>UNa</b>.</li>
+              <li>UNa &lt;30 → extrarenale Verluste (GI/Blutung/Verbrennung).</li>
+              <li>UNa &gt;30 → renale Verluste (Thiazide!, Mineralokortikoidmangel, CSW, osmotische Diurese).</li>
+            </ul>`;
+          return;
+        }
+        if(state.una === "lt30"){
+          headline.textContent = "Hypovoläm + UNa <30 → extrarenaler Na-Verlust";
+          body.innerHTML = `
+            <ul style="margin:8px 0 0; padding-left:18px;">
+              <li>DDx: <b>Diarrhoe</b>, <b>Erbrechen</b>, Blutverlust, Verbrennungen.</li>
+              <li>Mechanismus: Volumenmangel → ADH ↑ → Wasserretention → Hyponatriämie.</li>
+              <li>Praktisch: Volumen-/Na-Substitution nach Klinik, Ursache behandeln.</li>
+            </ul>`;
+          return;
+        }
+        headline.textContent = "Hypovoläm + UNa >30 → renaler Na-Verlust";
+        body.innerHTML = `
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>DDx: <b>Thiazide</b> (häufig!), Diuretikaeffekt, <b>Mineralokortikoidmangel</b>, <b>CSW</b>, osmotische Diurese.</li>
+            <li>Praktisch: Medikation (Thiazid!), K/Acidose, Cortisol/ACTH-Achse je nach Kontext.</li>
+            <li>Hinweis: Unter Diuretika kann UNa erhöht sein, obwohl extrarenale Ursache vorliegt.</li>
+          </ul>`;
+      }
+    }
+
+    function render(){
+      setBadge("severity"); setBadge("tonicity"); setBadge("uosm"); setBadge("volume"); setBadge("una");
+      revealLogic();
+      buildPills();
+      buildInterpretation();
+    }
+
+    function selectChoice(stepKey, value, btn){
+      state[stepKey] = value;
+      document.querySelectorAll(`[data-step="${stepKey}"] .choicebtn`).forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      setBadge(stepKey);
+      clearDownstream(stepKey);
+      render();
+    }
+
+    document.querySelectorAll(".choicegroup").forEach(group=>{
+      const stepKey = group.getAttribute("data-step");
+      group.querySelectorAll(".choicebtn").forEach(btn=>{
+        btn.addEventListener("click", ()=> selectChoice(stepKey, btn.getAttribute("data-value"), btn));
+      });
+    });
+
+    function composeCopyText(){
+      const lines = [];
+      lines.push("Hyponatriämie – DDx-Algorithmus (Auswahl)");
+      if(state.severity) lines.push(`- Symptome: ${labels.severity[state.severity]}`);
+      if(state.tonicity) lines.push(`- Tonicität: ${labels.tonicity[state.tonicity]}`);
+      if(state.uosm) lines.push(`- UOsm: ${labels.uosm[state.uosm]}`);
+      if(state.volume) lines.push(`- Volumenstatus: ${labels.volume[state.volume]}`);
+      if(state.una) lines.push(`- UNa: ${labels.una[state.una]}`);
+      lines.push("");
+      lines.push(el("resHeadline").textContent);
+      const tmp = document.createElement("div");
+      tmp.innerHTML = el("resBody").innerHTML;
+      const text = (tmp.textContent || "").replace(/\n{3,}/g,"\n\n").trim();
+      lines.push(text);
+      return lines.join("\n");
+    }
+
+    el("btnCopy").addEventListener("click", async ()=>{
+      const txt = composeCopyText();
+      try{
+        await navigator.clipboard.writeText(txt);
+      }catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = txt;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      const cs = el("copyState");
+      cs.style.display = "inline-block";
+      setTimeout(()=> cs.style.display = "none", 1200);
+    });
+
+    el("btnReset").addEventListener("click", ()=>{
+      Object.keys(state).forEach(k=>state[k]=null);
+      document.querySelectorAll(".choicebtn").forEach(btn=>btn.classList.remove("selected"));
+      render();
+    });
+
+    // initial
+    render();
+  </script>
+
+  <script src="nav.js"></script>
+</body>
+</html>
