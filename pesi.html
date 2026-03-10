@@ -117,10 +117,6 @@
         <div class="interpret" id="spesi_class">
           <strong>Klassifikation:</strong> —
         </div>
-
-        <div class="interpret" id="spesi_rec">
-          <strong>Empfehlung:</strong> —
-        </div>
       </div>
 
       <!-- ===================== PESI (optional) ===================== -->
@@ -279,10 +275,6 @@
 
         <div class="interpret" id="pesi_class">
           <strong>Klassifikation:</strong> —
-        </div>
-
-        <div class="interpret" id="pesi_rec">
-          <strong>Empfehlung:</strong> —
         </div>
       </div>
 
@@ -454,16 +446,6 @@
       document.getElementById("spesi_class").innerHTML =
         `<strong>Klassifikation:</strong> ${cls.name} (${cls.detail}) – grob 30-Tage-Risiko: ${cls.mortality}.`;
 
-      let rec = "";
-      if (document.getElementById("s_sbp100").checked) {
-        rec = "RRsys <100: Hochrisiko-Konstellation → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
-      } else if (s === 0) {
-        rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
-      } else {
-        rec = "Erhöhtes Risiko: stationäre Aufnahme empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
-      }
-
-      document.getElementById("spesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
       return s;
     }
 
@@ -502,18 +484,6 @@
       document.getElementById("pesi_class").innerHTML =
         `<strong>Klassifikation:</strong> Klasse ${cls.name} (${cls.range}) – grob 30-Tage-Mortalität: ${cls.mortality}.`;
 
-      let rec = "";
-      if (document.getElementById("p_sbp100").checked || document.getElementById("p_ams").checked) {
-        rec = "Hochrisiko (RRsys <100 oder Bewusstseinsstörung) → Überwachung/IMC/ICU, rasche Therapieentscheidung, engmaschiges Monitoring.";
-      } else if (cls.name === "I" || cls.name === "II") {
-        rec = "Niedriges Risiko: ambulant oder kurzstationär möglich, sofern klinisch stabil (kein relevanter O2-Bedarf, keine Blutungs-/Adhärenzprobleme, gesichertes Follow-up).";
-      } else if (cls.name === "III") {
-        rec = "Intermediäres Risiko: stationär empfohlen (Monitoring, Verlauf unter Antikoagulation, O2-Bedarf/Komorbiditäten berücksichtigen).";
-      } else {
-        rec = "Hohes Risiko: stationär mit Überwachung (mindestens Monitorbett/IMC). Engmaschige Reevaluation (Kreislauf, Oxygenierung, RV-Belastung).";
-      }
-
-      document.getElementById("pesi_rec").innerHTML = `<strong>Empfehlung:</strong> ${rec}`;
       return score;
     }
 
